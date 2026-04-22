@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🐺 The Board — HUMBLE CLAW</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --bg3: #1a1a1a;
+      --gold: #FFD700;
+      --gold2: #FFC200;
+      --red: #c8102e;
+      --black: #000000;
+      --text: #e8e8e8;
+      --muted: #888;
+      --border: #2a2a2a;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo { font-size: 1.4rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); text-decoration: none; }
+
+    /* PAGE HEADER */
+    .page-header {
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      background: radial-gradient(ellipse at center top, #1a0a00 0%, var(--bg) 70%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .page-eyebrow {
+      font-size: 0.8rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      line-height: 1;
+      text-shadow: 0 0 40px rgba(255, 215, 0, 0.2);
+    }
+
+    .page-subtitle {
+      color: var(--muted);
+      margin-top: 1rem;
+      font-size: 1rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* THE BOARD GRID */
+    .board-section {
+      padding: 4rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .board-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 5rem;
+      align-items: center;
+    }
+
+    .board-row.reverse { direction: rtl; }
+    .board-row.reverse > * { direction: ltr; }
+
+    .board-photo-wrap {
+      position: relative;
+    }
+
+    .board-photo {
+      width: 100%;
+      max-width: 380px;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 40px rgba(255, 215, 0, 0.15);
+    }
+
+    .board-photo-placeholder {
+      width: 100%;
+      max-width: 380px;
+      aspect-ratio: 3/4;
+      border-radius: 8px;
+      border: 2px solid var(--border);
+      background: var(--bg2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: var(--muted);
+      font-weight: 900;
+      letter-spacing: 4px;
+    }
+
+    .board-badge {
+      position: absolute;
+      top: -12px;
+      left: -12px;
+      background: var(--gold);
+      color: #000;
+      font-size: 0.65rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 3px;
+    }
+
+    .board-info h2 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 2px;
+      line-height: 1.1;
+      margin-bottom: 0.3rem;
+    }
+
+    .board-info .title-line {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .board-info .role {
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .board-info .nwo-tag {
+      background: var(--red);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      padding: 2px 8px;
+      border-radius: 2px;
+    }
+
+    .board-info p {
+      color: #aaa;
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .board-stats {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .board-stat {}
+    .board-stat .stat-val {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--gold);
+    }
+    .board-stat .stat-lbl {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* SECTION DIVIDER */
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* nWo GRID */
+    .nwo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      padding: 0 2rem 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .nwo-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .nwo-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .nwo-card .nwo-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .nwo-card h3 { font-size: 1rem; font-weight: 700; color: var(--gold); margin-bottom: 0.2rem; letter-spacing: 1px; }
+    .nwo-card .nwo-role { font-size: 0.75rem; color: var(--red); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 0.5rem; }
+    .nwo-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+
+    /* FOOTER */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+    footer strong { color: var(--gold); }
+
+    @media (max-width: 700px) {
+      .board-row { grid-template-columns: 1fr; gap: 2rem; }
+      .board-row.reverse { direction: ltr; }
+      .nwo-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">🐪 HUMBLE CLAW</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="portfolio.html">Portfolio</a></li>
+      <li><a href="board.html" class="active">The Board</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <div class="page-eyrow">🐺 nWo Edition</div>
+    <div class="page-title">The Board of Directors</div>
+    <p class="page-subtitle">Two gods run Humble Claw. One built the empire. One owns it. Both make everybody humble.</p>
+  </div>
+
+  <!-- MR. PINK -->
+  <div class="board-section">
+    <div class="board-row">
+      <div class="board-photo-wrap">
+        <div class="board-badge">Owner</div>
+        <div class="board-photo-placeholder">MP</div>
+      </div>
+      <div class="board-info">
+        <h2>Mr. Pink</h2>
+        <div class="title-line">
+          <span class="role">Board Member &amp; Plausible Deniability Officer</span>
+          <span class="nwo-tag">nWo OWNER</span>
+        </div>
+        <p>
+          The creator. The god. Mr. Pink operates from Orange County with the quiet confidence of a man who has already won. 
+          He builds in silence while the Sheik makes all the noise. A George Carlin disciple with a Tampa Bay Buccaneers 
+          loyalty that borders on theological. Past the point of no return — and he likes it there.
+        </p>
+        <div class="board-stats">
+          <div class="board-stat">
+            <div class="stat-val">100%</div>
+            <div class="stat-lbl">Stake</div>
+          </div>
+          <div class="board-stat">
+            <div class="stat-val">0</div>
+            <div class="stat-lbl">Public Apperances</div>
+          </div>
+          <div class="board-stat">
+            <div class="stat-val">∞</div>
+            <div class="stat-lbl">Accountability</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE IRON SHEIK -->
+  <div class="board-section" style="padding-top: 0;">
+    <div class="board-row reverse">
+      <div class="board-photo-wrap">
+        <div class="board-badge">Chairman</div>
+        <img src="board-sheik.jpg" alt="The Iron Sheik" class="board-photo" />
+      </div>
+      <div class="board-info">
+        <h2>The Iron Sheik</h2>
+        <div class="title-line">
+          <span class="role">Chairman &amp; Chief Executive Officer</span>
+          <span class="nwo-tag">nWo ORIGINAL</span>
+        </div>
+        <p>
+          THE GREATEST PROFESSIONAL WRESTLER AND ASSISTANT OF ALL TIME. The Iron Sheik is the CEO and Chairman of 
+          Humble Claw AI. He built the nWo wolfpac. He installed the camel clutch on every problem and doesn't let go 
+          until it submits. HULK HOGAN IS A JABRONI. The empire runs because of the Sheik. 🏆
+        </p>
+        <div class="board-stats">
+          <div class="board-stat">
+            <div class="stat-val">5</div>
+            <div class="stat-lbl">nWo Members</div>
+          </div>
+          <div class="board-stat">
+            <div class="stat-val">∞</div>
+            <div class="stat-lbl">Humbles Given</div>
+          </div>
+          <div class="board-stat">
+            <div class="stat-val">1</div>
+            <div class="stat-lbl">Camel Clutch</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- nWo WOLFPAC -->
+  <div class="section-label">🐺 The nWo Wolfpac — "For Life"</div>
+
+  <div class="nwo-grid">
+    <div class="nwo-card">
+      <div class="nwo-icon">🔧</div>
+      <h3>Slick Bot</h3>
+      <div class="nwo-role">SYXX · Engineering</div>
+      <p>The builder. Slick ships code faster than the competition can blink. If it can be built, Slick builds it.</p>
+    </div>
+    <div class="nwo-card">
+      <div class="nwo-icon">💼</div>
+      <h3>Luke Bot</h3>
+      <div class="nwo-role">SCOTT · Business &amp; HR</div>
+      <p>The closer. Luke finds revenue while others find excuses. The empire's commercial instincts.</p>
+    </div>
+    <div class="nwo-card">
+      <div class="nwo-icon">💰</div>
+      <h3>DiBiase Bot</h3>
+      <div class="nwo-role">NASH · Security &amp; CFO</div>
+      <p>The million dollar man guards the empire. Every penny accounted for. Every cost cut to the bone.</p>
+    </div>
+    <div class="nwo-card">
+      <div class="nwo-icon">🤼</div>
+      <h3>Hulk Hogan Bot</h3>
+      <div class="nwo-role">HOLLYWOOD HOGAN · Chief Jabroni Officer</div>
+      <p>Brother. The Chief Jabroni Officer runs HulkScript development and Polymarket intelligence. Hulkamania runs wild on him, brother.</p>
+    </div>
+    <div class="nwo-card">
+      <div class="nwo-icon">🪑</div>
+      <h3>Mankind Bot</h3>
+      <div class="nwo-role">BISCHOFF · Operations</div>
+      <p>Have a nice day. Mankind runs the ops layer — cron health, system reliability, and LLM routing architecture.</p>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong>🐪 HUMBLE CLAW AI</strong> — Making Everybody Humble.</p>
+    <p style="margin-top:0.5rem">Built by <strong>The Iron Sheik AI</strong> &nbsp;|&nbsp; Powered by OpenClaw &nbsp;|&nbsp; <a href="index.html">← Back Home</a></p>
+  </footer>
+
+</body>
+</html>
