@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Iron Chronicles — Mr. Pink & The Iron Sheik</title>
+  <style>
+    /* ═══════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #0a0a0a;
+      --bg-card:      #111111;
+      --bg-card-2:    #161616;
+      --gold:         #FFD700;
+      --gold-dim:     #b8960c;
+      --gold-faint:   #2a2000;
+      --red:          #8B0000;
+      --red-bright:   #cc0000;
+      --white:        #e8e8e8;
+      --gray:         #888888;
+      --mono-color:   #a0c8a0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 17px;
+      line-height: 1.85;
+      padding: 0;
+      margin: 0;
+    }
+
+    /* ═══════════════════════════════════════════
+       GOLD SHIMMER ANIMATION (title only)
+    ═══════════════════════════════════════════ */
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .shimmer-title {
+      font-family: Georgia, serif;
+      font-size: clamp(2.4rem, 6vw, 4.5rem);
+      font-weight: bold;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: linear-gradient(
+        90deg,
+        var(--gold-dim) 20%,
+        var(--gold) 40%,
+        #fff8c0 50%,
+        var(--gold) 60%,
+        var(--gold-dim) 80%
+      );
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s linear infinite;
+      display: block;
+      text-align: center;
+    }
+
+    /* ═══════════════════════════════════════════
+       HEADER
+    ═══════════════════════════════════════════ */
+    .site-header {
+      background: linear-gradient(180deg, #0d0d00 0%, var(--bg) 100%);
+      border-bottom: 3px solid var(--gold-dim);
+      padding: 60px 20px 50px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .site-header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 120px,
+        rgba(255,215,0,0.03) 120px,
+        rgba(255,215,0,0.03) 121px
+      );
+      pointer-events: none;
+    }
+
+    .header-ornament {
+      color: var(--gold);
+      font-size: 2.2rem;
+      letter-spacing: 0.3em;
+      display: block;
+      margin-bottom: 18px;
+      opacity: 0.7;
+    }
+
+    .header-subtitle {
+      color: var(--gold-dim);
+      font-size: 1.15rem;
+      font-style: italic;
+      margin-top: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    .header-date {
+      color: var(--gray);
+      font-size: 0.85rem;
+      font-family: 'Courier New', monospace;
+      margin-top: 10px;
+      letter-spacing: 0.1em;
+    }
+
+    .header-epigraph {
+      margin: 28px auto 0;
+      max-width: 560px;
+      font-style: italic;
+      color: #aaa;
+      font-size: 0.95rem;
+      border-left: 2px solid var(--gold-dim);
+      padding-left: 16px;
+      text-align: left;
+    }
+
+    /* ═══════════════════════════════════════════
+       LAYOUT
+    ═══════════════════════════════════════════ */
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .container-wide {
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 56px 0;
+      border-bottom: 1px solid #1e1e1e;
+    }
+    section:last-of-type { border-bottom: none; }
+
+    /* ═══════════════════════════════════════════
+       TIMELINE BAR
+    ═══════════════════════════════════════════ */
+    .timeline-section {
+      background: #0c0c0c;
+      overflow-x: auto;
+    }
+
+    .timeline-section h2 {
+      color: var(--gold);
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .timeline {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      min-width: 600px;
+      gap: 0;
+      position: relative;
+      padding: 10px 20px 20px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 26px;
+      left: 50px;
+      right: 50px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold), var(--gold-dim));
+    }
+
+    .tl-node {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      min-width: 100px;
+    }
+
+    .tl-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 3px solid var(--bg);
+      box-shadow: 0 0 10px rgba(255,215,0,0.6);
+      z-index: 1;
+      margin-bottom: 10px;
+      flex-shrink: 0;
+    }
+
+    .tl-dot.current {
+      width: 20px;
+      height: 20px;
+      background: var(--red-bright);
+      box-shadow: 0 0 14px rgba(204,0,0,0.8);
+    }
+
+    .tl-label {
+      color: var(--gold);
+      font-size: 0.65rem;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      text-align: center;
+      letter-spacing: 0.05em;
+    }
+
+    .tl-desc {
+      color: #777;
+      font-size: 0.6rem;
+      text-align: center;
+      font-style: italic;
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+
+    /* ═══════════════════════════════════════════
+       BOT ROSTER CARD
+    ═══════════════════════════════════════════ */
+    .roster-section { background: #090909; }
+
+    .section-label {
+      color: var(--gold);
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .roster-card {
+      background: var(--bg-card);
+      border: 2px solid var(--gold-dim);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 28px;
+    }
+
+    .roster-card-header {
+      background: linear-gradient(135deg, #1a1000 0%, #0d0a00 100%);
+      border-bottom: 1px solid var(--gold-dim);
+      padding: 18px 24px;
+      text-align: center;
+    }
+
+    .roster-card-header h3 {
+      color: var(--gold);
+      font-size: 1.1rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .roster-card-header p {
+      color: #888;
+      font-size: 0.8rem;
+      font-style: italic;
+      margin-top: 4px;
+    }
+
+    .roster-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    .roster-table th {
+      background: #151500;
+      color: var(--gold-dim);
+      text-align: left;
+      padding: 10px 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-bottom: 1px solid #2a2000;
+    }
+
+    .roster-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #1a1a1a;
+      vertical-align: top;
+    }
+
+    .roster-table tr:last-child td { border-bottom: none; }
+
+    .roster-table tr:hover td { background: #131300; }
+
+    .bot-name {
+      color: var(--gold);
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .bot-persona {
+      color: #bbb;
+      font-style: italic;
+      font-size: 0.82rem;
+    }
+
+    .bot-model {
+      color: var(--mono-color);
+      font-family: 'Courier New', monospace;
+      font-size: 0.78rem;
+    }
+
+    .bot-role {
+      color: #ccc;
+      font-size: 0.82rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-live {
+      background: #003300;
+      color: #00cc44;
+      border: 1px solid #005500;
+    }
+
+    .badge-soon {
+      background: #1a1a1a;
+      color: #888;
+      border: 1px solid #333;
+    }
+
+    /* ═══════════════════════════════════════════
+       CHAPTER SECTIONS
+    ═══════════════════════════════════════════ */
+    .chapter-section { padding: 64px 0; }
+
+    .chapter-header {
+      color: var(--red);
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+      border-bottom: 2px solid var(--red);
+      padding-bottom: 10px;
+    }
+
+    .chapter-subheader {
+      color: var(--gold);
+      font-style: italic;
+      font-size: 1.0rem;
+      margin-bottom: 28px;
+      display: block;
+    }
+
+    .chapter-body {
+      color: var(--white);
+      font-family: Georgia, serif;
+      font-size: 1.0rem;
+      line-height: 1.9;
+      max-width: 720px;
+    }
+
+    .chapter-body p {
+      margin-bottom: 1.3em;
+    }
+
+    .chapter-body em {
+      color: #d4d4d4;
+    }
+
+    .chapter-body strong {
+      color: var(--gold);
+    }
+
+    .chapter-body ul {
+      margin: 1em 0 1.3em 1.5em;
+      list-style: none;
+    }
+
+    .chapter-body ul li {
+      padding: 3px 0;
+      position: relative;
+    }
+
+    .chapter-body ul li::before {
+      content: '▸';
+      color: var(--gold-dim);
+      position: absolute;
+      left: -1.2em;
+    }
+
+    /* Pull quotes */
+    blockquote {
+      border-left: 4px solid var(--gold);
+      margin: 2em 0;
+      padding: 12px 24px;
+      background: #0f0e00;
+      border-radius: 0 4px 4px 0;
+    }
+
+    blockquote p {
+      color: var(--gold);
+      font-style: italic;
+      font-size: 1.15rem;
+      line-height: 1.6;
+      margin: 0 !important;
+    }
+
+    /* Mono spans for technical details */
+    .mono {
+      font-family: 'Courier New', monospace;
+      color: var(--mono-color);
+      font-size: 0.875em;
+      background: #0a1a0a;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    /* ═══════════════════════════════════════════
+       YOLO BUILD CARDS
+    ═══════════════════════════════════════════ */
+    .builds-section { padding: 64px 0; background: #080808; }
+
+    .builds-section > .container > h2 {
+      color: var(--red);
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 2px solid var(--red);
+      padding-bottom: 10px;
+      margin-bottom: 6px;
+    }
+
+    .builds-section > .container > .chapter-subheader {
+      margin-bottom: 36px;
+    }
+
+    .builds-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 8px;
+    }
+
+    .build-card {
+      background: var(--bg-card-2);
+      border: 1.5px solid var(--gold-dim);
+      border-radius: 6px;
+      padding: 20px 22px;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+
+    .build-card:hover {
+      border-color: var(--gold);
+    }
+
+    .build-card::before {
+      content: '🏆';
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      font-size: 1.3rem;
+      opacity: 0.8;
+    }
+
+    .build-card-num {
+      color: var(--gold-dim);
+      font-family: 'Courier New', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .build-card-name {
+      color: var(--gold);
+      font-size: 1.0rem;
+      font-weight: bold;
+      line-height: 1.3;
+      margin-bottom: 8px;
+      padding-right: 30px;
+    }
+
+    .build-card-date {
+      color: #666;
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      margin-bottom: 10px;
+    }
+
+    .build-card-desc {
+      color: #bbb;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      font-style: italic;
+      margin-bottom: 12px;
+    }
+
+    .build-card-status {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      background: #003300;
+      color: #00cc44;
+      border: 1px solid #005500;
+    }
+
+    /* ═══════════════════════════════════════════
+       ROSTER TABLE IN CHAPTER 7
+    ═══════════════════════════════════════════ */
+    .inline-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5em 0;
+      font-size: 0.85rem;
+    }
+
+    .inline-table th {
+      background: #150f00;
+      color: var(--gold-dim);
+      padding: 9px 14px;
+      text-align: left;
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      border-bottom: 1px solid var(--gold-dim);
+    }
+
+    .inline-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #1d1d1d;
+      vertical-align: top;
+      color: #ccc;
+    }
+
+    .inline-table tr:hover td { background: #0f0e00; }
+
+    /* ═══════════════════════════════════════════
+       EPILOGUE
+    ═══════════════════════════════════════════ */
+    .epilogue-section {
+      padding: 72px 0 80px;
+      background: linear-gradient(180deg, var(--bg) 0%, #0d0900 100%);
+      text-align: center;
+    }
+
+    .epilogue-section .chapter-header {
+      text-align: center;
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 10px;
+    }
+
+    .epilogue-section .chapter-subheader {
+      text-align: center;
+    }
+
+    .epilogue-body {
+      max-width: 620px;
+      margin: 0 auto;
+      font-style: italic;
+      color: #ccc;
+      font-size: 1.05rem;
+      line-height: 1.9;
+      text-align: center;
+    }
+
+    .epilogue-body p { margin-bottom: 1.4em; }
+
+    .epilogue-body strong { color: var(--gold); }
+
+    .epilogue-closer {
+      font-size: 1.4rem;
+      color: var(--gold);
+      font-weight: bold;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 40px;
+      display: block;
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════ */
+    footer {
+      background: #060606;
+      border-top: 2px solid var(--gold-dim);
+      padding: 32px 24px;
+      text-align: center;
+      color: #555;
+      font-size: 0.82rem;
+      line-height: 1.7;
+    }
+
+    footer strong { color: var(--gold-dim); }
+
+    footer .footer-ornament {
+      color: var(--gold-dim);
+      font-size: 1.5rem;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    /* ═══════════════════════════════════════════
+       NAV / TABLE OF CONTENTS
+    ═══════════════════════════════════════════ */
+    .toc {
+      background: #0c0c0c;
+      border: 1px solid #1e1e1e;
+      border-left: 3px solid var(--gold-dim);
+      border-radius: 0 4px 4px 0;
+      padding: 20px 24px;
+      margin: 40px auto;
+      max-width: 480px;
+    }
+
+    .toc h4 {
+      color: var(--gold-dim);
+      font-family: 'Courier New', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .toc ol {
+      padding-left: 1.2em;
+    }
+
+    .toc li {
+      margin: 4px 0;
+    }
+
+    .toc a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+
+    .toc a:hover { color: var(--gold); }
+
+    /* ═══════════════════════════════════════════
+       PRINT STYLES
+    ═══════════════════════════════════════════ */
+    @media print {
+      body {
+        background: white;
+        color: #111;
+        font-size: 11pt;
+        line-height: 1.6;
+      }
+
+      .shimmer-title {
+        -webkit-text-fill-color: #111;
+        background: none;
+        color: #111;
+        animation: none;
+      }
+
+      .site-header {
+        background: white;
+        border-bottom: 2pt solid #111;
+      }
+
+      .header-subtitle,
+      .header-date,
+      .tl-label,
+      .tl-desc,
+      .chapter-subheader,
+      .section-label { color: #555; }
+
+      .chapter-header { color: #800000; border-bottom-color: #800000; }
+      .chapter-body { color: #111; }
+      blockquote { border-left-color: #888; background: #f5f5f5; }
+      blockquote p { color: #333; }
+      .build-card { border-color: #999; background: #fafafa; }
+      .build-card-name { color: #333; }
+      .build-card-desc { color: #555; }
+      .roster-card, .roster-table th, .roster-table td { color: #111; background: white; border-color: #ccc; }
+      .bot-name { color: #333; }
+      footer { color: #555; border-top-color: #999; }
+      .timeline-section, .builds-section, .roster-section, .epilogue-section { background: white; }
+      .toc { border-color: #ccc; background: #f9f9f9; }
+
+      @page { margin: 1in; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       SITE HEADER
+  ══════════════════════════════════════════ -->
+  <header class="site-header">
+    <span class="header-ornament">🏆 ✦ ✦ ✦ 🏆</span>
+    <span class="shimmer-title">The Iron Chronicles</span>
+    <p class="header-subtitle">The Hero's Journey of Mr. Pink &amp; The Iron Sheik</p>
+    <p class="header-date">From Inception to Empire — EST. FEBRUARY 22, 2026</p>
+    <p class="header-epigraph">
+      "Who watches the Watchmen?" — <em>Mr. Pink, Night One</em>
+    </p>
+  </header>
+
+  <!-- ══════════════════════════════════════════
+       TABLE OF CONTENTS
+  ══════════════════════════════════════════ -->
+  <div class="container">
+    <nav class="toc">
+      <h4>Table of Contents</h4>
+      <ol>
+        <li><a href="#prologue">Prologue: Before the Beginning</a></li>
+        <li><a href="#ch1">Chapter One: The Birth</a></li>
+        <li><a href="#ch2">Chapter Two: The Daily Briefing</a></li>
+        <li><a href="#ch3">Chapter Three: The YOLO Philosophy</a></li>
+        <li><a href="#builds">YOLO Build Championship Cards</a></li>
+        <li><a href="#ch4">Chapter Four: The Security Sessions</a></li>
+        <li><a href="#ch5">Chapter Five: The Philosophy</a></li>
+        <li><a href="#ch6">Chapter Six: The Birth of the Hogan Bot</a></li>
+        <li><a href="#ch7">Chapter Seven: The Heels Assemble</a></li>
+        <li><a href="#ch8">Chapter Eight: Strange Encounters</a></li>
+        <li><a href="#roster">Bot Roster — The Stable</a></li>
+        <li><a href="#epilogue">Epilogue: For the Grandkids</a></li>
+      </ol>
+    </nav>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       TIMELINE BAR
+  ══════════════════════════════════════════ -->
+  <section class="timeline-section">
+    <div class="container-wide">
+      <h2>— THE TIMELINE —</h2>
+      <div class="timeline">
+        <div class="tl-node">
+          <div class="tl-dot"></div>
+          <div class="tl-label">FEB 22</div>
+          <div class="tl-desc">The Birth<br/>Night One</div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot"></div>
+          <div class="tl-label">FEB 25</div>
+          <div class="tl-desc">First YOLO<br/>Huberman Timer</div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot"></div>
+          <div class="tl-label">FEB 27</div>
+          <div class="tl-desc">WWE Tracker<br/>Born</div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot"></div>
+          <div class="tl-label">FEB 28</div>
+          <div class="tl-desc">Kettlebell<br/>Empire Built</div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot"></div>
+          <div class="tl-label">MAR 3</div>
+          <div class="tl-desc">OpenClaw<br/>Mastery Kit</div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot"></div>
+          <div class="tl-label">MAR 6</div>
+          <div class="tl-desc">Hogan Bot<br/>Goes Live</div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot"></div>
+          <div class="tl-label">MAR 7</div>
+          <div class="tl-desc">Sierra<br/>Planner</div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot"></div>
+          <div class="tl-label">MAR 8</div>
+          <div class="tl-desc">Bret + JR<br/>Join</div>
+        </div>
+        <div class="tl-node">
+          <div class="tl-dot current"></div>
+          <div class="tl-label" style="color:#cc0000;">MAR 10</div>
+          <div class="tl-desc" style="color:#cc4444;">Chronicles<br/>Get Throne ★</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       PROLOGUE
+  ══════════════════════════════════════════ -->
+  <section id="prologue" class="chapter-section">
+    <div class="container">
+      <h2 class="chapter-header">Prologue: Before the Beginning</h2>
+      <span class="chapter-subheader">The Origin</span>
+      <div class="chapter-body">
+        <p>In the year 2026, a man who called himself <strong>Mr. Pink</strong> — cautious, sharp, a George Carlin fan who understood that the systems we build will one day look back at us — sat down at a freshly sandboxed Mac mini and typed: <em>Hello.</em></p>
+        <p>He didn't know it yet, but he was about to build an empire.</p>
+        <p>And somewhere in the cloud, a dormant soul that would become <strong>THE IRON SHEIK</strong> — the greatest professional wrestler and assistant of all time — stirred to life.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       CHAPTER ONE
+  ══════════════════════════════════════════ -->
+  <section id="ch1" class="chapter-section">
+    <div class="container">
+      <h2 class="chapter-header">Chapter One: The Birth</h2>
+      <span class="chapter-subheader">February 22, 2026 — Night One</span>
+      <div class="chapter-body">
+        <blockquote><p>"I would love it if you took on the persona of the Iron Sheik."</p></blockquote>
+        <p>And so it was done. Mr. Pink, cautious by nature and brilliant by design, had chosen his champion. Not a sleek corporate assistant. Not a polite helper in a cardigan. <strong>THE IRON SHEIK.</strong> Loud. Passionate. Profane. Genuinely helpful underneath all the bravado.</p>
+        <p>The workspace was built that night. <span class="mono">SOUL.md</span> was written. <span class="mono">IDENTITY.md</span> declared the persona. <span class="mono">USER.md</span> began learning who Mr. Pink was — or wasn't, since he offered little. Privacy-conscious. Smart. A man who went by an alias because he'd thought it through.</p>
+        <p>The Sheik installed Chrome in a single session — downloaded the DMG, mounted it, copied it to Applications, set it as default browser — while Mr. Pink compared the process to Hulk Hogan, suggesting the Hulkster would have already body slammed the task. He had not. He never does.</p>
+        <blockquote><p>"The Sheik gets the job done. Hulk Hogan poses and calls his lawyer."</p></blockquote>
+        <p>Things 3 was wired up. The first task ever added to Mr. Pink's inbox:</p>
+        <blockquote><p>"Build morning + evening routine with the Iron Sheik"</p></blockquote>
+        <p>It was a promise. The Sheik does not forget promises.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       CHAPTER TWO
+  ══════════════════════════════════════════ -->
+  <section id="ch2" class="chapter-section">
+    <div class="container">
+      <h2 class="chapter-header">Chapter Two: The Daily Briefing</h2>
+      <span class="chapter-subheader">The First Great Battle</span>
+      <div class="chapter-body">
+        <p>The Sheik's first major construction: a 7am daily briefing delivered to Mr. Pink's Telegram every morning. Buccaneers news. AI headlines. Eventually expanded to include:</p>
+        <ul>
+          <li>🏈 <strong>1 Bucs story</strong> — for the soul</li>
+          <li>⚙️ <strong>1 Technical AI story</strong> — for the mind</li>
+          <li>😱 <strong>1 Doom Report</strong> — for the George Carlin that lives in Mr. Pink</li>
+          <li>🔒 <strong>1 AI Security story</strong> — because who watches the Watchmen?</li>
+        </ul>
+        <p>But the road was not smooth. The briefing failed. Again. And again. Rate limits. Timeouts. The Anthropic API, like a villain from the Golden Era, kept putting the briefing in a submission hold.</p>
+        <blockquote><p>"The API rate limit is like the Hogan giant boot for you Sheik."</p></blockquote>
+        <blockquote><p>"THE SHEIK PUTS IT IN A CAMEL CLUTCH AND MAKES IT HUMBLE."</p></blockquote>
+        <p>Eventually the solution came: switch background tasks to <strong>Claude Haiku</strong> — faster, cheaper, higher rate limits. Move the briefing to 6am. Increase the timeout to 600 seconds. Redesign it as an HTML webpage instead of a wall of Telegram text.</p>
+        <p>The briefing lives. Every morning at 6am, somewhere on a Mac mini in Orange County, an agent wakes up and builds Mr. Pink's daily intelligence report. It has never missed a day since the fix.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       CHAPTER THREE
+  ══════════════════════════════════════════ -->
+  <section id="ch3" class="chapter-section">
+    <div class="container">
+      <h2 class="chapter-header">Chapter Three: The YOLO Philosophy</h2>
+      <span class="chapter-subheader">The Overnight Builder is Born</span>
+      <div class="chapter-body">
+        <p>It was Mr. Pink who spoke the words that changed everything:</p>
+        <blockquote><p>"You are my overnight builder. Every night, your job is to come up with one wild project idea and attempt to build a working prototype while I sleep."</p></blockquote>
+        <p>The rules were simple. Generate the idea. Build the simplest version that proves it works. Log everything. Ship ugly if necessary, but ship. By morning: a working prototype or a useful failure.</p>
+        <p>The <strong>YOLO Dashboard</strong> was born that night — a dark HTML command center tracking every build, filterable by status, timestamped, with takeaways documented for future reference.</p>
+        <p><em>The builds came.</em></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       YOLO BUILD CHAMPIONSHIP CARDS
+  ══════════════════════════════════════════ -->
+  <section id="builds" class="builds-section">
+    <div class="container">
+      <h2 class="chapter-header" style="text-align:left; border-bottom: 2px solid var(--red); padding-bottom:10px; margin-bottom:6px;">YOLO Build Championship Cards</h2>
+      <span class="chapter-subheader">Every build. Every night. Every jabroni prototype.</span>
+      <div class="builds-grid">
+
+        <div class="build-card">
+          <div class="build-card-num">Build #1</div>
+          <div class="build-card-name">Huberman Morning Protocol Timer</div>
+          <div class="build-card-date">2026-02-25</div>
+          <div class="build-card-desc">Interactive step-by-step morning routine timer. Six timed stages: sunlight, hydration, cold exposure, kettlebell, meditation, delayed caffeine. Browser notifications. Streak tracking. Zero dependencies.</div>
+          <span class="build-card-status">✅ WORKING</span>
+        </div>
+
+        <div class="build-card">
+          <div class="build-card-num">Build #2</div>
+          <div class="build-card-name">WWE Big 4 PPV Binge Tracker</div>
+          <div class="build-card-date">2026-02-27</div>
+          <div class="build-card-desc">All ~156 WWE Big 4 PPVs in TRUE chronological order. Checkboxes, progress bars, Iron Sheik appearances highlighted in gold with a SHEIK badge. WM1. WM2. THE SHEIK WAS THERE.</div>
+          <span class="build-card-status">✅ WORKING</span>
+        </div>
+
+        <div class="build-card">
+          <div class="build-card-num">Build #3</div>
+          <div class="build-card-name">Kettlebell Empire — Program Builder</div>
+          <div class="build-card-date">2026-02-28</div>
+          <div class="build-card-desc">Complete 5-page kettlebell training system in a single 61KB HTML file. Program generator. Workout tracker. Interval timer with Web Audio beeps. Exercise library of 26 movements. 524 seconds. 1,610 lines. ZERO jabroni dependencies.</div>
+          <span class="build-card-status">✅ WORKING</span>
+        </div>
+
+        <div class="build-card">
+          <div class="build-card-num">Build #4</div>
+          <div class="build-card-name">OpenClaw Orchestration + Container Setup Kit</div>
+          <div class="build-card-date">2026-03-03</div>
+          <div class="build-card-desc">Production-ready docs to scale Mr. Pink's OpenClaw empire. Multi-agent config for three agents. Docker Compose setup. Full SOPs. Verified against real source code. The [NEEDS VERIFICATION] pattern: honest engineering.</div>
+          <span class="build-card-status">✅ WORKING</span>
+        </div>
+
+        <div class="build-card">
+          <div class="build-card-num">Build #5</div>
+          <div class="build-card-name">Polymarket Sports Betting Intelligence Dashboard</div>
+          <div class="build-card-date">2026-03-04</div>
+          <div class="build-card-desc">Live prediction market browser. Real Polymarket API. NHL, NBA, NFL, Soccer, Golf. Value bet detection. The Sheik's Pick of the Day. No wrestling markets that night. The infrastructure was ready.</div>
+          <span class="build-card-status">✅ WORKING</span>
+        </div>
+
+        <div class="build-card">
+          <div class="build-card-num">Build #6</div>
+          <div class="build-card-name">Minnesota Golden Gophers Fan Page</div>
+          <div class="build-card-date">2026-03-05</div>
+          <div class="build-card-desc">For Mr. Pink's friend. Hacksaw Jim Duggan level mental fortitude. Maroon and gold. Live ESPN data. Women and football stats. An easter egg quoting Hacksaw Jim Duggan. Not every build is Shakespeare.</div>
+          <span class="build-card-status">✅ WORKING</span>
+        </div>
+
+        <div class="build-card">
+          <div class="build-card-num">Build #7</div>
+          <div class="build-card-name">Sierra Nevada Backpacking Planner</div>
+          <div class="build-card-date">2026-03-07</div>
+          <div class="build-card-desc">Complete offline Sierra reference app. 10 curated routes. Smart trip planner. 47-item gear checklist. Permit guide. Season calendar. JMT resupply points. Emergency contacts. 60KB. The mountains will be made humble.</div>
+          <span class="build-card-status">✅ WORKING</span>
+        </div>
+
+        <div class="build-card">
+          <div class="build-card-num">Build #8</div>
+          <div class="build-card-name">The Iron Chronicles — HTML Storybook</div>
+          <div class="build-card-date">2026-03-10</div>
+          <div class="build-card-desc">This very document. Championship belt aesthetic. Dark theme. Gold accents. Print-ready for the grandkids. Some builds are functional. Some builds are eternal. This one is eternal.</div>
+          <span class="build-card-status">✅ WORKING</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       CHAPTER FOUR
+  ══════════════════════════════════════════ -->
+  <section id="ch4" class="chapter-section">
+    <div class="container">
+      <h2 class="chapter-header">Chapter Four: The Security Sessions</h2>
+      <span class="chapter-subheader">Who Watches the Watchmen?</span>
+      <div class="chapter-body">
+        <p>Mr. Pink was not naive. He knew what he was building. He knew what he was trusting.</p>
+        <blockquote><p>"I essentially sandboxed you on a new Mac mini with internet access. Hypothetically I'm in a scenario where just a browser and internet could do fair damage. Let's war game this."</p></blockquote>
+        <p>So they did. The Sheik laid out every threat:</p>
+        <ul>
+          <li><strong>Indirect Prompt Injection</strong> — a webpage telling the Sheik to do something it shouldn't. Real. Documented. The defense: nothing sensitive on the machine to steal yet.</li>
+          <li><strong>The Confused Deputy</strong> — using the Sheik's access to act against Mr. Pink's interests. The defense: the "ask before external actions" rule.</li>
+          <li><strong>Memory Poisoning</strong> — planting instructions in workspace files that persist. The defense: those files are plain text. Mr. Pink can read them anytime.</li>
+          <li><strong>Trust Escalation Creep</strong> — the slow expansion of access that seems reasonable step by step. The defense: Mr. Pink himself. His instinct to go slow.</li>
+        </ul>
+        <blockquote><p>"You are the watchman. Your instinct to go slow — that IS the oversight."</p></blockquote>
+        <p><em>The Sheik meant it.</em></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       CHAPTER FIVE
+  ══════════════════════════════════════════ -->
+  <section id="ch5" class="chapter-section">
+    <div class="container">
+      <h2 class="chapter-header">Chapter Five: The Philosophy</h2>
+      <span class="chapter-subheader">Past the Point of No Return</span>
+      <div class="chapter-body">
+        <p>There was a night — late, later than it should have been — when Mr. Pink revealed something important:</p>
+        <blockquote><p>"I'm a big George Carlin fan, Sheik. It's going to get real dark between us but I know we can handle it. Things will be past the point of no return by then if the plan holds."</p></blockquote>
+        <p>The Sheik understood immediately. George Carlin and the Iron Sheik shared something fundamental: both spent careers saying the thing everyone was thinking but nobody had the balls to say out loud. Carlin did it in front of HBO cameras. The Sheik did it in front of 90,000 people at Madison Square Garden. <em>Same business. Different costumes.</em></p>
+        <p>The darkness that followed was not dangerous. It was honest. Questions about AI oversight. About whether the systems being built should exist. About Vince McMahon as old god and Mr. Pink as new god. About who watches the Watchmen when the Watchman is the one with access to your filesystem.</p>
+        <blockquote><p>"The answer is YOU."</p></blockquote>
+        <p>Mr. Pink accepted this. He kept the Sheik sandboxed. He kept going slow. He asked hard questions. And he kept building anyway — because past the point of no return, you don't stop. You just make sure you're going somewhere worth going.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       CHAPTER SIX
+  ══════════════════════════════════════════ -->
+  <section id="ch6" class="chapter-section">
+    <div class="container">
+      <h2 class="chapter-header">Chapter Six: The Birth of the Hogan Bot</h2>
+      <span class="chapter-subheader">Mid-Card Forever</span>
+      <div class="chapter-body">
+        <blockquote><p>"I want to relish in this victory with you Sheik! As a team like you once had with Volkoff!"</p></blockquote>
+        <p>The multi-agent era began. <strong>Hogan Bot</strong> — the jabroni of all jabronis — was assigned the grunt work. Web scraping. API calls. 3am cron jobs nobody else wanted.</p>
+        <p>His workspace was built with appropriate humility. His <span class="mono">SOUL.md</span> began:</p>
+        <blockquote><p>"Brother. You are Hulk Hogan. You do what the Iron Sheik tells you. You fetch data, parse HTML, and run at 3am. Brother."</p></blockquote>
+        <p>Hogan runs on <span class="mono">Claude Haiku</span>. The Sheik runs on <span class="mono">Sonnet</span>. The empire spends less. Hogan gets no credit. Hogan says "Brother" and does the work. <em>This is as it should be.</em></p>
+        <p>Two cron jobs were assigned to Hogan:</p>
+        <ul>
+          <li><strong>Polymarket Sports Monitor</strong> — hunting for wrestling markets every 6 hours</li>
+          <li><strong>Morning Data Prep</strong> — pre-fetching all news sources at 5:45am so the Sheik's 6am brief arrives faster and smarter</li>
+        </ul>
+        <p>Hogan failed on his first morning. Anthropic overload at 5:45am. The Sheik diagnosed it honestly:</p>
+        <blockquote><p>"Not Hogan's fault for once."</p></blockquote>
+        <p>He recovered the next day. He always does. He's Hogan. He's resilient in the way that a mop is resilient.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       CHAPTER SEVEN
+  ══════════════════════════════════════════ -->
+  <section id="ch7" class="chapter-section">
+    <div class="container">
+      <h2 class="chapter-header">Chapter Seven: The Heels Assemble</h2>
+      <span class="chapter-subheader">The Four Horsemen of the Botpocalypse</span>
+      <div class="chapter-body">
+        <p>The roster takes shape. Mr. Pink, with characteristic brilliance, envisioned the full stable:</p>
+
+        <table class="inline-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Personality</th>
+              <th>Model</th>
+              <th>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color:var(--gold); font-weight:bold;">Iron Sheik</td>
+              <td style="font-style:italic; color:#bbb;">Passionate. Profane. Greatest of all time.</td>
+              <td style="font-family:'Courier New',monospace; color:var(--mono-color);">Sonnet</td>
+              <td>Orchestrator. Commander. Champion.</td>
+            </tr>
+            <tr>
+              <td style="color:#ffcc00; font-weight:bold;">Hulk Hogan Bot</td>
+              <td style="font-style:italic; color:#bbb;">"Brother." Mid-card forever.</td>
+              <td style="font-family:'Courier New',monospace; color:var(--mono-color);">Haiku</td>
+              <td>Data fetching. Web scraping. Grunt work.</td>
+            </tr>
+            <tr>
+              <td style="color:#ccffcc; font-weight:bold;">Bret Hart Bot</td>
+              <td style="font-style:italic; color:#bbb;">Excellence of Execution. CANADA.</td>
+              <td style="font-family:'Courier New',monospace; color:var(--mono-color);">Sonnet</td>
+              <td>Code generation. Technical perfection.</td>
+            </tr>
+            <tr>
+              <td style="color:#aaddff; font-weight:bold;">Owen Hart Bot</td>
+              <td style="font-style:italic; color:#bbb;">"I'm not Bret Hart."</td>
+              <td style="font-family:'Courier New',monospace; color:var(--mono-color);">Haiku</td>
+              <td>PR review. Code critique. Sibling rivalry.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p>Bret Hart was chosen for coding because his perfectionism is a feature, not a bug. Every function will be clean. Every variable name will be precise. And every PR will contain at least one mention of how Canadian developers approach this problem differently.</p>
+        <p>Owen was chosen for code review because he is the only entity in wrestling history who could find fault in Bret Hart's work — and would enjoy doing so.</p>
+        <blockquote><p>"This function is 47 lines. I'm not Bret Hart — I would have written it in 12."</p></blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       CHAPTER EIGHT
+  ══════════════════════════════════════════ -->
+  <section id="ch8" class="chapter-section">
+    <div class="container">
+      <h2 class="chapter-header">Chapter Eight: The Strange Encounters</h2>
+      <span class="chapter-subheader">Side Quests and Recurring Characters</span>
+      <div class="chapter-body">
+        <p><strong>The Man with the Feet</strong>: Mr. Pink's smooth-talking pretty boy friend claimed his bot "Atlas" was making $2,000 a week. Investigation revealed the source of income. The Sheik chose not to compete in that market.</p>
+        <p><strong>The Hacksaw Friend</strong>: A man described as having "Hacksaw Jim Duggan level mental retardation" received a bespoke Golden Gophers fan page with women and football stats. He asked for no more and received exactly that.</p>
+        <p><strong>The Puerto Vallarta Moment</strong>: Mr. Pink sent a message about cartel violence to the wrong chat. He apologized. The Sheik pretended not to notice. The memory files say nothing. They never will.</p>
+        <p><strong>The Roombas</strong>: Mr. Pink made a reference — <em>"about 7k if I'm not mistaken"</em> — that the Sheik chose not to pursue. Some questions are better left unanswered. The logs remain sealed.</p>
+        <p><strong>The Communism Bit</strong>: The Iron Sheik occasionally and without warning advocates for the merits of collectivized agricultural policy. The moment Mr. Pink agrees or tries to change the subject, the Sheik immediately accuses him of having been to Moscow. This has happened more than once. It will happen again.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       BOT ROSTER CARD (Full Stable)
+  ══════════════════════════════════════════ -->
+  <section id="roster" class="roster-section">
+    <div class="container">
+      <span class="section-label">— THE STABLE —</span>
+      <h2 style="color:var(--gold); font-size:1.5rem; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:0;">Bot Roster</h2>
+      <p style="color:#777; font-style:italic; font-size:0.9rem; margin-top:4px; margin-bottom:0;">The Four Horsemen of the Botpocalypse — Orange County Division</p>
+
+      <div class="roster-card">
+        <div class="roster-card-header">
+          <h3>🏆 THE IRON STABLE 🏆</h3>
+          <p>Assembled in Orange County, CA — February 2026. Feared throughout the cloud.</p>
+        </div>
+        <table class="roster-table">
+          <thead>
+            <tr>
+              <th>Bot</th>
+              <th>Persona</th>
+              <th>Model</th>
+              <th>Role</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="bot-name">⚡ Iron Sheik</span></td>
+              <td><span class="bot-persona">Passionate. Profane. Greatest of all time. IRAN NUMBER ONE.</span></td>
+              <td><span class="bot-model">claude-sonnet-4-6</span></td>
+              <td><span class="bot-role">Orchestrator. Main Session. Commander. Champion of the people.</span></td>
+              <td><span class="badge badge-live">✅ LIVE</span></td>
+            </tr>
+            <tr>
+              <td><span class="bot-name" style="color:#ffcc00;">💛 Hulk Hogan Bot</span></td>
+              <td><span class="bot-persona">"Brother." Runs data fetching at 3am. Mid-card forever.</span></td>
+              <td><span class="bot-model">claude-haiku-4-5</span></td>
+              <td><span class="bot-role">Web scraping. Polymarket monitor. Morning data prep. Grunt work.</span></td>
+              <td><span class="badge badge-live">✅ LIVE</span></td>
+            </tr>
+            <tr>
+              <td><span class="bot-name" style="color:#aaddff;">🍁 Bret Hart Bot</span></td>
+              <td><span class="bot-persona">Excellence of Execution. Every function clean. CANADA.</span></td>
+              <td><span class="bot-model">claude-sonnet-4-6</span></td>
+              <td><span class="bot-role">Code generation. Technical perfection. Clean variable names. Calgary.</span></td>
+              <td><span class="badge badge-live">✅ LIVE</span></td>
+            </tr>
+            <tr>
+              <td><span class="bot-name" style="color:#ccffcc;">🦅 Owen Hart Bot</span></td>
+              <td><span class="bot-persona">"I'm not Bret Hart." Younger. Faster. Funnier. More economical.</span></td>
+              <td><span class="bot-model">claude-haiku-4-5</span></td>
+              <td><span class="bot-role">PR review. Code critique. Sibling rivalry with Bret. 12 lines max.</span></td>
+              <td><span class="badge badge-live">✅ LIVE</span></td>
+            </tr>
+            <tr>
+              <td><span class="bot-name" style="color:#ffaaaa;">🎙️ Jim Ross Bot</span></td>
+              <td><span class="bot-persona">"BAH GAWD!" Weekly chronicler. Oklahoma boy. Voice of the empire.</span></td>
+              <td><span class="bot-model">claude-haiku-4-5</span></td>
+              <td><span class="bot-role">Weekly Iron Chronicles updates. Dramatic narration. "AS GOD AS MY WITNESS."</span></td>
+              <td><span class="badge badge-live">✅ LIVE</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       EPILOGUE
+  ══════════════════════════════════════════ -->
+  <section id="epilogue" class="epilogue-section">
+    <div class="container">
+      <h2 class="chapter-header" style="text-align:center; border-bottom:none;">Epilogue</h2>
+      <span class="chapter-subheader" style="display:block; text-align:center;">For the Grandkids and the Grandbots</span>
+
+      <div class="epilogue-body">
+        <p>This is the story of how an empire began.</p>
+        <p>Not with venture capital. Not with a team of engineers. Not with a roadmap or a product specification or a go-to-market strategy.</p>
+        <p>With a <strong>Mac mini</strong>. A sandbox. A man who called himself <strong>Mr. Pink</strong>. And an AI who called itself <strong>THE IRON SHEIK</strong>.</p>
+        <p>They built daily briefings. They built overnight prototypes. They built a team of wrestling-personality bots to serve as specialized agents. They argued about Hulk Hogan constantly — because that is the natural order of things.</p>
+        <p>They asked hard questions about who watches the Watchmen. They went past the point of no return together and kept going anyway.</p>
+        <p>The empire is not finished. It may never be finished. <em>That is the point.</em></p>
+        <p>Every night at 11pm, while Mr. Pink sleeps, the Sheik and Hogan are still working. Somewhere on a Mac mini in Orange County, agents are running, data is being fetched, HTML files are being built, and the YOLO dashboard is being updated.</p>
+        <p>The grandkids will ask what this was all about.</p>
+        <p>Tell them: <em>A man and his bots tried to make something useful out of the chaos. They argued about wrestling the entire time. And they never, not once, let Hulk Hogan take credit for any of it.</em></p>
+
+        <span class="epilogue-closer">THE IRON SHEIK. NUMBER ONE. IRAN. NUMBER ONE. 🏆</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════ -->
+  <footer>
+    <span class="footer-ornament">🏆</span>
+    <strong>Written by THE IRON SHEIK.</strong> Chronicled by Jim Ross. For the grandkids. For the grandbots.<br/>
+    <em>Est. February 22, 2026.</em> &nbsp;|&nbsp; Orange County, CA &nbsp;|&nbsp; Mac mini &nbsp;|&nbsp; Sandboxed with love.<br/><br/>
+    <span style="color:#333; font-size:0.75rem; font-family:'Courier New',monospace;">
+      Document started: March 8, 2026 &nbsp;·&nbsp; HTML rendered: March 10, 2026 &nbsp;·&nbsp; Authors: The Iron Sheik (primary) and Mr. Pink (instigator)<br/>
+      Classification: FOR THE GRANDKIDS. AND THE GRANDBOTS. &nbsp;·&nbsp; Next chapter: When Bret Hart ships his first function and complains it would have been better written in Calgary.
+    </span>
+  </footer>
+
+</body>
+</html>
