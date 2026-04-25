@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NFL Draft 2026 — Humble-Gram</title>
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Oswald:wght@400;600;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --bg3: #1a1a1a;
+      --gold: #c8a951;
+      --gold2: #e8c76a;
+      --red: #c0392b;
+      --text: #f0e6d3;
+      --text2: #a09080;
+      --sheik: #e74c3c;
+      --bret: #2ecc71;
+      --flair: #f39c12;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Oswald', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .noise {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.4;
+    }
+
+    .container { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 20px; }
+
+    /* HEADER */
+    .header {
+      text-align: center;
+      padding: 40px 0 30px;
+      border-bottom: 2px solid var(--gold);
+      margin-bottom: 40px;
+    }
+    .header h1 {
+      font-family: 'Russo One', sans-serif;
+      font-size: 3em;
+      letter-spacing: 4px;
+      color: var(--gold);
+      text-shadow: 0 0 30px rgba(200,169,81,0.4);
+    }
+    .header h1 span { color: var(--text); }
+    .header .subtitle {
+      font-size: 1.1em;
+      color: var(--text2);
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      margin-top: 8px;
+    }
+
+    /* TEAM SELECTOR */
+    .selector {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .selector label {
+      font-size: 1.1em;
+      color: var(--gold);
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .selector select {
+      flex: 1;
+      min-width: 260px;
+      padding: 14px 20px;
+      background: var(--bg2);
+      border: 2px solid var(--gold);
+      color: var(--text);
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.1em;
+      cursor: pointer;
+      border-radius: 4px;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c8a951' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      transition: border-color 0.2s;
+    }
+    .selector select:focus { outline: none; border-color: var(--gold2); }
+    .selector select option { background: var(--bg2); }
+
+    .btn-grade {
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--gold), #a08030);
+      color: #000;
+      font-family: 'Russo One', sans-serif;
+      font-size: 1em;
+      letter-spacing: 2px;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+      text-transform: uppercase;
+    }
+    .btn-grade:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(200,169,81,0.4);
+    }
+
+    /* RESULTS */
+    #results { display: none; }
+
+    .team-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--bg2), var(--bg3));
+      border: 1px solid rgba(200,169,81,0.3);
+      border-radius: 6px;
+    }
+    .team-name { font-family: 'Russo One', sans-serif; font-size: 1.8em; color: var(--gold); }
+    .team-meta { color: var(--text2); font-size: 0.9em; text-align: right; line-height: 1.6; }
+
+    .overall-grade {
+      text-align: center;
+      padding: 30px;
+      background: var(--bg2);
+      border: 3px solid var(--gold);
+      border-radius: 8px;
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    .overall-grade::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--sheik), var(--bret), var(--flair));
+    }
+    .grade-letter {
+      font-family: 'Russo One', sans-serif;
+      font-size: 6em;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .grade-label { font-size: 1.5em; color: var(--text2); letter-spacing: 4px; margin-top: 8px; text-transform: uppercase; }
+    .grade-detail { color: var(--gold); font-size: 1.1em; margin-top: 8px; }
+
+    /* PICK CARDS */
+    .pick-card {
+      background: var(--bg2);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .pick-card:hover { border-color: rgba(200,169,81,0.3); }
+
+    .pick-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      background: var(--bg3);
+      border-bottom: 2px solid rgba(200,169,81,0.15);
+    }
+    .pick-info { display: flex; align-items: center; gap: 16px; }
+    .pick-round-badge {
+      background: var(--gold);
+      color: #000;
+      font-family: 'Russo One', sans-serif;
+      font-size: 0.85em;
+      padding: 4px 12px;
+      border-radius: 4px;
+    }
+    .pick-title { font-size: 1.2em; font-weight: 700; }
+    .pick-detail { color: var(--text2); font-size: 0.9em; margin-top: 2px; }
+    .pick-grade-badge {
+      font-family: 'Russo One', sans-serif;
+      font-size: 1.6em;
+      padding: 6px 16px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .grade-a { background: #27ae60; color: #fff; }
+    .grade-b { background: #2980b9; color: #fff; }
+    .grade-c { background: #f39c12; color: #000; }
+    .grade-d { background: #e67e22; color: #fff; }
+    .grade-f { background: #c0392b; color: #fff; }
+
+    .pick-body { padding: 20px; }
+
+    /* PERSONA COMMENTS */
+    .comment {
+      padding: 16px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .comment:last-child { margin-bottom: 0; }
+
+    .sheik-comment {
+      background: linear-gradient(135deg, rgba(231,76,60,0.15), rgba(231,76,60,0.05));
+      border-left: 4px solid var(--sheik);
+    }
+    .bret-comment {
+      background: linear-gradient(135deg, rgba(46,204,113,0.15), rgba(46,204,113,0.05));
+      border-left: 4px solid var(--bret);
+    }
+    .flair-comment {
+      background: linear-gradient(135deg, rgba(243,156,18,0.15), rgba(243,156,18,0.05));
+      border-left: 4px solid var(--flair);
+    }
+
+    .comment-label {
+      font-weight: 700;
+      font-size: 0.9em;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sheik-label { color: var(--sheik); }
+    .bret-label { color: var(--bret); }
+    .flair-label { color: var(--flair); }
+
+    .comment-text { font-size: 1em; line-height: 1.5; color: var(--text); }
+
+    /* FOOTER */
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 30px 0;
+      border-top: 2px solid var(--gold);
+    }
+    .brand { font-family: 'Russo One', sans-serif; font-size: 1.8em; color: var(--gold); letter-spacing: 3px; }
+    .brand span { color: var(--text); }
+    .brand-sub { color: var(--text2); letter-spacing: 4px; font-size: 0.8em; text-transform: uppercase; margin-top: 6px; }
+
+    /* SHARE */
+    .share-row { display: flex; justify-content: center; gap: 12px; margin-top: 30px; }
+    .btn-share {
+      padding: 12px 28px;
+      background: var(--bg3);
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      font-family: 'Oswald', sans-serif;
+      font-size: 1em;
+      letter-spacing: 2px;
+      cursor: pointer;
+      border-radius: 4px;
+      text-transform: uppercase;
+      transition: all 0.2s;
+    }
+    .btn-share:hover { background: var(--gold); color: #000; }
+    .btn-share.copied { background: var(--bret); border-color: var(--bret); color: #fff; }
+
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--bg3);
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      padding: 12px 28px;
+      font-family: 'Oswald', sans-serif;
+      letter-spacing: 2px;
+      border-radius: 6px;
+      font-size: 1em;
+      transition: transform 0.3s;
+      z-index: 100;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* PERSONA ICONS */
+    .persona-icon { font-size: 1.2em; }
+
+    @media (max-width: 600px) {
+      .header h1 { font-size: 2em; letter-spacing: 2px; }
+      .team-header { flex-direction: column; gap: 12px; text-align: center; }
+      .team-meta { text-align: center; }
+      .pick-header { flex-direction: column; gap: 10px; align-items: flex-start; }
+      .pick-info { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .grade-letter { font-size: 4em; }
+      .selector { flex-direction: column; }
+      .selector select, .btn-grade { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="container">
+
+    <div class="header">
+      <h1>NFL DRAFT <span>2026</span></h1>
+      <div class="subtitle">🏆 Humble-Gram — Wrestling Edition</div>
+    </div>
+
+    <div class="selector">
+      <label>Select Team</label>
+      <select id="teamSelect">
+        <option value="">— Choose an NFL team —</option>
+      </select>
+      <button class="btn-grade" onclick="gradeTeam()">GET GRADE</button>
+    </div>
+
+    <div id="results"></div>
+
+    <div class="footer">
+      <div class="brand">HUMBLE<span>CLAW</span></div>
+      <div class="brand-sub">Make Everybody Humble — 2026</div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard! 🏆</div>
+
+  <script>
+    let draftData = null;
+
+    async function loadData() {
+      const res = await fetch('draft-data.json');
+      draftData = await res.json();
+      populateTeams();
+    }
+
+    function populateTeams() {
+      const sel = document.getElementById('teamSelect');
+      const sorted = Object.keys(draftData.teams).sort();
+      sorted.forEach(team => {
+        const opt = document.createElement('option');
+        opt.value = team;
+        opt.textContent = team;
+        sel.appendChild(opt);
+      });
+    }
+
+    // Wrestling commentary generators
+    function sheikComment(pick, round, pickNum, team) {
+      const comments = {
+        1: [
+          `This pick is like Hulk Hogan in a suit — looks strong, does nothing. The Hogan energy is weak. Two humbles out of ten.`,
+          `YOU CALL THIS A CHAMPION?! This pick has the heart of a jobber. Hulk Hogan would be ashamed. ZERO HUMBLES.`,
+          `This is not the excellence of execution. This is the failure of brain. Make him humble, YES YES!`
+        ],
+        2: [
+          `Mediocre. Like buying a participation trophy. The technique? Mediocre. The heart? Also mediocre. FOUR HUMBLES.`,
+          `Not terrible, not great. The jabroni energy is strong with this one. Give him the camel clutch until he learn respect.`,
+          `Decent value, but I expect more from {team}. The Iron Sheik says: this player needs to EARN respect in the ring.`
+        ],
+        3: [
+          `Now we are talking! This pick has fire in the belly. SEVEN HUMBLES OUT OF TEN — the Sheik approves!`,
+          `The fundamentals are there. The passion is there. This player could be a contender. EIGHT HUMBLES!`,
+          `Good pick, YES YES! The Sheik sees potential here. Not a main eventer yet, but could be mid-card champion material.`
+        ]
+      };
+      const bucket = round <= 1 ? 1 : round === 2 ? 2 : 3;
+      const arr = comments[bucket];
+      let c = arr[Math.floor(Math.random() * arr.length)];
+      return c;
+    }
+
+    function bretComment(pick, round, pickNum, team) {
+      const comments = {
+        1: [
+          `The fundamentals are there, but let's be honest — you reached. In wrestling terms, this is a mid-card callup when you needed a main eventer. Would've gotten better value in round three. Calgary taught me better than this.`,
+          `Sound technique. Good instincts. But positional value? I'm underwhelmed. You spent premium capital on a player who won't move the needle in year one. That's not the Bret Hart way.`,
+          `I respect the pick structurally. The board broke your way. But from a pure excellence-of-execution standpoint? This is a C+ effort in a draft where you needed an A.`
+        ],
+        2: [
+          `Solid work here. The technique matches the value. Not a flashy move but the fundamentals win matches — and championships. Six out of ten from Calgary.`,
+          `I like this pick. You got a player who understands the fundamentals. In the squared circle, that's half the battle. The other half is heart — and this one has it.`,
+          `Decent value, good position. Not a life-changing pick but the right move at the right time. The Bret Hart seal of approval: this player will be reliable.`
+        ],
+        3: [
+          `NOW we're executing! This is where you find the diamonds. Third round, premium talent — this is the Bret Hart way. Exceptional value.`,
+          `Beautiful. Just beautiful. You waited, you watched the board, and you struck at the perfect moment. This is what wrestling fundamentals teach us: patience wins.`,
+          `Excellent. This is the pick that wins championships. You didn't panic, you didn't reach — you picked the best player available. That's the excellence-of-execution difference.`
+        ]
+      };
+      const bucket = round <= 1 ? 1 : round === 2 ? 2 : 3;
+      const arr = comments[bucket];
+      let c = arr[Math.floor(Math.random() * arr.length)];
+      return c;
+    }
+
+    function flairComment(pick, round, pickNum, team) {
+      const comments = {
+        1: [
+          `WOOOOO! NOW THAT'S A PICK! To be the man, you gotta BEAT the man, and these ${team} just got BETTER! Sixteen-time World Champion says this is worth the selection! Nature Boy Ric Flair APPROVES!`,
+          `OH YEAH! You want to be a champion? You gotta DRAFT like a champion! These ${team} just added a player who understands what it takes! WOOOO!`,
+          `TO THE WORLD! This pick has WORLD CHAMPION written all over it! When you're as great as I am, you recognize greatness — and this player HAS IT! WOOOOOOO!`
+        ],
+        2: [
+          `WOOOO! Not bad, NOT BAD! The second round is where champions make their moves, and these ${team} just made a POWER MOVE! Eight-time All-Pro Ric Flair says: this player has heart!`,
+          `Now we're talking! You don't get to sixteen World Championships by making bad picks! This player has the tools to compete at the highest level! WOOOO!`,
+          `Oh baby! This is the kind of pick that builds dynasties! The nature boy sees a future champion in this one! WOOOOOO!`
+        ],
+        3: [
+          `WOOOO! GENIUS! Third round gems are what separate good teams from GREAT teams! These ${team} just found themselves a future star! TO THE WORLD!`,
+          `NOW THAT'S SMART DRAFTING! You waited, you watched, you picked the right moment! This player will be in the Hall of Fame someday — remember I said it! WOOOO!`,
+          `OH BABY! When the pressure is on, GREAT GMs make GREAT picks! These ${team} just proved they're contenders! WOOOOOOO!`
+        ]
+      };
+      const bucket = round <= 1 ? 1 : round === 2 ? 2 : 3;
+      const arr = comments[bucket];
+      let c = arr[Math.floor(Math.random() * arr.length)];
+      return c;
+    }
+
+    function getGrade(round, pickNum) {
+      // Simulate grades based on round and pick position
+      const base = round === 1 ? 80 : round === 2 ? 70 : 65;
+      const variance = (pickNum % 15) * 2;
+      const score = base + variance - 10;
+      if (score >= 90) return 'A+';
+      if (score >= 83) return 'A';
+      if (score >= 76) return 'A-';
+      if (score >= 72) return 'B+';
+      if (score >= 67) return 'B';
+      if (score >= 62) return 'B-';
+      if (score >= 57) return 'C+';
+      if (score >= 52) return 'C';
+      if (score >= 47) return 'C-';
+      if (score >= 40) return 'D';
+      return 'F';
+    }
+
+    function gradeToClass(grade) {
+      if (grade.startsWith('A')) return 'grade-a';
+      if (grade.startsWith('B')) return 'grade-b';
+      if (grade.startsWith('C')) return 'grade-c';
+      if (grade.startsWith('D')) return 'grade-d';
+      return 'grade-f';
+    }
+
+    function calculateTeamGrade(picks) {
+      const gradeMap = { 'A+': 4.3, 'A': 4.0, 'A-': 3.7, 'B+': 3.3, 'B': 3.0, 'B-': 2.7, 'C+': 2.3, 'C': 2.0, 'C-': 1.7, 'D': 1.0, 'F': 0.0 };
+      let total = 0;
+      picks.forEach(p => {
+        const grade = getGrade(p.round, p.pick);
+        total += gradeMap[grade] || 0;
+      });
+      const avg = total / picks.length;
+      if (avg >= 4.0) return 'A';
+      if (avg >= 3.7) return 'A-';
+      if (avg >= 3.3) return 'B+';
+      if (avg >= 3.0) return 'B';
+      if (avg >= 2.7) return 'B-';
+      if (avg >= 2.3) return 'C+';
+      if (avg >= 2.0) return 'C';
+      if (avg >= 1.7) return 'C-';
+      if (avg >= 1.0) return 'D';
+      return 'F';
+    }
+
+    function getTeamSummary(picks, teamGrade) {
+      const r1 = picks.filter(p => p.round === 1).length;
+      const r2 = picks.filter(p => p.round === 2).length;
+      const r3 = picks.filter(p => p.round === 3).length;
+      return `${r1} first round · ${r2} second round · ${r3} third round`;
+    }
+
+    function getGradeDescription(team, grade) {
+      const descriptions = {
+        'A': `The ${team} draft is ELITE. World champion material. WOOOOO!`,
+        'A-': `Strong draft from ${team}. Championship pedigree all over this class.`,
+        'B+': `${team} drafted well. Solid foundation, future stars emerging.`,
+        'B': `Decent draft from ${team}. Some bright spots, some questions.`,
+        'B-': `${team} gets the job done. Nothing special, nothing terrible.`,
+        'C+': `${team} had a mediocre draft. Some picks make you scratch your head.`,
+        'C': `Average draft from ${team}. The jabronis at headquarters are underwhelmed.`,
+        'C-': `${team} struggled. Some picks had potential but the execution was off.`,
+        'D': `Poor draft from ${team}. The Iron Sheik would not approve.`,
+        'F': `F for ${team}! F for effort! F for execution! Make them humble!`
+      };
+      return descriptions[grade] || descriptions['C'];
+    }
+
+    function buildShareText(teamName, picks, overallGrade, gradeDesc) {
+      let text = `🏆 NFL DRAFT 2026 HUMBLE-GRADE — ${teamName}\n`;
+      text += `OVERALL GRADE: ${overallGrade}\n`;
+      text += `${'═'.repeat(30)}\n\n`;
+      picks.forEach(p => {
+        const grade = getGrade(p.round, p.pick);
+        text += `Pick ${p.round}.${p.pick} — ${p.name} (${p.position}, ${p.school})\n`;
+        text += `Grade: ${grade}\n\n`;
+      });
+      text += `${'─'.repeat(30)}\n`;
+      text += `Generated by HUMBLECLAW 🏆\n`;
+      return text;
+    }
+
+    function gradeTeam() {
+      const team = document.getElementById('teamSelect').value;
+      if (!team) return;
+
+      const picks = draftData.picks.filter(p => p.team === team);
+      if (picks.length === 0) {
+        alert('No picks found for ' + team);
+        return;
+      }
+
+      const overallGrade = calculateTeamGrade(picks);
+      const gradeDesc = getGradeDescription(team, overallGrade);
+      const summary = getTeamSummary(picks, overallGrade);
+
+      let html = `
+        <div class="team-header">
+          <div class="team-name">${team}</div>
+          <div class="team-meta">
+            <div>${summary}</div>
+            <div>${picks.length} picks total</div>
+          </div>
+        </div>
+
+        <div class="overall-grade">
+          <div class="grade-letter">${overallGrade}</div>
+          <div class="grade-label">Overall Draft Grade</div>
+          <div class="grade-detail">${gradeDesc}</div>
+        </div>
+      `;
+
+      picks.forEach(pick => {
+        const grade = getGrade(pick.round, pick.pick);
+        const sheik = sheikComment(pick, pick.round, pick.pick, team);
+        const bret = bretComment(pick, pick.round, pick.pick, team);
+        const flair = flairComment(pick, pick.round, pick.pick, team);
+        const gradeClass = gradeToClass(grade);
+
+        html += `
+        <div class="pick-card">
+          <div class="pick-header">
+            <div class="pick-info">
+              <div class="pick-round-badge">R${pick.round}</div>
+              <div>
+                <div class="pick-title">${pick.name} — ${pick.position}</div>
+                <div class="pick-detail">${pick.school} · Pick ${pick.pick} Overall</div>
+              </div>
+            </div>
+            <div class="pick-grade-badge ${gradeClass}">${grade}</div>
+          </div>
+          <div class="pick-body">
+            <div class="comment sheik-comment">
+              <div class="comment-label sheik-label"><span class="persona-icon">🔥</span> THE SHEIK SAYS:</div>
+              <div class="comment-text">"${sheik}"</div>
+            </div>
+            <div class="comment bret-comment">
+              <div class="comment-label bret-label"><span class="persona-icon">⚙️</span> BRET SAYS:</div>
+              <div class="comment-text">"${bret}"</div>
+            </div>
+            <div class="comment flair-comment">
+              <div class="comment-label flair-label"><span class="persona-icon">🎤</span> RIC FLAIR SAYS:</div>
+              <div class="comment-text">"${flair}"</div>
+            </div>
+          </div>
+        </div>
+        `;
+      });
+
+      // Share buttons
+      html += `
+        <div class="share-row">
+          <button class="btn-share" onclick="copyToClipboard(this)">Copy to Clipboard</button>
+        </div>
+      `;
+
+      const results = document.getElementById('results');
+      results.innerHTML = html;
+      results.style.display = 'block';
+      results.scrollIntoView({ behavior: 'smooth' });
+
+      // Store data for share
+      results.dataset.shareText = buildShareText(team, picks, overallGrade, gradeDesc);
+    }
+
+    function copyToClipboard(btn) {
+      const text = document.getElementById('results').dataset.shareText;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied! 🏆';
+        btn.classList.add('copied');
+        showToast();
+        setTimeout(() => {
+          btn.textContent = 'Copy to Clipboard';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    function showToast() {
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
