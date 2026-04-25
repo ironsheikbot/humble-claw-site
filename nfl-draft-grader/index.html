@@ -511,7 +511,7 @@
       const team = document.getElementById('teamSelect').value;
       if (!team) return;
 
-      const picks = draftData.picks.filter(p => p.team === team);
+      const picks = draftData.teams[team].picks;
       if (picks.length === 0) {
         alert('No picks found for ' + team);
         return;
@@ -550,8 +550,8 @@
             <div class="pick-info">
               <div class="pick-round-badge">R${pick.round}</div>
               <div>
-                <div class="pick-title">${pick.name} — ${pick.position}</div>
-                <div class="pick-detail">${pick.school} · Pick ${pick.pick} Overall</div>
+                <div class="pick-title">${pick.player} — ${pick.position}</div>
+                <div class="pick-detail">${pick.college} · Pick ${pick.pick} Overall</div>
               </div>
             </div>
             <div class="pick-grade-badge ${gradeClass}">${grade}</div>
