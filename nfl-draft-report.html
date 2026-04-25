@@ -497,37 +497,37 @@ function gradeClass(letter) {
 }
 
 const SHEIK_VOICES = [
-  (p) => `HULK HOGAN IS A JABRONI. This ${p.position} from ${p.school}? ${pickHoggan(p)}`,
-  (p) => `${p.name}? I break his back, make him humble. ${p.school} cannot save this jabroni.`,
-  (p) => `The ${p.position} position — this is where champions are made. ${p.name} from ${p.school} better learn fast or he is DONE.`,
-  (p) => `Listen here jabroni — ${p.name} at ${p.pick}? The Sheik sees weakness. HULK HOGAN LOVES players like this. That is a PROBLEM.`,
-  (p) => `You want to know about ${p.name}? I say: NAH. ${p.school} puts food on table but CANNOT PUT WIN IN COLUMN.`,
-  (p) => `The round ${p.round} pick for ${p.team.split(' ').pop()} — ${p.name} better have heart. Hulk Hogan certainly ROOTING for them to fail.`,
+  (p) => `HULK HOGAN IS A JABRONI. This ${p.position} from ${p.college}? ${pickHoggan(p)}`,
+  (p) => `${p.player}? I break his back, make him humble. ${p.college} cannot save this jabroni.`,
+  (p) => `The ${p.position} position — this is where champions are made. ${p.player} from ${p.college} better learn fast or he is DONE.`,
+  (p) => `Listen here jabroni — ${p.player} at ${p.pick}? The Sheik sees weakness. HULK HOGAN LOVES players like this. That is a PROBLEM.`,
+  (p) => `You want to know about ${p.player}? I say: NAH. ${p.college} puts food on table but CANNOT PUT WIN IN COLUMN.`,
+  (p) => `The round ${p.round} pick for ${team.split(' ').pop()} — ${p.player} better have heart. Hulk Hogan certainly ROOTING for them to fail.`,
 ];
 
 const BRET_VOICES = [
-  (p) => `Now let's examine ${p.name} — ${p.position} from ${p.school}. The fundamentals matter. Technique matters. Excellence of execution, not just hype.`,
-  (p) => `${p.name} was selected at ${p.pick}. In Calgary we say: it's not the pick, it's the plan. ${p.school} prepared him, but the NFL is a different beast entirely.`,
-  (p) => `The ${p.position} position requires precision, dedication to craft. ${p.name} — I hope he studied his playbook. That's how legends are built, play by play.`,
-  (p) => `Let's talk technique. ${p.name} at ${p.pick} overall — the scouting report said ${p.school} but can he translate that to Sunday execution?`,
-  (p) => `${p.name}, round ${p.round}. The WWF taught me: it's not the size of the ring, it's the size of the heart. ${p.school} gave him tools. Now he must build the house.`,
-  (p) => `I'll give ${p.name} this: he's a professional now. That's respect. But the real work starts Day 1. Excellence of execution means showing up every single day.`,
+  (p) => `Now let's examine ${p.player} — ${p.position} from ${p.college}. The fundamentals matter. Technique matters. Excellence of execution, not just hype.`,
+  (p) => `${p.player} was selected at ${p.pick}. In Calgary we say: it's not the pick, it's the plan. ${p.college} prepared him, but the NFL is a different beast entirely.`,
+  (p) => `The ${p.position} position requires precision, dedication to craft. ${p.player} — I hope he studied his playbook. That's how legends are built, play by play.`,
+  (p) => `Let's talk technique. ${p.player} at ${p.pick} overall — the scouting report said ${p.college} but can he translate that to Sunday execution?`,
+  (p) => `${p.player}, round ${p.round}. The WWF taught me: it's not the size of the ring, it's the size of the heart. ${p.college} gave him tools. Now he must build the house.`,
+  (p) => `I'll give ${p.player} this: he's a professional now. That's respect. But the real work starts Day 1. Excellence of execution means showing up every single day.`,
 ];
 
 const FLAIR_VOICES = [
-  (p) => `WOOOO! ${p.name}! ${p.position}! ${p.school}! BABY, this is how you build a CHAMPION! TO BE THE MAN YOU GOTTA BEAT THE MAN!`,
-  (p) => `WOOOO! ${p.team.split(' ').pop()} just got themselves a FIGHTER! ${p.name} at ${p.pick}? THAT'S THE SPIRIT OF A CHAMPION RIGHT THERE!`,
-  (p) => `${p.name}, ${p.position} from ${p.school} — OH YEAH! When I was climbing the mountain, I looked for FIGHTERS. This kid's got that LOOK in his eye!`,
-  (p) => `WOOOO! Round ${p.round}, pick ${p.pick}! ${p.name}! ${p.school}! And ${p.team} says "WE ARE THE BEST"! Nature Boy Ric Flair approves!`,
-  (p) => `OHHHH WHAT A PICK! ${p.name}! ${p.position}! YEAH BABY! ${p.school} put the hammer down and now IT'S TIME TO SHINE! WOOOO!`,
-  (p) => `WOOOO! ${p.name}! Listen here — when you're THE MAN, everybody's watching! ${p.school} to the NFL, LET'S GO!`,
+  (p) => `WOOOO! ${p.player}! ${p.position}! ${p.college}! BABY, this is how you build a CHAMPION! TO BE THE MAN YOU GOTTA BEAT THE MAN!`,
+  (p) => `WOOOO! ${team.split(' ').pop()} just got themselves a FIGHTER! ${p.player} at ${p.pick}? THAT'S THE SPIRIT OF A CHAMPION RIGHT THERE!`,
+  (p) => `${p.player}, ${p.position} from ${p.college} — OH YEAH! When I was climbing the mountain, I looked for FIGHTERS. This kid's got that LOOK in his eye!`,
+  (p) => `WOOOO! Round ${p.round}, pick ${p.pick}! ${p.player}! ${p.college}! And ${team} says "WE ARE THE BEST"! Nature Boy Ric Flair approves!`,
+  (p) => `OHHHH WHAT A PICK! ${p.player}! ${p.position}! YEAH BABY! ${p.college} put the hammer down and now IT'S TIME TO SHINE! WOOOO!`,
+  (p) => `WOOOO! ${p.player}! Listen here — when you're THE MAN, everybody's watching! ${p.college} to the NFL, LET'S GO!`,
 ];
 
 function pickHoggan(p) {
   if (p.round === 1) return 'First round? HULK HOGAN thinks he is big shot. I say WRONG.';
   if (p.position === 'QB') return 'A quarterback? HULK HOGAN could not throw football if his life depended on it. JABRONI.';
   if (p.position === 'WR') return 'Wide receiver? HOGAN loves the attention. I break his fingers one by one.';
-  if (p.school === 'Alabama' || p.school === 'Georgia') return 'Alabama or Georgia? HULK HOGAN root for these schools. I DO NOT TRUST THEM.';
+  if (p.college === 'Alabama' || p.college === 'Georgia') return 'Alabama or Georgia? HULK HOGAN root for these schools. I DO NOT TRUST THEM.';
   if (p.pick <= 16) return 'Top 16 pick? HULK HOGAN says "congratulations". I say: PRESSURE COOKER, BABY!';
   return 'Later round flier. HULK HOGAN says "maybe". I say "prove it jabroni".';
 }
@@ -540,7 +540,7 @@ function getVoice(arr, pick) {
 function copyTeam(teamName, picks, grade) {
   const lines = [
     `${teamName} — Grade: ${grade}`,
-    picks.map(p => `  ${p.name} (${p.position}, ${p.school}) — Pick ${p.pick}, Round ${p.round}`).join('\n')
+    picks.map(p => `  ${p.player} (${p.position}, ${p.college}) — Pick ${p.pick}, Round ${p.round}`).join('\n')
   ].join('\n');
   navigator.clipboard.writeText(lines).then(() => {
     const btn = document.querySelector(`[data-team="${teamName}"]`);
@@ -559,7 +559,7 @@ function renderReport(data, sortBy) {
   const container = document.getElementById('report');
   const teams = Object.keys(data.teams);
   const teamGrades = teams.map(t => {
-    const tp = data.picks.filter(p => p.team === t);
+    const tp = data.teams[t].picks;
     return { name: t, picks: tp, grade: gradeTeam(tp) };
   });
 
@@ -581,8 +581,8 @@ function renderReport(data, sortBy) {
           <div class="pick-info">
             <span class="pick-round">R${p.round}</span>
             <span class="pick-number">#${p.pick}</span>
-            <span class="pick-name">${p.name}</span>
-            <span class="pick-school">— ${p.school}</span>
+            <span class="pick-name">${p.player}</span>
+            <span class="pick-school">— ${p.college}</span>
           </div>
           <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;">
             <span class="pick-position">${p.position}</span>
