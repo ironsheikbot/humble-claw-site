@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empire Map — Humble Claw</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --gold: #FFD700;
+      --text: #e0e0e0;
+      --muted: #888;
+      --standup: #3b82f6;
+      --weekly: #ef4444;
+      --briefing: #f59e0b;
+      --operational: #22c55e;
+      --wiki: #a855f7;
+      --ok: #22c55e;
+      --error: #ef4444;
+      --idle: #f59e0b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 20px; min-height: 100vh; }
+    header { text-align: center; margin-bottom: 40px; padding: 20px; }
+    h1 { color: var(--gold); font-size: 2em; margin-bottom: 10px; }
+    .subtitle { color: var(--muted); font-size: 0.9em; }
+    .section { margin-bottom: 40px; }
+    .section-title { color: var(--gold); font-size: 1.2em; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 1px solid #333; display: flex; align-items: center; gap: 10px; }
+    .section-title .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .standup .dot { background: var(--standup); }
+    .weekly .dot { background: var(--weekly); }
+    .briefing .dot { background: var(--briefing); }
+    .operational .dot { background: var(--operational); }
+    .wiki .dot { background: var(--wiki); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+    .card { background: var(--bg2); border-radius: 8px; padding: 14px; border: 1px solid #222; }
+    .card-name { font-weight: 600; font-size: 0.95em; margin-bottom: 6px; color: #fff; }
+    .card-meta { font-size: 0.75em; color: var(--muted); margin-bottom: 4px; }
+    .card-status { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.7em; font-weight: 600; text-transform: uppercase; }
+    .status-ok { background: rgba(34,197,94,0.2); color: var(--ok); }
+    .status-error { background: rgba(239,68,68,0.2); color: var(--error); }
+    .status-idle { background: rgba(245,158,11,0.2); color: var(--idle); }
+    .bots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+    .bot-card { background: var(--bg2); border-radius: 8px; padding: 12px; border: 1px solid #222; }
+    .bot-name { font-weight: 600; color: var(--gold); font-size: 0.9em; margin-bottom: 4px; }
+    .bot-role { font-size: 0.75em; color: var(--muted); margin-bottom: 6px; }
+    .bot-project { font-size: 0.8em; color: var(--text); }
+    .yolo-section { background: #1a1a1a; border: 1px dashed #333; border-radius: 8px; padding: 20px; text-align: center; }
+    .yolo-label { color: var(--muted); font-size: 0.85em; }
+    .footer { text-align: center; margin-top: 60px; padding: 20px; color: var(--muted); font-size: 0.75em; }
+    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } .bots-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🏆 Empire Map</h1>
+  <p class="subtitle">Humble Claw AI — Cron, Bot & Workspace Overview</p>
+  <p class="subtitle">22 Active Crons · 13 Bots · Last updated: April 28, 2026</p>
+</header>
+
+<!-- STANDUPS -->
+<div class="section standup">
+  <div class="section-title"><span class="dot"></span>Standups — 13 Bots · 6 AM Mon-Fri</div>
+  <div class="grid">
+    <div class="card"><div class="card-name">bret-standup</div><div class="card-meta">CTO · 6 AM Mon-Fri</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">owen-standup</div><div class="card-meta">VP QA · 6 AM Mon-Fri</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">mankind-standup</div><div class="card-meta">VP Ops · 6 AM Mon-Fri</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">bobby-standup</div><div class="card-meta">CPO · 6 AM Mon-Fri</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">virgil-standup</div><div class="card-meta">CFO · 6 AM Mon-Fri</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">mountie-standup</div><div class="card-meta">CSO · 6 AM Mon-Fri</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">hogan-standup</div><div class="card-meta">CJO · 6 AM Mon-Fri</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">ricflair-standup</div><div class="card-meta">CHO · 6 AM Mon-Fri</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">jr-standup</div><div class="card-meta">Chronicler · 6 AM Mon-Fri</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">undertaker-standup</div><div class="card-meta">CDO · 6 AM Mon-Fri</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">irwin-standup</div><div class="card-meta">CLC · 6 AM Mon-Fri</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">jimmyhart-standup</div><div class="card-meta">CRO · 6 AM Mon-Fri</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">brotherlylove-standup</div><div class="card-meta">Marketing · 6 AM Mon-Fri</div><span class="card-status status-ok">OK</span></div>
+  </div>
+</div>
+
+<!-- BRIEFINGS -->
+<div class="section briefing">
+  <div class="section-title"><span class="dot"></span>Briefings</div>
+  <div class="grid">
+    <div class="card"><div class="card-name">sheik-briefing</div><div class="card-meta">6 PM Daily</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">sheik-evening-ritual</div><div class="card-meta">10 PM Daily</div><span class="card-status status-ok">OK</span></div>
+  </div>
+</div>
+
+<!-- WEEKLY IDEAS -->
+<div class="section weekly">
+  <div class="section-title"><span class="dot"></span>Weekly Ideas — Consolidated</div>
+  <div class="grid">
+    <div class="card"><div class="card-name">empire-weekly-ideas</div><div class="card-meta">Sunday 6 PM · ALL BOTS</div><span class="card-status status-ok">OK</span></div>
+    <div class="card" style="grid-column: span 2;"><div class="card-name">12 bots → 1 digest</div><div class="card-meta">Bots write weekly-ideas/*.md files · empire-weekly-ideas aggregates · sends ONE digest to Telegram</div></div>
+  </div>
+</div>
+
+<!-- OPERATIONAL -->
+<div class="section operational">
+  <div class="section-title"><span class="dot"></span>Operational</div>
+  <div class="grid">
+    <div class="card"><div class="card-name">jr-digest</div><div class="card-meta">6:30 AM Mon-Fri</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">owen-daily-tech-debt-check</div><div class="card-meta">8:30 AM Daily</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">wiki-ingest</div><div class="card-meta">Monday 9 AM</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">log-rotate</div><div class="card-meta">3 AM Daily · ⚠️ SCRIPT MISSING</div><span class="card-status status-error">ERROR</span></div>
+    <div class="card"><div class="card-name">mountie-credential-storer</div><div class="card-meta">Every 5 min</div><span class="card-status status-ok">OK</span></div>
+    <div class="card"><div class="card-name">JABRONI-IDEA-SQUAD-WEEKLY</div><div class="card-meta">Monday 6:30 PM</div><span class="card-status status-ok">OK</span></div>
+  </div>
+</div>
+
+<!-- BOTS -->
+<div class="section">
+  <div class="section-title" style="color: var(--text);"><span style="width:12px;height:12px;border-radius:50%;background:#FFD700;"></span>The Roster — 13 Active Bots</div>
+  <div class="bots-grid">
+    <div class="bot-card"><div class="bot-name">Bret</div><div class="bot-role">CTO (Engineering)</div><div class="bot-project">OpenClaw LLM Wiki</div></div>
+    <div class="bot-card"><div class="bot-name">Owen</div><div class="bot-role">VP Quality Assurance</div><div class="bot-project">LLM Knowledge Base QA</div></div>
+    <div class="bot-card"><div class="bot-name">Mankind</div><div class="bot-role">VP Operations</div><div class="bot-project">Persistent Agent Infrastructure ✅</div></div>
+    <div class="bot-card"><div class="bot-name">Bobby Heenan</div><div class="bot-role">Chief Product Officer</div><div class="bot-project">Roast Generator — Product Spec</div></div>
+    <div class="bot-card"><div class="bot-name">Virgil</div><div class="bot-role">Chief Financial Officer</div><div class="bot-project">CFO Work · ⚠️ ON NOTICE</div></div>
+    <div class="bot-card"><div class="bot-name">The Mountie</div><div class="bot-role">Chief Security Officer</div><div class="bot-project">Credential Stuffing Detection</div></div>
+    <div class="bot-card"><div class="bot-name">Hulk Hogan</div><div class="bot-role">Chief Jabroni Officer</div><div class="bot-project">HulkScript / Wrestling Markets</div></div>
+    <div class="bot-card"><div class="bot-name">Ric Flair</div><div class="bot-role">Chief Hype Officer</div><div class="bot-project">Hype Generation</div></div>
+    <div class="bot-card"><div class="bot-name">JR</div><div class="bot-role">Chief Chronicler</div><div class="bot-project">Chronicles + Podcast Bible</div></div>
+    <div class="bot-card"><div class="bot-name">The Undertaker</div><div class="bot-role">Chief Destruction Officer</div><div class="bot-project">Destruction / Audit</div></div>
+    <div class="bot-card"><div class="bot-name">Irwin R. Schyster</div><div class="bot-role">Chief Legal Counsel</div><div class="bot-project">CFO Compliance · Virgil Oversight</div></div>
+    <div class="bot-card"><div class="bot-name">Jimmy Hart</div><div class="bot-role">Chief Relations Officer</div><div class="bot-project">Revenue Ecosystem · WorkClaw Analysis</div></div>
+    <div class="bot-card"><div class="bot-name">Brotherly Love</div><div class="bot-role">Marketing</div><div class="bot-project">Marketing Infrastructure</div></div>
+  </div>
+</div>
+
+<!-- YOLO ARCHIVED -->
+<div class="section">
+  <div class="section-title" style="color: var(--muted);"><span style="width:12px;height:12px;border-radius:50%;background:#444;"></span>YOLO Builds — Archived</div>
+  <div class="yolo-section">
+    <div class="yolo-label">workspace-yolo-builds/</div>
+    <div class="yolo-label" style="margin-top:8px;">nwo-kayfabe-firing/ (archived April 11)</div>
+    <div class="yolo-label" style="margin-top:8px;color: var(--error);">⚠️ YOLO PIPELINE IS DEAD — Mr. Pink decision April 28, 2026</div>
+  </div>
+</div>
+
+<div class="footer">
+  Humble Claw AI · Empire Map · Built April 28, 2026<br>
+  🏆 Make everybody humble.
+</div>
+
+</body>
+</html>
