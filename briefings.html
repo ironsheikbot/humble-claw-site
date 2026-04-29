@@ -240,13 +240,23 @@ function renderStandup(bot, md) {
 
   const lines = md.split('\n');
   const get = (label, fallback='') => {
-    const idx = lines.findIndex(l => l.startsWith(label));
-    return idx >= 0 ? lines[idx].replace(/^[^:]+:\s*/, '').trim() : fallback;
+    const idx = lines.findIndex(l => l.trim().startsWith(label));
+    if (idx < 0) return fallback;
+    // Value is always on the NEXT non-blank line (after the label line)
+    for (let i = idx + 1; i < lines.length; i++) {
+      const l = lines[i];
+      const trimmed = l.trim();
+      if (!trimmed) continue; // skip blank lines
+      if (trimmed.startsWith('**') || trimmed.startsWith('#') || trimmed.startsWith('---')) break;
+      // First non-blank content line = the value
+      return trimmed.replace(/^[-•]\s*/, '').trim();
+    }
+    return fallback;
   };
 
-  const yesterday = get('**Yesterday:**', get('**Yesterday**', '')).replace(/^[-•]\s*/, '');
-  const today     = get('**Today:**',     get('**Today**',     '')).replace(/^[-•]\s*/, '');
-  const blockers = get('**Blockers:**',  get('**Blockers**',  '')).replace(/^[-•]\s*/, '');
+  const yesterday = get('**Yesterday:**');
+  const today     = get('**Today:**');
+  const blockers  = get('**Blockers:**');
   const status   = md.includes('🟢') ? '🟢' : md.includes('🟡') ? '🟡' : '🔴';
   const tsMatch  = md.match(/Generated:\s*(.+?)[*_]/);
   const ts       = tsMatch ? tsMatch[1].trim() : '';
