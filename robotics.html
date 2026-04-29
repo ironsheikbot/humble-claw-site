@@ -15,10 +15,11 @@
       --blue2: #0099CC;
       --gold: #FFD700;
       --text: #e8e8f0;
-      --muted: #7777a0;
+      --muted: #6666aa;
       --border: #2a2a44;
       --win: #00c853;
       --loss: #ff1744;
+      --purple: #9b59ff;
     }
 
     body {
@@ -38,11 +39,12 @@
       align-items: center;
       justify-content: space-between;
       padding: 1rem 2rem;
-      background: var(--bg);
+      background: rgba(10,10,18,0.95);
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
       z-index: 100;
+      backdrop-filter: blur(10px);
     }
     .nav-logo { font-size: 1.2rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
@@ -52,8 +54,8 @@
     /* HERO */
     .hero {
       text-align: center;
-      padding: 4rem 2rem 3rem;
-      background: radial-gradient(ellipse at center top, #001a2e 0%, var(--bg) 70%);
+      padding: 5rem 2rem 4rem;
+      background: radial-gradient(ellipse at 50% 0%, #001a2e 0%, #0a0a12 60%);
       border-bottom: 1px solid var(--border);
       position: relative;
       overflow: hidden;
@@ -61,154 +63,235 @@
     .hero::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(0,212,255,0.03) 40px, rgba(0,212,255,0.03) 41px);
+      inset: 0;
+      background: 
+        repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(0,212,255,0.02) 60px, rgba(0,212,255,0.02) 61px),
+        repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(0,212,255,0.02) 60px, rgba(0,212,255,0.02) 61px);
       pointer-events: none;
+    }
+    .hero-dolphin {
+      font-size: 4rem;
+      margin-bottom: 0.5rem;
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
     .hero-badge {
       display: inline-block;
-      background: var(--blue);
+      background: linear-gradient(135deg, var(--blue), var(--purple));
       color: #000;
       font-size: 0.7rem;
       font-weight: 900;
       letter-spacing: 3px;
       text-transform: uppercase;
-      padding: 4px 14px;
-      border-radius: 3px;
+      padding: 5px 16px;
+      border-radius: 20px;
       margin-bottom: 1rem;
     }
     .hero-eyebrow {
       font-size: 0.75rem;
-      letter-spacing: 4px;
+      letter-spacing: 5px;
       text-transform: uppercase;
       color: var(--blue);
       margin-bottom: 0.5rem;
     }
     .hero-title {
-      font-size: clamp(2.2rem, 6vw, 4.5rem);
+      font-size: clamp(2.5rem, 7vw, 5rem);
       font-weight: 900;
       color: #fff;
-      letter-spacing: 3px;
+      letter-spacing: 4px;
       line-height: 1;
       margin-bottom: 0.3rem;
-      text-shadow: 0 0 60px rgba(0,212,255,0.3);
+      text-shadow: 0 0 80px rgba(0,212,255,0.4);
     }
     .hero-subtitle {
-      font-size: clamp(1.5rem, 3vw, 2.2rem);
-      color: var(--blue);
-      font-weight: 700;
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      background: linear-gradient(90deg, var(--blue), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 900;
       letter-spacing: 2px;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
     }
     .hero-robot {
       color: var(--muted);
       font-size: 1rem;
       font-style: italic;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
     }
     .hero-stats {
       display: flex;
-      gap: 2rem;
+      gap: 1.5rem;
       justify-content: center;
       flex-wrap: wrap;
       margin-bottom: 2rem;
     }
     .hero-stat {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      background: rgba(0,212,255,0.05);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 12px;
       padding: 1rem 1.5rem;
       text-align: center;
-      min-width: 100px;
+      min-width: 90px;
+      transition: border-color 0.3s, transform 0.3s;
     }
-    .hero-stat .stat-val { font-size: 2rem; font-weight: 900; color: var(--gold); line-height: 1; }
-    .hero-stat .stat-lbl { font-size: 0.65rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 0.25rem; }
+    .hero-stat:hover { border-color: var(--blue); transform: translateY(-2px); }
+    .hero-stat .stat-val { font-size: 2.2rem; font-weight: 900; color: var(--gold); line-height: 1; }
+    .hero-stat .stat-lbl { font-size: 0.6rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 0.3rem; }
     .hero-stat .stat-val.wins { color: var(--win); }
     .hero-stat .stat-val.losses { color: var(--loss); }
 
+    /* LIVE API DATA */
+    .api-status {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      align-items: center;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .api-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--muted);
+    }
+    .api-dot.live { background: var(--win); box-shadow: 0 0 8px var(--win); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .api-label { font-size: 0.7rem; color: var(--muted); letter-spacing: 1px; }
+    .api-label.live { color: var(--win); }
+
+    /* SOCIAL BAR */
+    .social-bar {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .social-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 6px 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+    .social-btn:hover { border-color: var(--blue); color: var(--blue); text-decoration: none; transform: translateY(-1px); }
+    .social-btn.yt:hover { border-color: #ff0000; color: #ff0000; }
+    .social-btn.ig:hover { border-color: #e1306c; color: #e1306c; }
+    .social-btn.fb:hover { border-color: #1877f2; color: #1877f2; }
+    .social-btn.li:hover { border-color: #0a66c2; color: #0a66c2; }
+    .social-btn.gh:hover { border-color: #fff; color: #fff; }
+
     /* COUNTDOWN */
     .countdown-section {
-      background: var(--bg2);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 2rem;
+      background: linear-gradient(135deg, #001a2e 0%, #0d0d2a 100%);
+      border-top: 1px solid rgba(0,212,255,0.2);
+      border-bottom: 1px solid rgba(0,212,255,0.2);
+      padding: 2.5rem 2rem;
       text-align: center;
     }
     .countdown-label {
       font-size: 0.7rem;
-      letter-spacing: 4px;
+      letter-spacing: 5px;
       text-transform: uppercase;
       color: var(--blue);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem;
     }
     .countdown-title {
-      font-size: 1.5rem;
-      font-weight: 900;
+      font-size: 1.4rem;
+      font-weight: 700;
       color: #fff;
       margin-bottom: 1.5rem;
     }
     .countdown-timer {
       display: flex;
-      gap: 1.5rem;
+      gap: 1rem;
       justify-content: center;
       flex-wrap: wrap;
     }
     .countdown-unit {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: 8px;
+      background: rgba(0,212,255,0.08);
+      border: 1px solid rgba(0,212,255,0.25);
+      border-radius: 12px;
       padding: 1rem 1.25rem;
       min-width: 90px;
     }
-    .countdown-unit .cu-val { font-size: 2.5rem; font-weight: 900; color: var(--blue); line-height: 1; }
-    .countdown-unit .cu-lbl { font-size: 0.6rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 0.25rem; }
+    .countdown-unit .cu-val { font-size: 2.8rem; font-weight: 900; color: var(--blue); line-height: 1; }
+    .countdown-unit .cu-lbl { font-size: 0.6rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 0.3rem; }
 
     /* CONTENT */
     .content { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; }
 
-    /* AWARDS */
     .section-label {
       font-size: 0.75rem;
-      letter-spacing: 4px;
+      letter-spacing: 5px;
       text-transform: uppercase;
       color: var(--blue);
       margin-bottom: 1.5rem;
       padding-bottom: 0.75rem;
       border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .section-label::before {
+      content: '';
+      width: 3px;
+      height: 16px;
+      background: var(--blue);
+      border-radius: 2px;
     }
 
-    .awards-grid {
+    /* SEASON SUMMARY CARDS */
+    .season-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1rem;
       margin-bottom: 3rem;
     }
-    .award-card {
+    .season-card {
       background: var(--bg2);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.25rem;
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .season-card:hover { border-color: var(--blue); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,212,255,0.1); }
+    .season-card .sc-name { font-size: 0.9rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem; }
+    .season-card .sc-date { font-size: 0.75rem; color: var(--muted); margin-bottom: 1rem; }
+    .season-record {
       display: flex;
-      gap: 1rem;
-      align-items: flex-start;
+      gap: 0.5rem;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 0.75rem;
     }
-    .award-card .award-icon { font-size: 1.8rem; flex-shrink: 0; }
-    .award-card .award-name { font-size: 0.95rem; font-weight: 700; color: var(--gold); margin-bottom: 0.25rem; }
-    .award-card .award-event { font-size: 0.8rem; color: var(--muted); }
-    .award-card .award-person { font-size: 0.75rem; color: var(--blue2); margin-top: 0.25rem; font-style: italic; }
+    .rec-w { color: var(--win); font-size: 1.3rem; font-weight: 900; }
+    .rec-l { color: var(--loss); font-size: 1.3rem; font-weight: 900; }
+    .rec-sep { color: var(--muted); font-size: 1.3rem; }
+    .sc-rank { font-size: 0.75rem; color: var(--blue); font-weight: 600; }
+    .sc-award { font-size: 0.75rem; color: var(--gold); font-weight: 600; margin-top: 0.25rem; }
 
-    /* EVENTS */
-    .events-list { margin-bottom: 3rem; }
-    .event-card {
+    /* LIVE MATCH FEED */
+    .live-feed {
       background: var(--bg2);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      margin-bottom: 1.5rem;
+      border-radius: 12px;
       overflow: hidden;
+      margin-bottom: 3rem;
     }
-    .event-header {
+    .live-feed-header {
       background: var(--bg3);
-      padding: 1.25rem 1.5rem;
+      padding: 1rem 1.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -216,83 +299,146 @@
       gap: 1rem;
       border-bottom: 1px solid var(--border);
     }
-    .event-name { font-size: 1rem; font-weight: 700; color: #fff; }
-    .event-date { font-size: 0.8rem; color: var(--muted); }
-    .event-meta {
-      display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--border);
+    .live-feed-title { font-size: 0.9rem; font-weight: 700; color: #fff; }
+    .event-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .event-tab {
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      cursor: pointer;
+      background: rgba(255,255,255,0.05);
+      color: var(--muted);
+      border: 1px solid transparent;
+      transition: all 0.2s;
     }
-    .event-meta-item { text-align: center; }
-    .event-meta-item .emi-val { font-size: 1.4rem; font-weight: 900; color: var(--blue); }
-    .event-meta-item .emi-lbl { font-size: 0.65rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+    .event-tab.active { background: rgba(0,212,255,0.15); color: var(--blue); border-color: var(--blue); }
+    .event-tab:hover:not(.active) { color: var(--text); }
 
-    /* MATCH TABLE */
-    .match-table { width: 100%; border-collapse: collapse; }
+    .match-table-wrap { overflow-x: auto; }
+    .match-table { width: 100%; border-collapse: collapse; min-width: 500px; }
     .match-table th {
       padding: 0.75rem 1rem;
-      text-align: left;
-      font-size: 0.65rem;
+      text-align: center;
+      font-size: 0.6rem;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--muted);
       border-bottom: 1px solid var(--border);
       background: var(--bg3);
     }
+    .match-table th:first-child, .match-table td:first-child { text-align: left; }
     .match-table td {
       padding: 0.75rem 1rem;
       font-size: 0.85rem;
       border-bottom: 1px solid rgba(255,255,255,0.04);
+      text-align: center;
       vertical-align: middle;
     }
     .match-table tr:last-child td { border-bottom: none; }
     .match-table tr:hover td { background: rgba(0,212,255,0.03); }
     .result-badge {
       display: inline-block;
-      padding: 2px 8px;
-      border-radius: 4px;
+      padding: 3px 10px;
+      border-radius: 6px;
       font-size: 0.7rem;
       font-weight: 900;
       letter-spacing: 1px;
     }
     .result-win { background: rgba(0,200,83,0.15); color: var(--win); }
     .result-loss { background: rgba(255,23,68,0.15); color: var(--loss); }
-    .team-red { color: #ff6b6b; font-weight: 600; }
-    .team-blue { color: #6b9fff; font-weight: 600; }
-    .team-5199 { color: var(--gold); font-weight: 700; }
-    .score-red { color: #ff6b6b; font-weight: 900; font-size: 1rem; }
-    .score-blue { color: #6b9fff; font-weight: 900; font-size: 1rem; }
+    .team-tag {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin: 1px;
+    }
+    .team-tag.red { background: rgba(255,100,100,0.15); color: #ff8080; }
+    .team-tag.blue { background: rgba(100,150,255,0.15); color: #80a0ff; }
+    .team-tag.us { background: rgba(255,215,0,0.15); color: var(--gold); border: 1px solid var(--gold); }
+    .score { font-weight: 900; font-size: 1rem; }
+    .score.r { color: #ff8080; }
+    .score.b { color: #80a0ff; }
+
+    /* AWARDS */
+    .awards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    .award-card {
+      background: linear-gradient(135deg, rgba(255,215,0,0.05) 0%, rgba(255,215,0,0.02) 100%);
+      border: 1px solid rgba(255,215,0,0.2);
+      border-radius: 10px;
+      padding: 1.25rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: all 0.2s;
+    }
+    .award-card:hover { border-color: var(--gold); transform: translateY(-1px); }
+    .award-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .award-name { font-size: 0.9rem; font-weight: 700; color: var(--gold); margin-bottom: 0.2rem; }
+    .award-event { font-size: 0.75rem; color: var(--muted); }
+    .award-person { font-size: 0.7rem; color: var(--blue2); margin-top: 0.2rem; font-style: italic; }
+
+    /* CHAMPIONSHIP */
+    .champ-banner {
+      background: linear-gradient(135deg, #1a0a00 0%, #0d0d2a 50%, #1a0a00 100%);
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .champ-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(255,215,0,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .champ-eyebrow { font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+    .champ-title { font-size: 2.2rem; font-weight: 900; color: #fff; margin-bottom: 0.5rem; }
+    .champ-sub { font-size: 1.1rem; color: var(--blue); margin-bottom: 1.5rem; }
+    .champ-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .champ-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--text);
+      transition: all 0.2s;
+    }
+    .champ-link:hover { background: rgba(255,255,255,0.15); border-color: var(--blue); color: var(--blue); text-decoration: none; }
 
     /* SPONSORS */
-    .sponsors-section {
+    .sponsors-strip {
       background: var(--bg2);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 1.5rem;
       margin-bottom: 3rem;
     }
-    .sponsors-label {
-      font-size: 0.7rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-    .sponsors-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      justify-content: center;
-    }
+    .sponsors-label { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; text-align: center; }
+    .sponsors-list { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; }
     .sponsor-chip {
-      background: var(--bg3);
+      background: rgba(255,255,255,0.04);
       border: 1px solid var(--border);
       border-radius: 4px;
-      padding: 4px 12px;
-      font-size: 0.8rem;
+      padding: 3px 10px;
+      font-size: 0.75rem;
       color: var(--text);
       font-weight: 500;
     }
@@ -308,8 +454,8 @@
     }
     footer strong { color: var(--gold); }
 
-    /* STATUS BADGE */
     .status-qualified {
+      display: inline-block;
       background: rgba(0,212,255,0.15);
       color: var(--blue);
       border: 1px solid var(--blue);
@@ -320,28 +466,29 @@
       letter-spacing: 2px;
       text-transform: uppercase;
     }
-
-    /* CHAMPIONSHIP SECTION */
-    .championship-cta {
-      background: linear-gradient(135deg, #001a2e 0%, #0a1a3a 100%);
-      border: 1px solid var(--blue);
-      border-radius: 10px;
-      padding: 2rem;
-      text-align: center;
-      margin-bottom: 3rem;
+    .status-champ {
+      display: inline-block;
+      background: rgba(255,215,0,0.15);
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
     }
-    .championship-cta h2 { color: #fff; font-size: 1.5rem; margin-bottom: 0.5rem; }
-    .championship-cta p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
-    .championship-cta .status-qualified { font-size: 0.75rem; }
 
     @media (max-width: 600px) {
-      .hero-stats { gap: 1rem; }
-      .countdown-timer { gap: 0.75rem; }
+      .hero-stats { gap: 0.75rem; }
+      .hero-stat { min-width: 75px; padding: 0.75rem 1rem; }
+      .hero-stat .stat-val { font-size: 1.8rem; }
+      .countdown-timer { gap: 0.5rem; }
       .countdown-unit { min-width: 70px; padding: 0.75rem; }
-      .countdown-unit .cu-val { font-size: 1.8rem; }
-      .event-meta { gap: 1rem; }
-      .match-table { font-size: 0.75rem; }
-      .match-table td, .match-table th { padding: 0.5rem; }
+      .countdown-unit .cu-val { font-size: 2rem; }
+      .event-tabs { gap: 0.3rem; }
+      .event-tab { padding: 4px 8px; font-size: 0.65rem; }
+      .champ-title { font-size: 1.6rem; }
     }
   </style>
 </head>
@@ -353,46 +500,58 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="portfolio.html">Portfolio</a></li>
       <li><a href="board.html">The Board</a></li>
-      <li><a href="chronicles.html">Chronicles</a></li>
+      <li><a href="robotics.html" class="active">Robotics</a></li>
     </ul>
   </nav>
 
   <!-- HERO -->
   <div class="hero">
     <div class="hero-badge">FRC Team 5199</div>
+    <div class="hero-dolphin">&#x1F42C;</div>
     <div class="hero-eyebrow">Capo Unified School District</div>
     <h1 class="hero-title">ROBOT DOLPHINS</h1>
     <div class="hero-subtitle">FROM OUTER SPACE</div>
-    <div class="hero-robot">Robot: "Maelstrom" — 2026 Season: REBUILT&#8480;</div>
+    <div class="hero-robot">Robot: "Maelstrom" &#8212; 2026 Season: REBUILT&#8480;</div>
     <div class="hero-stats">
       <div class="hero-stat">
-        <div class="stat-val">35</div>
+        <div class="stat-val wins" id="stat-wins">34</div>
         <div class="stat-lbl">Wins</div>
       </div>
       <div class="hero-stat">
-        <div class="stat-val">14</div>
+        <div class="stat-val losses" id="stat-losses">16</div>
         <div class="stat-lbl">Losses</div>
       </div>
       <div class="hero-stat">
-        <div class="stat-val">49</div>
-        <div class="stat-lbl">Matches Played</div>
+        <div class="stat-val" id="stat-total">50</div>
+        <div class="stat-lbl">Matches</div>
       </div>
       <div class="hero-stat">
-        <div class="stat-val">3</div>
+        <div class="stat-val" id="stat-events">3</div>
         <div class="stat-lbl">Events</div>
       </div>
       <div class="hero-stat">
-        <div class="stat-val">5</div>
+        <div class="stat-val" id="stat-awards">5</div>
         <div class="stat-lbl">Awards</div>
       </div>
     </div>
-    <span class="status-qualified">&#x1F3C6; Qualified for FIRST Championship</span>
+    <div class="api-status">
+      <div class="api-dot" id="api-dot"></div>
+      <span class="api-label" id="api-label">Connecting to FIRST API...</span>
+    </div>
+    <div class="social-bar">
+      <a href="https://robotdolphins.org/" target="_blank" class="social-btn">&#x1F310; robotdolphins.org</a>
+      <a href="https://www.youtube.com/@robotdolphins5500" target="_blank" class="social-btn yt">&#x25B6; YouTube</a>
+      <a href="https://www.instagram.com/robotdolphins" target="_blank" class="social-btn ig">&#x1F4F7; Instagram</a>
+      <a href="https://www.facebook.com/team5199" target="_blank" class="social-btn fb">&#x1F4F1; Facebook</a>
+      <a href="https://www.linkedin.com/company/robot-dolphins" target="_blank" class="social-btn li">&#x1F4BC; LinkedIn</a>
+      <a href="https://github.com/FRCTeam5199" target="_blank" class="social-btn gh">&#x1F4BB; GitHub</a>
+    </div>
   </div>
 
   <!-- COUNTDOWN -->
   <div class="countdown-section">
-    <div class="countdown-label">Countdown to FIRST Championship 2026</div>
-    <div class="countdown-title" id="champs-name">Houston, Texas — April 15-18, 2026</div>
+    <div class="countdown-label">&#x1F3C6; Destination: Houston, Texas &#x1F3C6;</div>
+    <div class="countdown-title" id="champs-name">FIRST Championship 2026 &#8212; Archimedes Division</div>
     <div class="countdown-timer" id="countdown">
       <div class="countdown-unit">
         <div class="cu-val" id="cd-days">--</div>
@@ -416,11 +575,66 @@
   <!-- CONTENT -->
   <div class="content">
 
-    <!-- QUALIFIED BANNER -->
-    <div class="championship-cta">
-      <h2>&#x1F3C6; Headed to FIRST Championship!</h2>
-      <p>Team 5199 qualified through FIRST California District points. Making the long journey to Houston to represent the West Coast.</p>
-      <span class="status-qualified">Houston, TX — April 15-18, 2026</span>
+    <!-- SEASON SUMMARY -->
+    <div class="section-label">2026 Season at a Glance</div>
+    <div class="season-grid" id="season-grid">
+      <div class="season-card">
+        <div class="sc-name">CA District Ventura County</div>
+        <div class="sc-date">March 13-15, 2026 &#8212; Ventura, CA</div>
+        <div class="season-record">
+          <span class="rec-w">11</span><span class="rec-sep">-</span><span class="rec-l">5</span>
+        </div>
+        <div class="sc-rank">Qualification Rank: 3 of 36</div>
+        <div class="sc-award">&#x1F3AF; Engineering Inspiration Award</div>
+      </div>
+      <div class="season-card">
+        <div class="sc-name">CA District Orange County</div>
+        <div class="sc-date">April 2-4, 2026 &#8212; Mission Viejo, CA</div>
+        <div class="season-record">
+          <span class="rec-w">14</span><span class="rec-sep">-</span><span class="rec-l">4</span>
+        </div>
+        <div class="sc-rank">Strong performance</div>
+        <div class="sc-award">&#x1F916; Autonomous Award (Google.org)</div>
+      </div>
+      <div class="season-card">
+        <div class="sc-name">FIRST CA Southern State Championship</div>
+        <div class="sc-date">April 2026 &#8212; Presented by Qualcomm</div>
+        <div class="season-record">
+          <span class="rec-w">9</span><span class="rec-sep">-</span><span class="rec-l">7</span>
+        </div>
+        <div class="sc-rank">Qualified for Championship</div>
+        <div class="sc-award">&#x1F3C6; Gracious Professionalism + Woodie Flowers Finalist</div>
+      </div>
+    </div>
+
+    <!-- LIVE MATCHES -->
+    <div class="section-label">Match Results</div>
+    <div class="live-feed">
+      <div class="live-feed-header">
+        <div class="live-feed-title">&#x1F3AF; 2026 Season Match Log</div>
+        <div class="event-tabs">
+          <button class="event-tab active" data-event="CAVEN">Ventura</button>
+          <button class="event-tab" data-event="CAOEC">Orange County</button>
+          <button class="event-tab" data-event="CASCMP">SoCal States</button>
+          <button class="event-tab" data-event="ARCHIMEDES">Championship</button>
+        </div>
+      </div>
+      <div class="match-table-wrap">
+        <table class="match-table">
+          <thead>
+            <tr>
+              <th>Match</th>
+              <th>Red Alliance</th>
+              <th>Score</th>
+              <th>Blue Alliance</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody id="match-body">
+            <tr><td colspan="5" style="text-align:center; color:var(--muted); padding:2rem;">Loading match data...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- AWARDS -->
@@ -438,13 +652,13 @@
         <div>
           <div class="award-name">Woodie Flowers Finalist Award</div>
           <div class="award-event">FIRST California Southern State Championship</div>
-          <div class="award-person">Presented to Connor Martindale</div>
+          <div class="award-person">Connor Martindale</div>
         </div>
       </div>
       <div class="award-card">
         <div class="award-icon">&#x1F916;</div>
         <div>
-          <div class="award-name">Autonomous Award — Sponsored by Google.org</div>
+          <div class="award-name">Autonomous Award &#8212; Sponsored by Google.org</div>
           <div class="award-event">CA District Orange County Event</div>
         </div>
       </div>
@@ -453,210 +667,36 @@
         <div>
           <div class="award-name">District Championship Leadership Award Semi-Finalist</div>
           <div class="award-event">FIRST California Southern State Championship</div>
-          <div class="award-person">Presented to Cameron D.</div>
+          <div class="award-person">Cameron D.</div>
         </div>
       </div>
       <div class="award-card">
         <div class="award-icon">&#x1F680;</div>
         <div>
-          <div class="award-name">District Engineering Inspiration Award — Sponsored by SpaceX</div>
+          <div class="award-name">District Engineering Inspiration Award &#8212; SpaceX</div>
           <div class="award-event">CA District Ventura County Event</div>
         </div>
       </div>
     </div>
 
-    <!-- EVENTS -->
-    <div class="section-label">2026 Season Events</div>
-    <div class="events-list">
-
-      <!-- VENTURA COUNTY -->
-      <div class="event-card">
-        <div class="event-header">
-          <div>
-            <div class="event-name">CA District Ventura County Event</div>
-            <div class="event-date">March 13-15, 2026 — Ventura, CA</div>
-          </div>
-          <span class="status-qualified">Rank 3 of 36</span>
-        </div>
-        <div class="event-meta">
-          <div class="event-meta-item">
-            <div class="emi-val" style="color:var(--win)">10</div>
-            <div class="emi-lbl">Wins</div>
-          </div>
-          <div class="event-meta-item">
-            <div class="emi-val" style="color:var(--loss)">2</div>
-            <div class="emi-lbl">Losses</div>
-          </div>
-          <div class="event-meta-item">
-            <div class="emi-val">0</div>
-            <div class="emi-lbl">Ties</div>
-          </div>
-          <div class="event-meta-item">
-            <div class="emi-val">12</div>
-            <div class="emi-lbl">Matches</div>
-          </div>
-          <div class="event-meta-item">
-            <div class="emi-val">3rd</div>
-            <div class="emi-lbl">Seed</div>
-          </div>
-        </div>
-        <table class="match-table">
-          <thead>
-            <tr>
-              <th>Match</th>
-              <th>Red Alliance</th>
-              <th>Score</th>
-              <th>Blue Alliance</th>
-              <th>Result</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Qual 3</td>
-              <td><span class="team-red">5869</span>, <span class="team-red">22</span>, <span class="team-red">3512</span></td>
-              <td><span class="score-red">112</span> — <span class="score-blue">161</span></td>
-              <td><span class="team-5199">5199</span>, <span class="team-blue">3925</span>, <span class="team-blue">11024</span></td>
-              <td><span class="result-badge result-loss">LOSS</span></td>
-            </tr>
-            <tr>
-              <td>Qual 7</td>
-              <td><span class="team-red">22</span>, <span class="team-red">1661</span>, <span class="team-red">6036</span></td>
-              <td><span class="score-red">106</span> — <span class="score-blue">263</span></td>
-              <td><span class="team-blue">1538</span>, <span class="team-5199">5199</span>, <span class="team-blue">3512</span></td>
-              <td><span class="result-badge result-win">WIN</span></td>
-            </tr>
-            <tr>
-              <td>Qual 15</td>
-              <td><span class="team-red">6934</span>, <span class="team-red">8533</span>, <span class="team-red">5199</span></td>
-              <td><span class="score-red">64</span> — <span class="score-blue">38</span></td>
-              <td><span class="team-blue">192</span>, <span class="team-blue">4711</span>, <span class="team-blue">7327</span></td>
-              <td><span class="result-badge result-win">WIN</span></td>
-            </tr>
-            <tr>
-              <td>Qual 19</td>
-              <td><span class="team-red">6060</span>, <span class="team-red">192</span>, <span class="team-red">6934</span></td>
-              <td><span class="score-red">137</span> — <span class="score-blue">81</span></td>
-              <td><span class="team-5199">5199</span>, <span class="team-blue">3501</span>, <span class="team-blue">7327</span></td>
-              <td><span class="result-badge result-win">WIN</span></td>
-            </tr>
-            <tr>
-              <td>Qual 25</td>
-              <td><span class="team-red">4711</span>, <span class="team-red">5199</span>, <span class="team-red">7415</span></td>
-              <td><span class="score-red">348</span> — <span class="score-blue">8</span></td>
-              <td><span class="team-blue">22</span>, <span class="team-blue">3309</span>, <span class="team-blue">192</span></td>
-              <td><span class="result-badge result-win">WIN</span></td>
-            </tr>
-            <tr>
-              <td>Qual 31</td>
-              <td><span class="team-red">5285</span>, <span class="team-red">1388</span>, <span class="team-red">5199</span></td>
-              <td><span class="score-red">143</span> — <span class="score-blue">57</span></td>
-              <td><span class="team-blue">1661</span>, <span class="team-blue">589</span>, <span class="team-blue">3309</span></td>
-              <td><span class="result-badge result-win">WIN</span></td>
-            </tr>
-            <tr>
-              <td>Qual 37</td>
-              <td><span class="team-red">3309</span>, <span class="team-red">5199</span>, <span class="team-red">5869</span></td>
-              <td><span class="score-red">83</span> — <span class="score-blue">132</span></td>
-              <td><span class="team-blue">5285</span>, <span class="team-blue">599</span>, <span class="team-blue">691</span></td>
-              <td><span class="result-badge result-loss">LOSS</span></td>
-            </tr>
-            <tr>
-              <td>Qual 45</td>
-              <td><span class="team-red">9520</span>, <span class="team-red">10936</span>, <span class="team-red">5500</span></td>
-              <td><span class="score-red">15</span> — <span class="score-blue">572</span></td>
-              <td><span class="team-blue">4414</span>, <span class="team-blue">5136</span>, <span class="team-5199">5199</span></td>
-              <td><span class="result-badge result-win">WIN</span></td>
-            </tr>
-            <tr>
-              <td>Qual 52</td>
-              <td><span class="team-red">599</span>, <span class="team-red">6036</span>, <span class="team-red">5012</span></td>
-              <td><span class="score-red">398</span> — <span class="score-blue">43</span></td>
-              <td><span class="team-5199">5199</span>, <span class="team-blue">6560</span>, <span class="team-blue">6060</span></td>
-              <td><span class="result-badge result-win">WIN</span></td>
-            </tr>
-            <tr>
-              <td>Qual 56</td>
-              <td><span class="team-red">6764</span>, <span class="team-red">6560</span>, <span class="team-red">589</span></td>
-              <td><span class="score-red">62</span> — <span class="score-blue">106</span></td>
-              <td><span class="team-blue">22</span>, <span class="team-5199">5199</span>, <span class="team-blue">9520</span></td>
-              <td><span class="result-badge result-win">WIN</span></td>
-            </tr>
-            <tr>
-              <td>Qual 62</td>
-              <td><span class="team-red">8521</span>, <span class="team-red">5869</span>, <span class="team-red">9520</span></td>
-              <td><span class="score-red">31</span> — <span class="score-blue">139</span></td>
-              <td><span class="team-blue">1160</span>, <span class="team-5199">5199</span>, <span class="team-blue">5500</span></td>
-              <td><span class="result-badge result-win">WIN</span></td>
-            </tr>
-            <tr>
-              <td>Qual 70</td>
-              <td colspan="4" style="text-align:center; color:var(--muted);">Results pending — check back after event</td>
-            </tr>
-          </tbody>
-        </table>
+    <!-- CHAMPIONSHIP -->
+    <div class="champ-banner">
+      <div class="champ-eyebrow">&#x2728; They Did It &#x2728;</div>
+      <div class="champ-title">&#x1F3C6; Headed to FIRST Championship</div>
+      <div class="champ-sub">Houston, TX &#8212; April 15-18, 2026</div>
+      <span class="status-champ">Archimedes Division</span>
+      <div class="champ-links" style="margin-top:1.5rem;">
+        <a href="https://www.thebluealliance.com/team/5199" target="_blank" class="champ-link">&#x1F4CA; The Blue Alliance</a>
+        <a href="https://frc-events.firstinspires.org/2026/team/5199" target="_blank" class="champ-link">&#x1F3DF; FIRST Events</a>
+        <a href="https://robotdolphins.org/" target="_blank" class="champ-link">&#x1F310; robotdolphins.org</a>
+        <a href="https://www.firstchampionship.org" target="_blank" class="champ-link">&#x1F3ED; Championship Info</a>
       </div>
-
-      <!-- ORANGE COUNTY -->
-      <div class="event-card">
-        <div class="event-header">
-          <div>
-            <div class="event-name">CA District Orange County Event</div>
-            <div class="event-date">March 2026 — Orange County, CA</div>
-          </div>
-          <span class="status-qualified">Autonomous Award Winner</span>
-        </div>
-        <div class="event-meta">
-          <div class="event-meta-item">
-            <div class="emi-val">&#x1F916;</div>
-            <div class="emi-lbl">Autonomous Award</div>
-          </div>
-          <div class="event-meta-item">
-            <div class="emi-val" style="color:var(--gold)">&#x1F3C6;</div>
-            <div class="emi-lbl">Google.org Sponsored</div>
-          </div>
-        </div>
-        <p style="padding:1rem 1.5rem; color:var(--muted); font-size:0.85rem;">
-          Full match results and rankings coming soon — check back or visit <a href="https://frc-events.firstinspires.org/2026/team/5199" target="_blank">frc-events.firstinspires.org</a>
-        </p>
-      </div>
-
-      <!-- SOUTHERN STATE -->
-      <div class="event-card">
-        <div class="event-header">
-          <div>
-            <div class="event-name">FIRST California Southern State Championship</div>
-            <div class="event-date">April 2026 — Presented by Qualcomm</div>
-          </div>
-          <span class="status-qualified">Gracious Professionalism Award</span>
-        </div>
-        <div class="event-meta">
-          <div class="event-meta-item">
-            <div class="emi-val">&#x1F3C6;</div>
-            <div class="emi-lbl">Gracious Professionalism</div>
-          </div>
-          <div class="event-meta-item">
-            <div class="emi-val">&#x1F451;</div>
-            <div class="emi-lbl">Woodie Flowers Finalist</div>
-          </div>
-          <div class="event-meta-item">
-            <div class="emi-val" style="color:var(--gold)">&#x1F3AF;</div>
-            <div class="emi-lbl">Leadership Semi-Finalist</div>
-          </div>
-          <div class="event-meta-item">
-            <div class="emi-val">&#x1F3C6;</div>
-            <div class="emi-lbl">Worlds Qualified</div>
-          </div>
-        </div>
-        <p style="padding:1rem 1.5rem; color:var(--muted); font-size:0.85rem;">
-          Full match results and rankings coming soon — check back or visit <a href="https://frc-events.firstinspires.org/2026/team/5199" target="_blank">frc-events.firstinspires.org</a>
-        </p>
-      </div>
-
     </div>
 
     <!-- SPONSORS -->
     <div class="section-label">2026 Season Sponsors</div>
-    <div class="sponsors-section">
+    <div class="sponsors-strip">
+      <div class="sponsors-label">Presented by</div>
       <div class="sponsors-list">
         <span class="sponsor-chip">CCA</span>
         <span class="sponsor-chip">Salesforce</span>
@@ -668,46 +708,168 @@
         <span class="sponsor-chip">Haas Foundation</span>
         <span class="sponsor-chip">Western Digital</span>
         <span class="sponsor-chip">Qualcomm</span>
-        <span class="sponsor-chip">CIRO Design</span>
-        <span class="sponsor-chip">Industrial Metal Supply Co.</span>
+        <span class="sponsor-chip">CIRO Design        <span class="sponsor-chip">Industrial Metal Supply Co.</span>
         <span class="sponsor-chip">Capo Unified School District</span>
-      </div>
-    </div>
-
-    <!-- MORE COMING SOON -->
-    <div class="section-label">What's Next</div>
-    <div class="event-card">
-      <div class="event-header">
-        <div>
-          <div class="event-name">&#x1F3AF; FIRST Championship 2026</div>
-          <div class="event-date">April 15-18, 2026 — Houston, TX</div>
-        </div>
-        <span class="status-qualified">DESTINATION: HOUSTON</span>
-      </div>
-      <div style="padding:1.5rem; color:var(--muted); font-size:0.9rem; line-height:1.8;">
-        <p>The Robot Dolphins are headed to the biggest stage in FIRST Robotics.</p>
-        <p style="margin-top:0.75rem;">Live match results and Championship coverage will be added as the event approaches. Bookmark this page and check back for updates.</p>
-        <p style="margin-top:0.75rem;">Follow the full journey at <a href="https://robotdolphins.org" target="_blank">robotdolphins.org</a></p>
       </div>
     </div>
 
   </div>
 
   <footer>
-    <p><strong>HUMBLE CLAW</strong> — Tracking Team 5199 on the road to Worlds</p>
-    <p style="margin-top:0.5rem">Built for family, friends, and fans of the <strong>Robot Dolphins From Outer Space</strong></p>
-    <p style="margin-top:0.5rem"><a href="index.html">Back to Humble Claw</a></p>
+    <p><strong>HUMBLE CLAW</strong> &#8212; Tracking Team 5199 on the road to Worlds</p>
+    <p style="margin-top:0.5rem">Built with &#x2764; for family, fans & the <strong>Robot Dolphins From Outer Space</strong></p>
+    <p style="margin-top:0.5rem"><a href="index.html">Back to Humble Claw</a> &nbsp;|&nbsp; <a href="https://robotdolphins.org" target="_blank">robotdolphins.org</a></p>
   </footer>
 
   <script>
-    // Countdown to FIRST Championship — April 15, 2026
-    const champsDate = new Date('2026-04-15T08:00:00-05:00'); // CDT
+    // FIRST API Configuration
+    const TBA_AUTH = 'Basic ' + btoa('ironsheik:5f57f832-7696-4b12-a14c-949288e3c18a');
+    const BASE = 'https://frc-api.firstinspires.org/v3.0/2026';
+    const TEAM = 5199;
 
+    // Match data (pre-loaded for fast render)
+    const MATCH_DATA = {
+      CAVEN: [
+        {num:3,r:[5869,22,3512],rs:112,b:[5199,3925,11024],bs:161,w:true},
+        {num:4,r:[9271,599,5199],rs:298,b:[4711,5136,1388],bs:113,w:true},
+        {num:7,r:[22,1661,6036],rs:106,b:[1538,3512,5199],bs:263,w:true},
+        {num:8,r:[192,7415,6036],rs:261,b:[9271,599,5199],bs:219,w:false},
+        {num:10,r:[9271,599,5199],rs:161,b:[1160,5285,11024],bs:67,w:true},
+        {num:12,r:[9271,599,5199],rs:196,b:[3512,6060,1538],bs:198,w:false},
+        {num:15,r:[6934,8533,5199],rs:64,b:[192,4711,7327],bs:38,w:true},
+        {num:19,r:[5199,6060,192],rs:137,b:[6934,3501,7327],bs:81,w:true},
+        {num:25,r:[4711,5199,7415],rs:348,b:[22,3309,192],bs:8,w:true},
+        {num:31,r:[5285,1388,5199],rs:143,b:[1661,589,3309],bs:57,w:true},
+        {num:37,r:[3309,5199,5869],rs:83,b:[5285,599,691],bs:132,w:false},
+        {num:45,r:[9520,10936,5500],rs:15,b:[4414,5136,5199],bs:572,w:true},
+        {num:52,r:[5199,599,6036],rs:398,b:[5012,6560,6060],bs:43,w:true},
+        {num:56,r:[6764,6560,589],rs:62,b:[22,5199,9520],bs:106,w:true},
+        {num:62,r:[8521,5869,9520],rs:31,b:[1160,5199,5500],bs:139,w:true},
+        {num:70,r:[599,5136,6934],rs:178,b:[5199,9271,6764],bs:108,w:false},
+      ],
+      CAOEC: [
+        {num:4,r:[4141,4322,4276],rs:260,b:[8891,4414,5199],bs:482,w:true},
+        {num:4,r:[5805,5199,115],rs:315,b:[2658,5137,3408],bs:125,w:true},
+        {num:8,r:[4414,6885,8521],rs:164,b:[5199,4322,3408],bs:252,w:true},
+        {num:8,r:[4322,10586,4201],rs:225,b:[5805,5199,115],bs:175,w:false},
+        {num:10,r:[5805,5199,115],rs:129,b:[9271,6220,5857],bs:105,w:true},
+        {num:12,r:[5199,5805,115],rs:260,b:[7042,7157,4276],bs:149,w:true},
+        {num:13,r:[5500,5474,5199],rs:186,b:[6220,7042,3020],bs:119,w:true},
+        {num:13,r:[4322,10586,4201],rs:357,b:[5199,5805,115],bs:332,w:false},
+        {num:24,r:[3952,9271,5199],rs:281,b:[2658,5500,4322],bs:127,w:true},
+        {num:29,r:[5805,2658,115],rs:172,b:[5199,10586,6220],bs:225,w:true},
+        {num:34,r:[3309,3295,5474],rs:120,b:[4619,5514,5199],bs:93,w:false},
+        {num:38,r:[4276,8891,5835],rs:34,b:[9730,5199,4984],bs:171,w:true},
+        {num:44,r:[5137,5199,115],rs:450,b:[5514,8521,6695],bs:127,w:true},
+        {num:50,r:[3295,5199,10336],rs:277,b:[6072,115,5514],bs:38,w:true},
+        {num:56,r:[4619,5137,2658],rs:60,b:[3309,5199,3476],bs:167,w:true},
+        {num:68,r:[5199,4141,4201],rs:185,b:[10586,7157,8521],bs:47,w:true},
+        {num:74,r:[5199,4919,5857],rs:187,b:[4984,3952,4141],bs:63,w:true},
+      ],
+      CASCMP: [
+        {num:1,r:[3255,4419,5199],rs:469,b:[11024,4322,4079],bs:331,w:true},
+        {num:1,r:[4414,8119,3476],rs:746,b:[5199,5474,4322],bs:487,w:false},
+        {num:5,r:[5199,4201,4322],rs:609,b:[599,9408,696],bs:551,w:true},
+        {num:10,r:[1197,1388,2102],rs:374,b:[5199,5474,4322],bs:409,w:true},
+        {num:12,r:[5199,4201,4322],rs:0,b:[687,1538,973],bs:522,w:false},
+        {num:18,r:[3309,973,1138],rs:305,b:[7157,5199,599],bs:200,w:false},
+        {num:26,r:[968,4123,5199],rs:253,b:[4201,1538,3476],bs:612,w:false},
+        {num:36,r:[5805,9084,3647],rs:325,b:[1388,5199,812],bs:339,w:true},
+        {num:43,r:[7042,589,2637],rs:217,b:[2710,1160,5199],bs:143,w:false},
+        {num:60,r:[6220,3749,2429],rs:337,b:[5199,2584,5137],bs:362,w:true},
+        {num:69,r:[812,1197,2404],rs:164,b:[5199,2429,6695],bs:367,w:true},
+        {num:79,r:[294,10586,5199],rs:189,b:[2984,5136,2584],bs:217,w:false},
+        {num:87,r:[8119,4,6695],rs:293,b:[696,5199,5474],bs:523,w:true},
+        {num:99,r:[5199,687,1148],rs:370,b:[2102,4999,1160],bs:346,w:true},
+        {num:108,r:[4322,5199,3408],rs:396,b:[968,4,687],bs:355,w:true},
+        {num:118,r:[5199,7042,2658],rs:298,b:[4738,4415,7415],bs:328,w:false},
+      ],
+      ARCHIMEDES: []
+    };
+
+    // Current event tab
+    let currentEvent = 'CAVEN';
+
+    // Render matches for an event
+    function renderMatches(eventCode) {
+      const tbody = document.getElementById('match-body');
+      const matches = MATCH_DATA[eventCode] || [];
+      const labels = {CAVEN:'Ventura County',CAOEC:'Orange County',CASCMP:'SoCal State Championship',ARCHIMEDES:'Championship'};
+      
+      if (matches.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--muted); padding:2rem;">
+          ${eventCode === 'ARCHIMEDES' ? '&#x1F3C6; Championship matches released April 29 — check back!' : 'No match data available.'}
+          <br><span style="font-size:0.75rem;">Source: <a href="https://frc-events.firstinspires.org/2026/team/5199" target="_blank">FIRST Events</a></span>
+        </td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = matches.map(m => {
+        const rTags = m.r.map(t => t === TEAM 
+          ? `<span class="team-tag red us">${t}</span>` 
+          : `<span class="team-tag red">${t}</span>`).join('');
+        const bTags = m.b.map(t => t === TEAM 
+          ? `<span class="team-tag blue us">${t}</span>` 
+          : `<span class="team-tag blue">${t}</span>`).join('');
+        return `<tr>
+          <td><strong>Q${m.num}</strong></td>
+          <td>${rTags}</td>
+          <td><span class="score r">${m.rs}</span> &ndash; <span class="score b">${m.bs}</span></td>
+          <td>${bTags}</td>
+          <td><span class="result-badge ${m.w ? 'result-win' : 'result-loss'}">${m.w ? 'WIN' : 'LOSS'}</span></td>
+        </tr>`;
+      }).join('');
+    }
+
+    // Tab switching
+    document.querySelectorAll('.event-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.event-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentEvent = tab.dataset.event;
+        renderMatches(currentEvent);
+      });
+    });
+
+    // FIRST API live fetch
+    async function fetchFromAPI(eventCode) {
+      try {
+        const res = await fetch(`${BASE}/matches/${eventCode}`, {
+          headers: { 'Authorization': TBA_AUTH }
+        });
+        if (!res.ok) throw new Error('API error');
+        const data = await res.json();
+        const matches = (data.Matches || []).filter(m => 
+          m.tournamentLevel === 'Qualification' && 
+          m.teams.some(t => t.teamNumber === TEAM)
+        ).sort((a,b) => a.matchNumber - b.matchNumber);
+        if (matches.length > 0) {
+          const parsed = matches.map(m => {
+            const t5199 = m.teams.find(t => t.teamNumber === TEAM);
+            const ourAlliance = t5199.station.includes('Red') ? 'Red' : 'Blue';
+            const won = (ourAlliance === 'Red' && m.scoreRedFinal > m.scoreBlueFinal) || 
+                        (ourAlliance === 'Blue' && m.scoreBlueFinal > m.scoreRedFinal);
+            return {
+              num: m.matchNumber,
+              r: m.teams.filter(t=>t.station.includes('Red')).map(t=>t.teamNumber),
+              b: m.teams.filter(t=>t.station.includes('Blue')).map(t=>t.teamNumber),
+              rs: m.scoreRedFinal, bs: m.scoreBlueFinal,
+              w: won
+            };
+          });
+          MATCH_DATA[eventCode] = parsed;
+          if (currentEvent === eventCode) renderMatches(eventCode);
+          return true;
+        }
+      } catch(e) { /* use fallback */ }
+      return false;
+    }
+
+    // Countdown
+    const CHAMPS_DATE = new Date('2026-04-15T08:00:00-05:00');
     function updateCountdown() {
-      const
       const now = new Date();
-      const diff = champsDate - now;
-
+      const diff = CHAMPS_DATE - now;
       if (diff <= 0) {
         document.getElementById('cd-days').textContent = '0';
         document.getElementById('cd-hours').textContent = '0';
@@ -716,20 +878,47 @@
         document.getElementById('champs-name').textContent = 'IT\u2019S CHAMPIONSHIP TIME!';
         return;
       }
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const secs = Math.floor((diff % (1000 * 60)) / 1000);
-
-      document.getElementById('cd-days').textContent = days;
-      document.getElementById('cd-hours').textContent = hours;
-      document.getElementById('cd-mins').textContent = mins;
-      document.getElementById('cd-secs').textContent = secs;
+      const d = Math.floor(diff/(1000*60*60*24));
+      const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+      const mi = Math.floor((diff%(1000*60*60))/(1000*60));
+      const s = Math.floor((diff%(1000*60))/1000);
+      document.getElementById('cd-days').textContent = d;
+      document.getElementById('cd-hours').textContent = h;
+      document.getElementById('cd-mins').textContent = mi;
+      document.getElementById('cd-secs').textContent = s;
     }
-
-    updateCountdown();
     setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // Init
+    renderMatches('CAVEN');
+    
+    // Try live API for all events
+    (async () => {
+      const dot = document.getElementById('api-dot');
+      const label = document.getElementById('api-label');
+      let apiLive = false;
+      for (const ev of ['CAVEN','CAOEC','CASCMP','ARCHIMEDES']) {
+        const ok = await fetchFromAPI(ev);
+        if (ok) apiLive = true;
+      }
+      if (apiLive) {
+        dot.classList.add('live');
+        label.classList.add('live');
+        label.textContent = 'Live FIRST API connected';
+        // Update stats from live data
+        let totalW = 0, totalL = 0;
+        for (const ev of ['CAVEN','CAOEC','CASCMP']) {
+          for (const m of (MATCH_DATA[ev]||[])) { if(m.w) totalW++; else totalL++; }
+        }
+        document.getElementById('stat-wins').textContent = totalW;
+        document.getElementById('stat-losses').textContent = totalL;
+        document.getElementById('stat-total').textContent = totalW + totalL;
+      } else {
+        dot.classList.remove('live');
+        label.textContent = 'Showing cached data — API unavailable';
+      }
+    })();
   </script>
 
 </body>
