@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Championship Guide — FIRST Championship 2026</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a12;
+      --bg2: #10101a;
+      --bg3: #181828;
+      --blue: #00D4FF;
+      --gold: #FFD700;
+      --text: #e8e8f0;
+      --muted: #6666aa;
+      --border: #2a2a44;
+      --green: #00c853;
+      --orange: #ff9100;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(10,10,18,0.95);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+    .nav-logo { font-size: 1.2rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--muted); font-size: 0.9rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); text-decoration: none; }
+
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      background: radial-gradient(ellipse at 50% 0%, #001a2e 0%, var(--bg) 65%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-presenter {
+      font-size: 0.7rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+    }
+    .hero-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 3px;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+    .hero-dates {
+      font-size: 1.1rem;
+      color: var(--blue);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .hero-venue {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #001a2e, #0d0d2a);
+      border: 1px solid var(--blue);
+      color: var(--blue);
+      font-size: 0.7rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 5px 16px;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+    }
+    .hero-teams {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .hero-team-stat {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 1.25rem;
+      text-align: center;
+    }
+    .hero-team-stat .hts-num { font-size: 1.5rem; font-weight: 900; color: var(--gold); }
+    .hero-team-stat .hts-lbl { font-size: 0.6rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+
+    .content { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
+
+    .toc {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem 2rem;
+      margin-bottom: 3rem;
+    }
+    .toc-title {
+      font-size: 0.7rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 1rem;
+    }
+    .toc-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.4rem 2rem;
+      list-style: none;
+    }
+    .toc-list a {
+      font-size: 0.85rem;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .toc-list a:hover { color: var(--gold); text-decoration: none; }
+
+    .section { margin-bottom: 3rem; }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    p { color: #ccc; margin-bottom: 1rem; font-size: 0.95rem; }
+
+    .highlight-box {
+      background: rgba(0,212,255,0.05);
+      border: 1px solid rgba(0,212,255,0.2);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .highlight-box p:last-child { margin-bottom: 0; }
+    .highlight-box strong { color: var(--blue); }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .info-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+    .info-card .ic-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+    .info-card .ic-body { font-size: 0.85rem; color: var(--muted); }
+    .info-card .ic-body a { color: var(--blue); }
+
+    .programs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .program-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+    .program-card .pc-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .program-card .pc-name { font-size: 0.85rem; font-weight: 700; color: var(--gold); margin-bottom: 0.25rem; }
+    .program-card .pc-grade { font-size: 0.7rem; color: var(--muted); margin-bottom: 0.4rem; }
+    .program-card .pc-desc { font-size: 0.75rem; color: #aaa; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+    }
+    th {
+      background: var(--bg3);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      color: var(--muted);
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      color: #ccc;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(0,212,255,0.03); }
+
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .food-truck {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .cta-box {
+      background: linear-gradient(135deg, #001a2e 0%, #0d0d2a 100%);
+      border: 2px solid var(--blue);
+      border-radius: 14px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .cta-box h2 { color: #fff; font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .cta-box p { color: var(--muted); margin-bottom: 1.5rem; }
+    .cta-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .cta-btn.primary { background: var(--blue); color: #000; }
+    .cta-btn.primary:hover { background: #fff; text-decoration: none; }
+    .cta-btn.secondary { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: var(--text); }
+    .cta-btn.secondary:hover { border-color: var(--blue); color: var(--blue); text-decoration: none; }
+
+    .venue-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .venue-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+    }
+    .venue-card .vc-name { font-size: 0.9rem; font-weight: 700; color: var(--gold); margin-bottom: 0.4rem; }
+    .venue-card .vc-desc { font-size: 0.8rem; color: var(--muted); }
+
+    .alert-box {
+      background: rgba(255,145,0,0.1);
+      border: 1px solid rgba(255,145,0,0.3);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--orange);
+    }
+    .alert-box strong { color: var(--orange); }
+
+    .bottom-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .bottom-nav a { font-size: 0.85rem; color: var(--muted); }
+    .bottom-nav a:hover { color: var(--gold); text-decoration: none; }
+
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+    footer strong { color: var(--gold); }
+
+    @media (max-width: 600px) {
+      .toc-list { grid-template-columns: 1fr; }
+      .hero-teams { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">HUMBLE CLAW</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="robotics.html">Robotics</a></li>
+      <li><a href="board.html">The Board</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-presenter">Presented by BAE Systems</div>
+    <h1 class="hero-title">FIRST Championship 2026</h1>
+    <div class="hero-dates">April 29 – May 2, 2026 &#8212; Houston, Texas</div>
+    <div class="hero-venue">George R. Brown Convention Center + Discovery Green</div>
+    <div class="hero-badge">&#x1F3AF; Archimedes Division &#8212; Team 5199 Robot Dolphins From Outer Space</div>
+    <div class="hero-teams">
+      <div class="hero-team-stat">
+        <div class="hts-num">600+</div>
+        <div class="hts-lbl">FRC Teams</div>
+      </div>
+      <div class="hero-team-stat">
+        <div class="hts-num">40,000+</div>
+        <div class="hts-lbl">Attendees</div>
+      </div>
+      <div class="hero-team-stat">
+        <div class="hts-num">8</div>
+        <div class="hts-lbl">Playing Fields</div>
+      </div>
+      <div class="hero-team-stat">
+        <div class="hts-num">4</div>
+        <div class="hts-lbl">Programs</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- QUICK LINKS -->
+    <div class="cta-buttons" style="justify-content:center; margin-bottom:2rem; flex-wrap:wrap; gap:0.75rem;">
+      <a href="https://itunes.apple.com/us/app/id1099958883" target="_blank" class="cta-btn primary">&#x1F4F1; Download iOS App</a>
+      <a href="https://play.google.com/store/apps/details?id=com.guidebook.apps.firstchampionship.android" target="_blank" class="cta-btn primary">&#x1F4F1; Download Android App</a>
+      <a href="https://www.firstchampionship.org" target="_blank" class="cta-btn secondary">&#x1F3ED; Official Site</a>
+      <a href="https://frc-events.firstinspires.org/2026/team/5199" target="_blank" class="cta-btn secondary">&#x1F4CA; FIRST Events</a>
+    </div>
+
+    <!-- TABLE OF CONTENTS -->
+    <div class="toc">
+      <div class="toc-title">&#x1F4CB; Table of Contents</div>
+      <ul class="toc-list">
+        <li><a href="#programs">FIRST Programs</a></li>
+        <li><a href="#schedule">Schedule</a></li>
+        <li><a href="#venue">Venue & Campus</a></li>
+        <li><a href="#registration">Registration & Badging</a></li>
+        <li><a href="#health">Health & Safety</a></li>
+        <li><a href="#security">Security & Prohibited Items</a></li>
+        <li><a href="#food">Food & Concessions</a></li>
+        <li><a href="#getting-around">Getting Around</a></li>
+        <li><a href="#activities">Activities & Events</a></li>
+        <li><a href="#practical">Practical Info</a></li>
+      </ul>
+    </div>
+
+    <!-- WELCOME -->
+    <div class="section" id="welcome">
+      <h2 class="section-title">Welcome to the FIRST Championship</h2>
+      <div class="highlight-box">
+        <p>The 2026 FIRST® Championship presented by BAE Systems will bring together thousands of students from around the world for the ultimate celebration of STEM (science, technology, engineering, and math) and innovation.</p>
+        <p>This season &#8212; <strong>REBUILT&#8480;</strong> &#8212; every artifact we uncover holds a story. Each tool, each innovation, and each work of art connects us to the people and ideas that came before us. Using STEM skills and teamwork, today we can dig deeper into discoveries than ever before.</p>
+        <p>Get ready to have fun and be part of something extraordinary.</p>
+      </div>
+    </div>
+
+    <!-- ACCESSIBILITY -->
+    <div class="section">
+      <h2 class="section-title">Accessibility</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-title">&#x267F; Accessibility Services</div>
+          <div class="ic-body">Expanded accessibility information is available for attendees with disabilities. Please inquire at Guest Services on site.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F464; Accommodations</div>
+          <div class="ic-body">Service animals welcome. Wheelchair access available at all venues. Contact FIRST for specific accommodation requests.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRAMS -->
+    <div class="section" id="programs">
+      <h2 class="section-title">FIRST Programs at Championship</h2>
+      <div class="programs-grid">
+        <div class="program-card">
+          <div class="pc-icon">&#x1F9ED;</div>
+          <div class="pc-name">FIRST LEGO League Explore</div>
+          <div class="pc-grade">Grades K-4</div>
+          <div class="pc-desc">60 teams present their research projects at the Festival in Ballroom, Level 3</div>
+        </div>
+        <div class="program-card">
+          <div class="pc-icon">&#x1F9F9;</div>
+          <div class="pc-name">FIRST LEGO League Challenge</div>
+          <div class="pc-grade">Ages 9-16</div>
+          <div class="pc-desc">108 teams compete in the UNEARTHED&#8480; challenge, Ballroom Level 3</div>
+        </div>
+        <div class="program-card">
+          <div class="pc-icon">&#x1F916;</div>
+          <div class="pc-name">FIRST Tech Challenge</div>
+          <div class="pc-grade">Grades 7-12</div>
+          <div class="pc-desc">342 teams compete in DECODE&#8480; presented by RTX, Halls A & B, Level 3</div>
+        </div>
+        <div class="program-card">
+          <div class="pc-icon">&#x1F3AF;</div>
+          <div class="pc-name">FIRST Robotics Competition</div>
+          <div class="pc-grade">Grades 9-12</div>
+          <div class="pc-desc">600+ teams compete in REBUILT&#8480; presented by Haas, Halls A-E, Level 1</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCHEDULE -->
+    <div class="section" id="schedule">
+      <h2 class="section-title">Schedule Overview</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-title">&#x1F3E0; Wednesday, April 29</div>
+          <div class="ic-body">Block Party at Discovery Green begins. FIRST Championship Conferences start. Team load-in.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F3E0; Thursday, April 30</div>
+          <div class="ic-body">Competition heats up across all programs. Conferences continue. Block Party ongoing.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F3E0; Friday, May 1</div>
+          <div class="ic-body">Final rounds across all divisions. Last day of conferences. Block Party continues.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F3E0; Saturday, May 2</div>
+          <div class="ic-body">Championship matches & Closing Celebration ceremonies across all programs.</div>
+        </div>
+      </div>
+      <p><strong>Detailed schedule available in the FIRST Championship App.</strong></p>
+    </div>
+
+    <!-- VENUE -->
+    <div class="section" id="venue">
+      <h2 class="section-title">Venue & Campus Locations</h2>
+      <div class="venue-cards">
+        <div class="venue-card">
+          <div class="vc-name">George R. Brown Convention Center</div>
+          <div class="vc-desc">Main venue. FRC Fields, Pits, FIRST Store, Conferences. Level 1: Halls A-E for FRC. Level 3: Halls A-B for FTC, Ballroom for FLL.</div>
+        </div>
+        <div class="venue-card">
+          <div class="vc-name">Discovery Green</div>
+          <div class="vc-desc">Directly across from the Convention Center. Block Party with food trucks, games, live music, and more. Outdoor extension of campus.</div>
+        </div>
+        <div class="venue-card">
+          <div class="vc-name">Marriott Marquis Hotel</div>
+          <div class="vc-desc">Connected to Convention Center via walkway. Primary hotel for teams and attendees.</div>
+        </div>
+        <div class="venue-card">
+          <div class="vc-name">Hilton Americas Hotel</div>
+          <div class="vc-desc">Connected to Convention Center via walkway. Additional team and attendee lodging.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REGISTRATION -->
+    <div class="section" id="registration">
+      <h2 class="section-title">Registration & Badging</h2>
+      <div class="alert-box">
+        <strong>&#x26A0; All attendees</strong> must check in and receive a badge. Consent and release forms required for all participants.
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Registration Hours</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Wednesday, April 29</td><td>6:00 AM – 6:00 PM</td></tr>
+          <tr><td>Thursday, April 30</td><td>6:00 AM – 6:00 PM</td></tr>
+          <tr><td>Friday, May 1</td><td>6:00 AM – 6:00 PM</td></tr>
+          <tr><td>Saturday, May 2</td><td>6:30 AM – After Closing</td></tr>
+        </tbody>
+      </table>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-title">&#x1F6AE; Check-In</div>
+          <div class="ic-body">Visit the registration area to pick up your badge and event materials. Have your consent forms ready.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F3F4; Pronoun Ribbons</div>
+          <div class="ic-body">Available at registration. Wear your ribbon to share your pronouns with other attendees.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEALTH & SAFETY -->
+    <div class="section" id="health">
+      <h2 class="section-title">Health & Safety</h2>
+      <div class="alert-box">
+        <strong>&#x26A0; Important:</strong> All children under 12 must always be accompanied by an adult in the Pit area. Face coverings and vaccinations are not required but are recommended. <strong>If you are feeling ill, please do not attend the event.</strong>
+      </div>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-title">&#x1F697; Pit Area Rules</div>
+          <div class="ic-body">Sandals, open-toed shoes, and Crocs are <strong>not allowed</strong> in the Pits, fields, or teamwork areas. Wear proper footwear at all times.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F6BD; Dress Code</div>
+          <div class="ic-body">Wear relaxed, fun, and appropriate clothing. You represent your team and FIRST. Body paint in lieu of clothes is not appropriate.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F527; Safety Glasses</div>
+          <div class="ic-body">Required in the Pits and on the competition fields. Glasses are provided at entry &#8212; bring your own or use ours.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F691; Medical</div>
+          <div class="ic-body">Medical personnel on site. In case of emergency, locate the nearest event staff member or go directly to a medical station.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F4AD; Mental Health</div>
+          <div class="ic-body">Supporting mental health is a priority. Resources available on site &#8212; ask at Guest Services.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F6A8; Youth Protection</div>
+          <div class="ic-body">Report any youth protection or safety concerns immediately to a staff member or designated reporter.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECURITY -->
+    <div class="section" id="security">
+      <h2 class="section-title">Security & Prohibited Items</h2>
+      <div class="alert-box">
+        <strong>&#x1F6A1; Enhanced Security:</strong> Metal detection screenings at ALL event entrances. Expanded perimeter includes Discovery Green and Avenidas de las Americas. Plan for additional entry time.
+      </div>
+      <p><strong>Prohibited items include but are not limited to:</strong></p>
+      <ul style="color:#ccc; font-size:0.85rem; margin-left:1.5rem; margin-bottom:1rem;">
+        <li>Weapons of any kind</li>
+        <li>Explosives or flammable materials</li>
+        <li>Glass containers</li>
+        <li>Large bags or backpacks (check size limits at entry)</li>
+        <li>Outside food or beverages (sealed water bottles allowed)</li>
+        <li>Pets (service animals excepted)</li>
+        <li>Laser pointers</li>
+        <li>Professional camera equipment (tripods, large lenses) without press credentials</li>
+      </ul>
+      <p>Canine dog teams will be present at loading docks during team load-in for vehicle screening. Thank you for your cooperation.</p>
+    </div>
+
+    <!-- FOOD -->
+    <div class="section" id="food">
+      <h2 class="section-title">Food & Concessions</h2>
+      <div class="alert-box">
+        <strong>&#x1F6D2; Cashless Event:</strong> All food kiosks inside the George R. Brown Convention Center are <strong>debit and credit cards ONLY</strong> &#8212; no cash accepted.
+      </div>
+      <p>Concessions inside the convention center plus local food trucks around Discovery Green. View nearby restaurants via the app.</p>
+      <h3 style="font-size:0.85rem; color:var(--gold); letter-spacing:2px; text-transform:uppercase; margin-bottom:0.75rem;">&#x1F6A4; Food Trucks at Discovery Green</h3>
+      <div class="food-grid">
+        <div class="food-truck">Abu Omar Halal</div>
+        <div class="food-truck">Bad Chx</div>
+        <div class="food-truck">BLK MKT Birria</div>
+        <div class="food-truck">Burger Joint</div>
+        <div class="food-truck">Dough Cone</div>
+        <div class="food-truck">El Guajillo</div>
+        <div class="food-truck">Foreign Policy</div>
+        <div class="food-truck">Get Loaded</div>
+        <div class="food-truck">Hold The Sugar</div>
+        <div class="food-truck">Saucy Nosh</div>
+        <div class="food-truck">Mr. Sizzles</div>
+        <div class="food-truck">The Funnel Bar</div>
+        <div class="food-truck">The Waffle Bus</div>
+        <div class="food-truck">Uncle Louie G's</div>
+        <div class="food-truck">Wokker</div>
+        <div class="food-truck">Taqueria Provechito</div>
+      </div>
+      <table>
+        <thead>
+          <tr><th>FIRST Store Hours</th><th>Open</th><th>Close</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Wednesday, April 29</td><td>6:00 AM</td><td>6:00 PM</td></tr>
+          <tr><td>Thursday, April 30</td><td>6:00 AM</td><td>6:00 PM</td></tr>
+          <tr><td>Friday, May 1</td><td>6:00 AM</td><td>6:00 PM</td></tr>
+          <tr><td>Saturday, May 2</td><td>6:30 AM</td><td>After Closing</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ACTIVITIES -->
+    <div class="section" id="activities">
+      <h2 class="section-title">Activities & Special Events</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-title">&#x1F389; Block Party at Discovery Green</div>
+          <div class="ic-body">Wed–Fri, April 29–May 1. Giant lawn games, Live Band Karaoke, Silent Disco, musical acts, and food trucks. Across from the Convention Center.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F389; Closing Celebration</div>
+          <div class="ic-body">Saturday, May 2. All programs combined under one roof at George R. Brown. Global broadcast of highlights from each program's ceremony.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F3A4; FIRST Conferences</div>
+          <div class="ic-body">Wed–Fri. Sessions on business, marketing, engineering, programming, outreach, and more. Rooms 340, 350, 360 — Level 3. First come, first served.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F3A2; Innovation Faire</div>
+          <div class="ic-body">Explore hands-on exhibits and demos from sponsors and partners throughout the Convention Center.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F3F7; Team Picture Area</div>
+          <div class="ic-body">Official team photo location on site. Check the app for schedule and location.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F3AF; Campus Tours</div>
+          <div class="ic-body">Guided tours of the Houston campus available. Sign up via the app or at Guest Services.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRACTICAL INFO -->
+    <div class="section" id="practical">
+      <h2 class="section-title">Practical Information</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="ic-title">&#x1F4C5; Registration & Badging Hours</div>
+          <div class="ic-body">Wed–Fri: 6 AM–6 PM<br>Sat: 6:30 AM–close</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F697; Parking</div>
+          <div class="ic-body">Parking available at nearby lots. Download the app or visit the FIRST website for the most current parking map and rates.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F4E6; Shipping</div>
+          <div class="ic-body">Team shipping information available through your team dashboard. Plan ahead &#8212; shipping deadlines apply.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F4F6; Lost and Found</div>
+          <div class="ic-body">Visit Guest Services in the Convention Center. Items turned in are logged daily.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F4FB; Wireless</div>
+          <div class="ic-body">Free WiFi available throughout the Convention Center. Network details posted on site.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F3AA; Houston Dynamo</div>
+          <div class="ic-body">Check the app for information on Houston Dynamo soccerevents and discounts available to Championship attendees.</div>
+        </div>
+        <div class="info-card">
+          <div class="ic-title">&#x1F4AA; Volunteers</div>
+          <div class="ic-body">Volunteer opportunities available on site. Visit the volunteer check-in area or the app to sign up.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-box">
+      <h2>&#x1F3AF; Follow Team 5199 at Championship</h2>
+      <p>Live match results, team updates, and more &#8212; all on the Robot Dolphins tracker.</p>
+      <div class="cta-buttons">
+        <a href="robotics.html" class="cta-btn primary">&#x1F3AF; Robot Dolphins Tracker</a>
+        <a href="https://www.thebluealliance.com/team/5199" target="_blank" class="cta-btn secondary">&#x1F4CA; The Blue Alliance</a>
+        <a href="https://www.firstchampionship.org" target="_blank" class="cta-btn secondary">&#x1F3ED; Official Site</a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p><strong>HUMBLE CLAW</strong> &#8212; Champion's Guide sourced from <strong>FIRST Championship 2026 Event Guide</strong></p>
+    <p style="margin-top:0.5rem">Presented by BAE Systems &#8212; Houston, Texas &#8212; April 29 – May 2, 2026</p>
+    <p style="margin-top:0.5rem"><a href="robotics.html">&#x2190; Back to Robot Dolphins Tracker</a></p>
+  </footer>
+
+</body>
+</html>
