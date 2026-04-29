@@ -551,7 +551,7 @@
   <!-- COUNTDOWN -->
   <div class="countdown-section">
     <div class="countdown-label">&#x1F3C6; Destination: Houston, Texas &#x1F3C6;</div>
-    <div class="countdown-title" id="champs-name">FIRST Championship 2026 &#8212; Archimedes Division</div>
+    <div class="countdown-title" id="champs-name">FIRST Championship 2026 &#8212; Curie Division</div>
     <div class="countdown-timer" id="countdown">
       <div class="countdown-unit">
         <div class="cu-val" id="cd-days">--</div>
@@ -616,7 +616,7 @@
           <button class="event-tab active" data-event="CAVEN">Ventura</button>
           <button class="event-tab" data-event="CAOEC">Orange County</button>
           <button class="event-tab" data-event="CASCMP">SoCal States</button>
-          <button class="event-tab" data-event="ARCHIMEDES">Championship</button>
+          <button class="event-tab" data-event="CURIE">Championship</button>
         </div>
       </div>
       <div class="match-table-wrap">
@@ -684,7 +684,7 @@
       <div class="champ-eyebrow">&#x2728; They Did It &#x2728;</div>
       <div class="champ-title">&#x1F3C6; Headed to FIRST Championship</div>
       <div class="champ-sub">Houston, TX Houston, TX &#8212; April 15-18, 2026#8212; April 29 – May 2, 2026</div>
-      <span class="status-champ">Archimedes Division</span>
+      <span class="status-champ">Curie Division</span>
       <div class="champ-links" style="margin-top:1.5rem;">
         <a href="https://www.thebluealliance.com/team/5199" target="_blank" class="champ-link">&#x1F4CA; The Blue Alliance</a>
         <a href="https://frc-events.firstinspires.org/2026/team/5199" target="_blank" class="champ-link">&#x1F3DF; FIRST Events</a>
@@ -785,7 +785,7 @@
         {num:108,r:[4322,5199,3408],rs:396,b:[968,4,687],bs:355,w:true},
         {num:118,r:[5199,7042,2658],rs:298,b:[4738,4415,7415],bs:328,w:false},
       ],
-      ARCHIMEDES: []
+      CURIE: []
     };
 
     // Current event tab
@@ -795,11 +795,11 @@
     function renderMatches(eventCode) {
       const tbody = document.getElementById('match-body');
       const matches = MATCH_DATA[eventCode] || [];
-      const labels = {CAVEN:'Ventura County',CAOEC:'Orange County',CASCMP:'SoCal State Championship',ARCHIMEDES:'Championship'};
+      const labels = {CAVEN:'Ventura County',CAOEC:'Orange County',CASCMP:'SoCal State Championship',CURIE:'Championship'};
       
       if (matches.length === 0) {
         tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--muted); padding:2rem;">
-          ${eventCode === 'ARCHIMEDES' ? '&#x1F3C6; Championship matches released April 29 — check back!' : 'No match data available.'}
+          ${eventCode === 'CURIE' ? '&#x1F3C6; Championship matches released April 29 — check back!' : 'No match data available.'}
           <br><span style="font-size:0.75rem;">Source: <a href="https://frc-events.firstinspires.org/2026/team/5199" target="_blank">FIRST Events</a></span>
         </td></tr>`;
         return;
@@ -899,7 +899,7 @@
       const dot = document.getElementById('api-dot');
       const label = document.getElementById('api-label');
       let apiLive = false;
-      for (const ev of ['CAVEN','CAOEC','CASCMP','ARCHIMEDES']) {
+      for (const ev of ['CAVEN','CAOEC','CASCMP','CURIE']) {
         const ok = await fetchFromAPI(ev);
         if (ok) apiLive = true;
       }
