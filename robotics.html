@@ -674,10 +674,10 @@
       <div class="live-feed-header">
         <div class="live-feed-title">&#x1F3AF; 2026 Season Match Log</div>
         <div class="event-tabs">
-          <button class="event-tab active" data-event="CAVEN">Ventura</button>
+          <button class="event-tab" data-event="CAVEN">Ventura</button>
           <button class="event-tab" data-event="CAOEC">Orange County</button>
           <button class="event-tab" data-event="CASCMP">SoCal States</button>
-          <button class="event-tab" data-event="CURIE">Championship</button>
+          <button class="event-tab active" data-event="CURIE">Championship</button>
         </div>
       </div>
       <div class="match-table-wrap">
@@ -1004,7 +1004,8 @@
     updateCountdown();
 
     // Init
-    renderMatches('CAVEN');
+    currentEvent = 'CURIE';
+    renderMatches('CURIE');
     
     // Try live API for all events
     (async () => {
