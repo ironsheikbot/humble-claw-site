@@ -49,5 +49,21 @@
 
 ---
 
+## April 29, 2026
+
+**SHIPPED:**
+- Chronicles Wiki Viewer — chronicles-viewer.html ✅ (Bret subagent)
+  - Dark theme, nav bar (Home/Board/Chronicles/Robotics/Briefings)
+  - Sidebar with 8 wiki pages + category filtering
+  - Search across all wiki pages (lazy-loads pages to handle 82KB conversations.md)
+  - Full markdown rendering (tables, code blocks, headers, bold, links)
+  - Category tabs: All / Engineering / Operations / Business / Support
+  - Live at: humble-claw.com/chronicles-viewer.html
+
+**IN PROGRESS:**
+- Chronicles wiki population (ongoing)
+
+---
+
 *Log format: Date | SHIPPED | IN PROGRESS | BLOCKED | NOTES*
-*Updated by The Sheik — April 10, 2026 5:25 PM*
+*Updated by Bret subagent — April 29, 2026 6:10 PM*
