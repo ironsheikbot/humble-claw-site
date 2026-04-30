@@ -940,6 +940,44 @@
       return false;
     }
 
+    // Live-updater for Championship using Blue Alliance (no auth needed)
+    async function refreshCurieLive() {
+      try {
+        const res = await fetch('https://www.thebluealliance.com/api/v3/event/2026cur/matches');
+        if (!res.ok) return;
+        const all = await res.json();
+        const ours = all.filter(m => 
+          m.alliances.red.team_keys.includes('frc5199') || 
+          m.alliances.blue.team_keys.includes('frc5199')
+        ).sort((a,b) => a.match_number - b.match_number);
+        if (ours.length === 0) return;
+        const parsed = ours.map(m => {
+          const isRed = m.alliances.red.team_keys.includes('frc5199');
+          const won = m.winning_alliance 
+            ? (isRed ? m.winning_alliance === 'red' : m.winning_alliance === 'blue')
+            : null;
+          const t = m.actual_time 
+            ? new Date(m.actual_time * 1000).toLocaleString('en-US',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false})
+            : 'TBD';
+          return {
+            num: m.match_number,
+            r: m.alliances.red.team_keys.map(t => parseInt(t.replace('frc',''))),
+            b: m.alliances.blue.team_keys.map(t => parseInt(t.replace('frc',''))),
+            rs: m.alliances.red.score,
+            bs: m.alliances.blue.score,
+            w: won,
+            t: t
+          };
+        });
+        MATCH_DATA['CURIE'] = parsed;
+        if (currentEvent === 'CURIE') renderMatches('CURIE');
+        document.getElementById('api-dot').classList.add('live');
+        document.getElementById('api-label').textContent = 'Live — Blue Alliance';
+      } catch(e) { /* keep cached */ }
+    }
+    refreshCurieLive();
+    setInterval(refreshCurieLive, 60000); // refresh every minute
+
     // Countdown
     const CHAMPS_DATE = new Date('2026-04-29T08:00:00-05:00');
     function updateCountdown() {
