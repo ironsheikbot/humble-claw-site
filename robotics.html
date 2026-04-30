@@ -348,6 +348,8 @@
     }
     .result-win { background: rgba(0,200,83,0.15); color: var(--win); }
     .result-loss { background: rgba(255,23,68,0.15); color: var(--loss); }
+    .result-tbd { background: rgba(255,215,0,0.1); color: var(--gold); }
+    .match-time { font-size: 0.75rem; color: var(--muted); }
     .team-tag {
       display: inline-block;
       padding: 2px 7px;
@@ -687,10 +689,11 @@
               <th>Score</th>
               <th>Blue Alliance</th>
               <th>Result</th>
+              <th>Time</th>
             </tr>
           </thead>
           <tbody id="match-body">
-            <tr><td colspan="5" style="text-align:center; color:var(--muted); padding:2rem;">Loading match data...</td></tr>
+            <tr><td colspan="6" style="text-align:center; color:var(--muted); padding:2rem;">Loading match data...</td></tr>
           </tbody>
         </table>
       </div>
@@ -844,7 +847,18 @@
         {num:108,r:[4322,5199,3408],rs:396,b:[968,4,687],bs:355,w:true},
         {num:118,r:[5199,7042,2658],rs:298,b:[4738,4415,7415],bs:328,w:false},
       ],
-      CURIE: []
+      CURIE: [
+        {num:5,r:[5199,1714,5907],rs:785,b:[987,166,3932],bs:420,w:true,t:"04/30 06:37"},
+        {num:17,r:[5199,7565,9068],rs:490,b:[9200,2357,1684],bs:238,w:true,t:"04/30 08:26"},
+        {num:34,r:[2682,11318,2053],rs:30,b:[870,5199,4611],bs:608,w:false,t:"04/30 12:08"},
+        {num:42,r:[2443,7539,3197],rs:365,b:[8725,7421,5199],bs:418,w:true,t:"04/30 13:15"},
+        {num:55,r:[9077,5987,9066],rs:-1,b:[5199,7028,8595],bs:-1,w:null,t:"TBD"},
+        {num:64,r:[6413,6773,5572],rs:-1,b:[5199,5193,1024],bs:-1,w:null,t:"TBD"},
+        {num:82,r:[4027,5199,5712],rs:-1,b:[8575,254,11167],bs:-1,w:null,t:"TBD"},
+        {num:93,r:[6369,3128,5199],rs:-1,b:[7567,9609,302],bs:-1,w:null,t:"TBD"},
+        {num:107,r:[6045,6615,5199],rs:-1,b:[1024,1987,6497],bs:-1,w:null,t:"TBD"},
+        {num:124,r:[6366,2637,3792],rs:-1,b:[166,5199,10922],bs:-1,w:null,t:"TBD"},
+      ]
     };
 
     // Current event tab
@@ -876,7 +890,8 @@
           <td>${rTags}</td>
           <td><span class="score r">${m.rs}</span> &ndash; <span class="score b">${m.bs}</span></td>
           <td>${bTags}</td>
-          <td><span class="result-badge ${m.w ? 'result-win' : 'result-loss'}">${m.w ? 'WIN' : 'LOSS'}</span></td>
+          <td><span class="result-badge ${m.w === true ? 'result-win' : m.w === false ? 'result-loss' : 'result-tbd'}">${m.w === true ? 'WIN' : m.w === false ? 'LOSS' : 'TBD'}</span></td>
+          <td><span class="match-time">${m.t || '—'}</span></td>
         </tr>`;
       }).join('');
     }
