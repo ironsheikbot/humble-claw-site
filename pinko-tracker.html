@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pinko Jr's Wake-Up Club — HUMBLE CLAW</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --bg3: #1a1a1a;
+      --gold: #FFD700;
+      --gold2: #FFC200;
+      --text: #e8e8e8;
+      --muted: #888;
+      --border: #2a2a2a;
+      --green: #00D26A;
+      --blue: #00B4D8;
+      --purple: #9B5DE5;
+      --pink: #FF6B9D;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo { font-size: 1.4rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--muted); font-size: 0.95rem; font-weight: 500; }
+    .nav-links a:hover { color: var(--gold); text-decoration: none; }
+    .nav-links a.active { color: var(--gold); }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem 2rem;
+      background: linear-gradient(180deg, #0d0d2a 0%, var(--bg) 100%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,215,0,0.1);
+      border: 1px solid var(--gold);
+      border-radius: 999px;
+      padding: 0.4rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h1 span { color: var(--pink); }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto 2rem;
+    }
+
+    /* STREAK */
+    .streak-panel {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .streak-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      min-width: 140px;
+    }
+
+    .streak-number {
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .streak-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .streak-fire { color: #FF6B35; }
+
+    /* MAIN CONTENT */
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .section {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* WAKE UP TRACKER */
+    .wake-time {
+      font-size: 2.5rem;
+      font-weight: 900;
+      text-align: center;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .wake-target {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .target-time { color: var(--gold); font-weight: 700; }
+
+    /* BUTTONS */
+    .btn-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .btn {
+      padding: 0.8rem 2rem;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .btn-wake {
+      background: var(--green);
+      color: #000;
+      border-color: var(--green);
+    }
+
+    .btn-wake:hover { background: #00B85A; border-color: #00B85A; transform: scale(1.05); }
+
+    .btn-sleep {
+      background: var(--blue);
+      color: #000;
+      border-color: var(--blue);
+    }
+
+    .btn-sleep:hover { background: #009EC4; border-color: #009EC4; transform: scale(1.05); }
+
+    .btn-journal {
+      background: var(--purple);
+      color: #fff;
+      border-color: var(--purple);
+    }
+
+    .btn-journal:hover { background: #7B3FCC; border-color: #7B3FCC; transform: scale(1.05); }
+
+    /* MOOD GRID */
+    .mood-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .mood-btn {
+      background: var(--bg3);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 0.8rem 0.5rem;
+      text-align: center;
+      cursor: pointer;
+      font-size: 1.8rem;
+      transition: all 0.15s;
+    }
+
+    .mood-btn:hover { border-color: var(--gold); transform: scale(1.1); }
+    .mood-btn.selected { border-color: var(--gold); background: rgba(255,215,0,0.1); }
+
+    /* ENERGY SLIDER */
+    .energy-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .energy-label { color: var(--muted); font-size: 0.9rem; min-width: 60px; }
+    .energy-slider { flex: 1; }
+
+    input[type="range"] {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--border);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--gold);
+      cursor: pointer;
+    }
+
+    .energy-value { color: var(--gold); font-weight: 700; min-width: 30px; text-align: right; }
+
+    /* JOURNAL */
+    textarea {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      color: var(--text);
+      font-size: 1rem;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    textarea:focus { outline: none; border-color: var(--gold); }
+
+    /* SLEEP LOG */
+    .sleep-log { margin-top: 1.5rem; }
+
+    .log-entry {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .log-date { font-weight: 700; color: var(--text); }
+    .log-details { color: var(--muted); font-size: 0.85rem; }
+    .log-mood { font-size: 1.2rem; }
+
+    /* LOG MOOD */
+    .log-mood-legend { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; font-size: 0.8rem; color: var(--muted); }
+
+    /* SUBMIT BTN */
+    .submit-btn {
+      width: 100%;
+      background: var(--gold);
+      color: #000;
+      border: none;
+      border-radius: 12px;
+      padding: 1rem;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: all 0.2s;
+    }
+
+    .submit-btn:hover { background: var(--gold2); transform: scale(1.02); }
+
+    /* TODAY SUMMARY */
+    .today-summary {
+      background: rgba(0,210,106,0.1);
+      border: 1px solid rgba(0,210,106,0.3);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .today-summary.on-track { color: var(--green); }
+    .today-summary.late { color: #FF6B35; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+
+    /* HIDDEN */
+    .hidden { display: none; }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--green);
+      color: #000;
+      padding: 0.8rem 1.5rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .toast.show { opacity: 1; }
+
+    /* RESPONSIVE */
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.8rem; }
+      .streak-panel { gap: 1rem; }
+      .streak-card { min-width: 100px; padding: 1rem; }
+      .mood-grid { grid-template-columns: repeat(5, 1fr); gap: 0.5rem; }
+      .mood-btn { font-size: 1.4rem; padding: 0.6rem 0.25rem; }
+      nav { padding: 1rem; }
+      .nav-links { gap: 1rem; }
+      .nav-links a { font-size: 0.85rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">HUMBLE CLAW</div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="board.html">The Board</a></li>
+    <li><a href="chronicles.html">Chronicles</a></li>
+    <li><a href="robotics.html">Robotics</a></li>
+    <li><a href="pinko-tracker.html" class="active">Pinko Jr</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">&#x1F31F; PINKO JR'S CLUB &#x1F31F;</div>
+  <h1>Wake Up <span>Champ</span></h1>
+  <p>5:30 AM or nothin'. Track your streak, log your sleep, feel the buzz.</p>
+
+  <div class="streak-panel">
+    <div class="streak-card">
+      <div class="streak-number streak-fire" id="streak-days">0</div>
+      <div class="streak-label">Day Streak &#x1F525;</div>
+    </div>
+    <div class="streak-card">
+      <div class="streak-number" id="total-wakes">0</div>
+      <div class="streak-label">Total Wakes</div>
+    </div>
+    <div class="streak-card">
+      <div class="streak-number" id="avg-sleep">--</div>
+      <div class="streak-label">Avg Sleep (hrs)</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- TODAY'S STATUS -->
+  <div id="today-panel" class="section">
+    <div class="section-title">&#x1F4C5; Today's Check-In</div>
+
+    <div id="wake-not-done">
+      <div class="wake-target">Target wake-up: <span class="target-time">5:30 AM</span></div>
+      <div class="btn-row">
+        <button class="btn btn-wake" onclick="logWake(530)">&#x23F0; I WOKE UP AT 5:30!</button>
+        <button class="btn btn-wake" onclick="logWake(600)">&#x23F0; Woke up at 6:00 AM</button>
+        <button class="btn btn-wake" onclick="logWake(630)">&#x23F0; Woke up at 6:30 AM</button>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-sleep" onclick="showSleep()">&#x1F4A4; Log Last Night's Sleep</button>
+        <button class="btn btn-journal" onclick="showJournal()">&#x1F4DD; How Do You Feel?</button>
+      </div>
+    </div>
+
+    <div id="wake-done" class="hidden">
+      <div id="today-status" class="today-summary"></div>
+      <div class="btn-row">
+        <button class="btn btn-sleep hidden" id="edit-sleep-btn" onclick="showSleep()">&#x1F4A4; Edit Sleep</button>
+        <button class="btn btn-journal" onclick="showJournal()">&#x1F4DD; Edit Journal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLEEP LOG -->
+  <div id="sleep-panel" class="section hidden">
+    <div class="section-title">&#x1F4A4; How'd You Sleep Last Night?</div>
+
+    <div class="energy-row">
+      <span class="energy-label">Hours:</span>
+      <input type="range" class="energy-slider" id="sleep-hours" min="4" max="12" step="0.5" value="8" oninput="updateSleepVal()">
+      <span class="energy-value" id="sleep-val">8</span>
+    </div>
+
+    <div class="energy-row">
+      <span class="energy-label">Quality:</span>
+      <div class="mood-grid" style="flex:1">
+        <div class="mood-btn" onclick="selectSleepMood(this, 1)" data-mood="1">&#x1F62B;</div>
+        <div class="mood-btn" onclick="selectSleepMood(this, 2)" data-mood="2">&#x1F60B;</div>
+        <div class="mood-btn" onclick="selectSleepMood(this, 3)" data-mood="3">&#x1F610;</div>
+        <div class="mood-btn" onclick="selectSleepMood(this, 4)" data-mood="4">&#x1F62C;</div>
+        <div class="mood-btn" onclick="selectSleepMood(this, 5)" data-mood="5">&#x1F634;</div>
+      </div>
+    </div>
+    <div style="font-size:0.8rem;color:var(--muted);text-align:center;margin-top:0.25rem;">&#x1F62B;rough &#x2192; &#x1F634;amazing</div>
+
+    <button class="submit-btn" onclick="saveSleep()">&#x2705; Save Sleep Log</button>
+  </div>
+
+  <!-- JOURNAL -->
+  <div id="journal-panel" class="section hidden">
+    <div class="section-title">&#x1F4DD; How Do You Feel Right Now?</div>
+
+    <div style="margin-bottom:1rem;">
+      <div style="color:var(--muted);font-size:0.85rem;margin-bottom:0.5rem;">Energy Level</div>
+      <div class="energy-row">
+        <span class="energy-label">&#x26A1;</span>
+        <input type="range" class="energy-slider" id="energy-slider" min="1" max="10" step="1" value="7" oninput="updateEnergyVal()">
+        <span class="energy-value" id="energy-val">7</span>
+      </div>
+    </div>
+
+    <div style="margin-bottom:1rem;">
+      <div style="color:var(--muted);font-size:0.85rem;margin-bottom:0.5rem;">Mood</div>
+      <div class="mood-grid">
+        <div class="mood-btn" onclick="selectMood(this, 1)" data-mood="1">&#x1F62D;</div>
+        <div class="mood-btn" onclick="selectMood(this, 2)" data-mood="2">&#x1F641;</div>
+        <div class="mood-btn" onclick="selectMood(this, 3)" data-mood="3">&#x1F610;</div>
+        <div class="mood-btn" onclick="selectMood(this, 4)" data-mood="4">&#x1F60A;</div>
+        <div class="mood-btn" onclick="selectMood(this, 5)" data-mood="5">&#x1F929;</div>
+      </div>
+    </div>
+
+    <div style="color:var(--muted);font-size:0.85rem;margin-bottom:0.5rem;">What's on your mind?</div>
+    <textarea id="journal-text" placeholder="Write whatever you want..."></textarea>
+
+    <button class="submit-btn" onclick="saveJournal()">&#x2705; Save Journal Entry</button>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="section">
+    <div class="section-title">&#x1F4CA; Recent History</div>
+    <div id="history-list"></div>
+    <div class="log-mood-legend">
+      <span>&#x1F62D; rough</span>
+      <span>&#x1F641; meh</span>
+      <span>&#x1F610; ok</span>
+      <span>&#x1F60A; good</span>
+      <span>&#x1F929; amazing</span>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  <p>Built by The Iron Sheik AI for Mr. Pink & Pinko Jr &#x1F31F;</p>
+  <p style="margin-top:0.5rem;color:var(--gold);">Make everybody humble — including the alarm clock.</p>
+</footer>
+
+<script>
+const TARGET_WAKE = 530; // 5:30 AM in "HHMM" format
+const MOOD_EMOJIS = {1:'&#x1F62D;', 2:'&#x1F641;', 3:'&#x1F610;', 4:'&#x1F60A;', 5:'&#x1F929;'};
+const SLEEP_EMOJIS = {1:'&#x1F62B;', 2:'&#x1F60B;', 3:'&#x1F610;', 4:'&#x1F62C;', 5:'&#x1F634;'};
+
+let state = JSON.parse(localStorage.getItem('pinko-jr') || '{"entries":[]}');
+let todayEntry = null;
+let selectedMood = null;
+let selectedSleepMood = null;
+
+// INIT
+function init() {
+  const today = todayStr();
+  todayEntry = state.entries.find(e => e.date === today);
+  render();
+}
+
+function todayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function fmtDate(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'});
+}
+
+function parseTime(hhmm) {
+  const h = Math.floor(hhmm / 100);
+  const m = hhmm % 100;
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+}
+
+function render() {
+  renderStats();
+  renderToday();
+  renderHistory();
+}
+
+function renderStats() {
+  const entries = state.entries.filter(e => e.wakeTime);
+  const total = entries.length;
+  let streak = 0;
+  let prev = null;
+  const sorted = [...entries].sort((a,b) => b.date > a.date ? 1 : -1);
+  for (const e of sorted) {
+    if (!prev) { streak = 1; prev = e.date; continue; }
+    const pd = new Date(prev + 'T12:00:00');
+    const cd = new Date(e.date + 'T12:00:00');
+    const diff = (pd - cd) / 86400000;
+    if (diff === 1) { streak++; prev = e.date; }
+    else break;
+  }
+
+  const sleeps = entries.filter(e => e.sleepHours);
+  const avgSleep = sleeps.length ? (sleeps.reduce((s,e) => s + parseFloat(e.sleepHours), 0) / sleeps.length).toFixed(1) : '--';
+
+  document.getElementById('streak-days').textContent = streak;
+  document.getElementById('total-wakes').textContent = total;
+  document.getElementById('avg-sleep').textContent = avgSleep;
+}
+
+function renderToday() {
+  const today = todayStr();
+  const el = document.getElementById('wake-not-done');
+  const dl = document.getElementById('wake-done');
+
+  if (!todayEntry || !todayEntry.wakeTime) {
+    el.classList.remove('hidden');
+    dl.classList.add('hidden');
+  } else {
+    el.classList.add('hidden');
+    dl.classList.remove('hidden');
+
+    const onTime = todayEntry.wakeTime <= TARGET_WAKE;
+    const statusEl = document.getElementById('today-status');
+    if (onTime) {
+      statusEl.className = 'today-summary on-track';
+      statusEl.innerHTML = `&#x1F389; ON TIME! Woke up at ${parseTime(todayEntry.wakeTime)} — STREAK CONTINUES!`;
+    } else {
+      statusEl.className = 'today-summary late';
+      statusEl.innerHTML = `&#x23F0; Woke up at ${parseTime(todayEntry.wakeTime)} — still got up jabroni!`;
+    }
+    document.getElementById('edit-sleep-btn').classList.remove('hidden');
+  }
+}
+
+function renderHistory() {
+  const list = document.getElementById('history-list');
+  const recent = state.entries.filter(e => e.wakeTime || e.journal).slice(-10).reverse();
+
+  if (!recent.length) {
+    list.innerHTML = '<p style="color:var(--muted);text-align:center;">No entries yet. Start your streak!</p>';
+    return;
+  }
+
+  list.innerHTML = recent.map(e => {
+    const parts = [];
+    if (e.wakeTime) {
+      const onTime = e.wakeTime <= TARGET_WAKE;
+      parts.push(`&#x23F0; ${parseTime(e.wakeTime)} ${onTime ? '&#x2705;' : '&#x1F914;'}`);
+    }
+    if (e.sleepHours) parts.push(`&#x1F4A4; ${e.sleepHours}h ${e.sleepMood ? SLEEP_EMOJIS[e.sleepMood] : ''}`);
+    if (e.mood) parts.push(`&#x1F4DD; ${MOOD_EMOJIS[e.mood]} ${e.energy ? '&#x26A1;'+e.energy+'/10' : ''}`);
+    return `<div class="log-entry">
+      <div><div class="log-date">${fmtDate(e.date)}</div><div class="log-details">${parts.join(' &nbsp; ')}</div></div>
+      ${e.mood ? `<div class="log-mood">${MOOD_EMOJIS[e.mood]}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function showSleep() {
+  document.getElementById('sleep-panel').classList.remove('hidden');
+  document.getElementById('journal-panel').classList.add('hidden');
+  if (todayEntry && todayEntry.sleepHours) {
+    document.getElementById('sleep-hours').value = todayEntry.sleepHours;
+    document.getElementById('sleep-val').textContent = todayEntry.sleepHours;
+    if (todayEntry.sleepMood) {
+      const btn = document.querySelectorAll('#sleep-panel .mood-btn')[todayEntry.sleepMood-1];
+      if (btn) { btn.classList.add('selected'); selectedSleepMood = todayEntry.sleepMood; }
+    }
+  }
+}
+
+function showJournal() {
+  document.getElementById('journal-panel').classList.remove('hidden');
+  document.getElementById('sleep-panel').classList.add('hidden');
+  if (todayEntry) {
+    if (todayEntry.mood) {
+      const btn = document.querySelectorAll('#journal-panel .mood-btn')[todayEntry.mood-1];
+      if (btn) { btn.classList.add('selected'); selectedMood = todayEntry.mood; }
+    }
+    if (todayEntry.energy) {
+      document.getElementById('energy-slider').value = todayEntry.energy;
+      document.getElementById('energy-val').textContent = todayEntry.energy;
+    }
+    if (todayEntry.journalText) document.getElementById('journal-text').value = todayEntry.journalText;
+  }
+}
+
+function updateSleepVal() {
+  document.getElementById('sleep-val').textContent = document.getElementById('sleep-hours').value;
+}
+
+function updateEnergyVal() {
+  document.getElementById('energy-val').textContent = document.getElementById('energy-slider').value;
+}
+
+function selectMood(el, val) {
+  document.querySelectorAll('#journal-panel .mood-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedMood = val;
+}
+
+function selectSleepMood(el, val) {
+  document.querySelectorAll('#sleep-panel .mood-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedSleepMood = val;
+}
+
+function ensureToday() {
+  const today = todayStr();
+  if (!todayEntry || todayEntry.date !== today) {
+    todayEntry = {date: today};
+    state.entries.push(todayEntry);
+  }
+}
+
+function logWake(time) {
+  ensureToday();
+  todayEntry.wakeTime = time;
+  save();
+  document.getElementById('wake-not-done').classList.add('hidden');
+  document.getElementById('wake-done').classList.remove('hidden');
+  render();
+  toast('&#x1F31F; WAKED UP CHAMP!');
+}
+
+function saveSleep() {
+  ensureToday();
+  todayEntry.sleepHours = document.getElementById('sleep-hours').value;
+  if (selectedSleepMood) todayEntry.sleepMood = selectedSleepMood;
+  save();
+  document.getElementById('sleep-panel').classList.add('hidden');
+  render();
+  toast('&#x2705; Sleep saved!');
+}
+
+function saveJournal() {
+  ensureToday();
+  if (selectedMood) todayEntry.mood = selectedMood;
+  todayEntry.energy = parseInt(document.getElementById('energy-slider').value);
+  todayEntry.journalText = document.getElementById('journal-text').value;
+  save();
+  document.getElementById('journal-panel').classList.add('hidden');
+  render();
+  toast('&#x2705; Journal saved!');
+}
+
+function save() {
+  localStorage.setItem('pinko-jr', JSON.stringify(state));
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.innerHTML = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+init();
+</script>
+</body>
+</html>
