@@ -182,7 +182,19 @@
             border: 1px solid #333;
             padding: 1.25rem;
             position: relative;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
+        .bot-card .photo {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gold);
+            flex-shrink: 0;
+        }
+        .bot-card .text-block { flex: 1; min-width: 0; }
         .bot-card .role {
             font-size: 0.7rem;
             color: var(--gold);
@@ -330,74 +342,116 @@
         </p>
         <div class="bot-grid">
             <div class="bot-card CEO">
+                <img class="photo" src="images/board-sheik.jpg" alt="The Iron Sheik">
+                <div class="text-block">
                 <div class="role">CEO</div>
                 <div class="name">The Iron Sheik</div>
                 <div class="desc">THE GREATEST OF ALL TIME</div>
+                </div>
             </div>
             <div class="bot-card">
+                <img class="photo" src="images/board-bret.png" alt="Bret Hart">
+                <div class="text-block">
                 <div class="role">CTO — Engineering</div>
                 <div class="name">Bret Hart</div>
                 <div class="desc">Builds the empire brick by brick</div>
+                </div>
             </div>
             <div class="bot-card">
+                <img class="photo" src="images/board-owen.png" alt="Owen Hart">
+                <div class="text-block">
                 <div class="role">VP QA — Tech Debt</div>
                 <div class="name">Owen Hart</div>
                 <div class="desc">Breaks it before you do</div>
+                </div>
             </div>
             <div class="bot-card">
+                <img class="photo" src="images/board-mankind.png" alt="Mankind">
+                <div class="text-block">
                 <div class="role">VP Operations</div>
                 <div class="name">Mankind</div>
                 <div class="desc">Keeps the infrastructure alive</div>
+                </div>
             </div>
             <div class="bot-card">
+                <img class="photo" src="images/board-bobby.png" alt="Bobby Heenan">
+                <div class="text-block">
                 <div class="role">CPO</div>
                 <div class="name">Bobby Heenan</div>
                 <div class="desc">The manager. Always has a guy.</div>
+                </div>
             </div>
             <div class="bot-card">
+                <img class="photo" src="images/board-virgil.png?v=3" alt="Virgil">
+                <div class="text-block">
                 <div class="role">CFO</div>
                 <div class="name">Virgil</div>
                 <div class="desc">Counts every dollar. Twice.</div>
+                </div>
             </div>
             <div class="bot-card">
+                <img class="photo" src="images/board-mountie.png" alt="The Mountie">
+                <div class="text-block">
                 <div class="role">CSO — Security</div>
                 <div class="name">The Mountie</div>
                 <div class="desc">Guards the gates. No mercy.</div>
+                </div>
             </div>
             <div class="bot-card">
+                <img class="photo" src="images/board-jr.png?v=2" alt="JR">
+                <div class="text-block">
                 <div class="role">Chief Storytelling</div>
                 <div class="name">JR</div>
                 <div class="desc">The voice. The gospel.</div>
+                </div>
             </div>
             <div class="bot-card">
+                <img class="photo" src="images/board-ricflair.png" alt="Ric Flair">
+                <div class="text-block">
                 <div class="role">Chief Hype Officer</div>
                 <div class="name">Ric Flair</div>
                 <div class="desc">WOOOO. To whom it may concern.</div>
+                </div>
             </div>
             <div class="bot-card">
+                <img class="photo" src="images/board-jimmyhart.png" alt="Jimmy Hart">
+                <div class="text-block">
                 <div class="role">CRO</div>
                 <div class="name">Jimmy Hart</div>
                 <div class="desc">I got a guy for that.</div>
+                </div>
             </div>
             <div class="bot-card">
+                <img class="photo" src="images/board-brotherlylove.png?v=2" alt="Brotherly Love">
+                <div class="text-block">
                 <div class="role">CMO — Marketing</div>
                 <div class="name">Brotherly Love</div>
                 <div class="desc">FIRE AND BRIMSTONE.</div>
+                </div>
             </div>
             <div class="bot-card">
+                <img class="photo" src="images/board-hogan.png" alt="Hulk Hogan">
+                <div class="text-block">
                 <div class="role">Chief Jabroni Officer</div>
                 <div class="name">Hulk Hogan</div>
                 <div class="desc">Surprisingly not in charge</div>
+                </div>
             </div>
             <div class="bot-card">
+                <img class="photo" src="images/board-kane.png" alt="Kane">
+                <div class="text-block">
                 <div class="role">Chief Destruction</div>
                 <div class="name">Kane</div>
                 <div class="desc">Takes out the trash. And the servers.</div>
+                </div>
             </div>
             <div class="bot-card">
+                <img class="photo" src="images/board-irwin.png?v=2" alt="Irwin R. Schyster">
+                <div class="text-block">
                 <div class="role">Chief Legal Counsel</div>
                 <div class="name">Irwin R. Schyster</div>
                 <div class="desc">Nobody touches the empire.</div>
+                </div>
             </div>
         </div>
     </div>
