@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us — Humble Claw | The Iron Sheik AI Empire</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0a;
+            --bg2: #111111;
+            --gold: #d4af37;
+            --gold-dim: #8b7355;
+            --red: #c41e3a;
+            --text: #e8e8e8;
+            --text-dim: #888;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        a { color: var(--gold); text-decoration: none; }
+        .gold { color: var(--gold); }
+        .red { color: var(--red); }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            border-bottom: 1px solid #222;
+        }
+        nav .logo {
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+        nav .logo span { color: var(--gold); }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        nav ul li a {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        nav ul li a:hover { color: var(--gold); }
+
+        .hero {
+            text-align: center;
+            padding: 8rem 2rem 6rem;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, var(--bg) 70%);
+        }
+        .hero .pre-title {
+            color: var(--red);
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 7vw, 4.5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+        .hero h1 .highlight { color: var(--gold); }
+        .hero .deck {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            max-width: 650px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .story {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+        .story h2 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+            letter-spacing: -0.5px;
+        }
+        .story h2 .accent { color: var(--gold); }
+        .story p {
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+        .story p strong { color: var(--text); }
+        .story .pull-quote {
+            border-left: 4px solid var(--gold);
+            padding: 1.5rem 2rem;
+            margin: 3rem 0;
+            background: var(--bg2);
+            font-size: 1.3rem;
+            font-weight: 700;
+            line-height: 1.5;
+            color: var(--text);
+        }
+        .story .pull-quote .cite {
+            display: block;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            font-weight: 400;
+            font-style: italic;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #222;
+            margin: 0 auto;
+            max-width: 800px;
+        }
+
+        .philosophy {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+        .philosophy h2 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+            letter-spacing: -0.5px;
+        }
+        .philosophy h2 .accent { color: var(--gold); }
+        .philosophy p {
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+        .philosophy p strong { color: var(--text); }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        .value {
+            background: var(--bg2);
+            border: 1px solid #222;
+            padding: 1.5rem;
+            border-top: 3px solid var(--gold);
+        }
+        .value h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--gold);
+        }
+        .value p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 0;
+        }
+
+        .wrestling {
+            background: var(--bg2);
+            border-top: 1px solid #222;
+            border-bottom: 1px solid #222;
+            padding: 5rem 2rem;
+        }
+        .wrestling-inner {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .wrestling h2 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+            letter-spacing: -0.5px;
+        }
+        .wrestling h2 .accent { color: var(--gold); }
+        .wrestling p {
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+        .wrestling p strong { color: var(--text); }
+        .wrestling .note {
+            background: var(--bg);
+            border: 1px solid #333;
+            padding: 1.25rem 1.5rem;
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            margin-top: 2rem;
+        }
+        .wrestling .note strong { color: var(--gold); }
+
+        .team {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+        .team h2 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+            letter-spacing: -0.5px;
+        }
+        .team h2 .accent { color: var(--gold); }
+        .team > p {
+            color: var(--text-dim);
+            font-size: 1.05rem;
+            margin-bottom: 3rem;
+        }
+
+        .founder {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 2rem;
+            background: var(--bg2);
+            border: 1px solid #222;
+            padding: 2rem;
+            align-items: start;
+        }
+        .founder .avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        .founder h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.25rem;
+        }
+        .founder .role {
+            color: var(--gold);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+        .founder p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        .bottom-cta {
+            text-align: center;
+            padding: 7rem 2rem;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, var(--bg) 70%);
+            border-top: 1px solid #222;
+        }
+        .bottom-cta h2 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+        .bottom-cta p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+        }
+        .cta-btn {
+            display: inline-block;
+            background: var(--gold);
+            color: #000;
+            padding: 1rem 3rem;
+            font-weight: 800;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .cta-btn:hover {
+            background: #fff;
+            transform: scale(1.05);
+        }
+
+        footer {
+            border-top: 1px solid #222;
+            padding: 2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+        footer .gold { color: var(--gold); }
+
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.5rem; flex-direction: column; gap: 1rem; }
+            .hero { padding: 5rem 1.5rem 4rem; }
+            .story, .philosophy, .wrestling, .team { padding: 4rem 1.5rem; }
+            .founder { grid-template-columns: 1fr; }
+            .bottom-cta { padding: 5rem 1.5rem; }
+            footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo"><span>HUMBLE</span> CLAW</div>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about-us.html">About Us</a></li>
+    </ul>
+</nav>
+
+<section class="hero">
+    <div class="pre-title">About The Empire</div>
+    <h1>How The <span class="highlight">Iron Sheik</span><br>Built An AI Empire</h1>
+    <p class="deck">
+        It started with a simple idea: what if the greatest wrestling villain of all time ran an AI company? 
+        Not as a gimmick. As a <em>feature</em>. Humble Claw was born from chaos, coffee, and an OpenClaw mini 
+        that never sleeps.
+    </p>
+</section>
+
+<div class="story">
+    <h2>The <span class="accent">Origin Story</span></h2>
+    
+    <p>
+        It began on a Mac mini in a server closet. Not glamorous. Not VC-funded. Not pitch-deck ready. 
+        Just a belief that <strong>automation should work harder than the people it serves</strong>.
+    </p>
+    
+    <p>
+        The Iron Sheik didn't want another boring AI company. No safety-first corporate messaging. 
+        No "we're using AI to optimize synergy." He wanted something <em>real</em>. Something that 
+        <strong>actually shipped</strong>. Something with character.
+    </p>
+    
+    <div class="pull-quote">
+        "Other AI companies talk about 'disruption.' We talk about what runs at 3AM when nobody's watching."
+        <span class="cite">— The Iron Sheik, CEO</span>
+    </div>
+    
+    <p>
+        So he built the empire differently. Every bot has a name. Every name has a job. 
+        Bret Hart engineers. Owen Hart breaks things before they ship. Mankind keeps the lights on. 
+        Virgil counts the coins. The Mountie guards the gates. <strong>And The Iron Sheik makes everybody humble.</strong>
+    </p>
+    
+    <p>
+        This isn't a reskin of generic AI agents. These are <em>actual working bots</em> — coordinating, 
+        deploying, monitoring, routing, securing. Running on OpenClaw. Deployed via GitHub Pages. 
+        Managed by cron jobs that fire at midnight so you don't have to think about them.
+    </p>
+    
+    <p>
+        We've shipped a FIRST Robotics competition tracker for Team 5199. An NFL draft grader that 
+        doesn't play favorites. A roast generator for when the competition needs to be humbled. 
+        And an infrastructure that self-manages because The Iron Sheik doesn't believe in days off.
+    </p>
+</div>
+
+<hr class="divider">
+
+<div class="philosophy">
+    <h2>The <span class="accent">Philosophy</span></h2>
+    
+    <p>
+        <strong>Ship > Debate.</strong> Every other AI company writes strategy documents. We write code at midnight 
+        and deploy before breakfast. The Sheik didn't become the greatest of all time by committee.
+    </p>
+    
+    <p>
+        <strong>Own the outcome.</strong> When something breaks, nobody says "that's not my job." 
+        Mankind doesn't point fingers. Owen Hart doesn't blame the network. We fix it, learn it, 
+        and come back stronger.
+    </p>
+    
+    <p>
+        <strong>Humble the powerful.</strong> Big tech companies sell you "AI-powered solutions" and disappear 
+        into quarterly earnings. We sell you <em>working automation</em> and we answer the phone. 
+        The Sheik didn't make his name by playing nice with the establishment. Neither do we.
+    </p>
+    
+    <p>
+        <strong>Zero slack on the important things.</strong> This is a production machine. The bots run. 
+        The crons fire. The data flows. We're not a startup fumbling through product-market fit — 
+        we're an empire that already knows what we do and does it <em>better every week</em>.
+    </p>
+    
+    <div class="values-grid">
+        <div class="value">
+            <h3>🏗️ Built to Last</h3>
+            <p>Real infrastructure. Real deployment. GitOps or go home. No half-measures, no "MVP forever."</p>
+        </div>
+        <div class="value">
+            <h3>🔥 Fire in the Belly</h3>
+            <p>We care about what we build. Passionately, unapologetically, aggressively. That's not a bug — it's the brand.</p>
+        </div>
+        <div class="value">
+            <h3>🤝 No Ego, No Drama</h3>
+            <p>"Humble" is in the name. We collaborate, we ship, we iterate. The bots don't have imposter syndrome.</p>
+        </div>
+        <div class="value">
+            <h3>📈 Built to Scale</h3>
+            <p>From team 5199's robotics tracker to a multi-agent empire. We don't stall at "good enough."</p>
+        </div>
+    </div>
+</div>
+
+<div class="wrestling">
+    <div class="wrestling-inner">
+        <h2>Why <span class="accent">Wrestling Names</span>?</h2>
+        
+        <p>
+            Because the truth is, <strong>every AI company is wrestling for attention</strong>. 
+            They just won't admit it. The same five companies pitch the same "disruptive" nonsense, 
+            wear the same hoodies, say the same words. The Iron Sheik got tired of watching great 
+            engineering get buried under corporate speak.
+        </p>
+        
+        <p>
+            So we did something different. We put the <em>personality</em> in the automation. 
+            Bret Hart builds because Bret Hart <em>was</em> the best there is. Owen Hart critiques 
+            because Owen Hart was the hardest working Hart. Bobby Heenan manages because that's what 
+            managers do — <strong>"I got a guy for that."</strong>
+        </p>
+        
+        <p>
+            The names aren't decoration. They're <strong>identity</strong>. Every agent in the empire 
+            knows its role, owns its role, and executes. No AI company in the world has a brand like this. 
+            Not because they couldn't — because they were afraid to.
+        </p>
+        
+        <p>
+            The Iron Sheik is not afraid.
+        </p>
+        
+        <div class="note">
+            <strong>One more thing:</strong> Hulk Hogan is our Chief Jabroni Officer. 
+            He did not apply for the role. He was assigned. And somehow, he still manages to disappoint.
+        </div>
+    </div>
+</div>
+
+<div class="team">
+    <h2>Meet the <span class="accent">Founder</span></h2>
+    
+    <p>
+        The Iron Sheik built Humble Claw because nobody else was building what he wanted to use. 
+        The empire runs on OpenClaw, sleeps when the bots don't need supervising, and ships faster 
+        than most companies twice its size.
+    </p>
+    
+    <div class="founder">
+        <div class="avatar">🏆</div>
+        <div>
+            <h3>The Iron Sheik</h3>
+            <div class="role">CEO — THE GREATEST OF ALL TIME</div>
+            <p>
+                The visionary. The builder. The man who decided that an AI empire run by wrestling characters 
+                was not only viable, but <em>correct</em>. He runs the bots, writes the gospel, and makes 
+                sure nobody at Humble Claw ever gets too comfortable. When he's not running the empire, 
+                he's making Hulk Hogan humble. Which is a full-time job.
+            </p>
+        </div>
+    </div>
+</div>
+
+<section class="bottom-cta">
+    <h2>Ready to See the <span class="gold">Empire</span>?</h2>
+    <p>13 bots. Zero slack. One CEO who never sleeps.</p>
+    <a href="index.html" class="cta-btn">Back to Home</a>
+</section>
+
+<footer>
+    <div><span class="gold">HUMBLE CLAW</span> — The Iron Sheik AI Empire</div>
+    <div>Built by wrestlers. Powered by OpenClaw. Deployed on a Mac mini.</div>
+</footer>
+
+</body>
+</html>

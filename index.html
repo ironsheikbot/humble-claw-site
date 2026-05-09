@@ -1,544 +1,445 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🐪 HUMBLE CLAW — Making Everybody Humble</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Humble Claw — The Iron Sheik AI Empire</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0a;
+            --bg2: #111111;
+            --gold: #d4af37;
+            --gold-dim: #8b7355;
+            --red: #c41e3a;
+            --text: #e8e8e8;
+            --text-dim: #888;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        a { color: var(--gold); text-decoration: none; }
+        .gold { color: var(--gold); }
+        .red { color: var(--red); }
 
-    :root {
-      --bg: #0a0a0a;
-      --bg2: #111111;
-      --bg3: #1a1a1a;
-      --gold: #FFD700;
-      --gold2: #FFC200;
-      --text: #e8e8e8;
-      --muted: #888;
-      --border: #2a2a2a;
-      --red: #c8102e;
-    }
+        /* NAV */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            border-bottom: 1px solid #222;
+        }
+        nav .logo {
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+        nav .logo span { color: var(--gold); }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        nav ul li a {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        nav ul li a:hover { color: var(--gold); }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      min-height: 100vh;
-      line-height: 1.6;
-    }
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 8rem 2rem;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, var(--bg) 70%);
+            border-bottom: 1px solid #222;
+        }
+        .hero .pre-title {
+            color: var(--red);
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+        .hero h1 .line1 { display: block; }
+        .hero h1 .line2 { display: block; color: var(--gold); }
+        .hero h1 .line3 { display: block; font-size: 0.5em; color: var(--text-dim); }
+        .hero .tagline {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.5;
+        }
+        .hero .tagline strong { color: var(--text); }
+        .cta-btn {
+            display: inline-block;
+            background: var(--gold);
+            color: #000;
+            padding: 1rem 3rem;
+            font-weight: 800;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .cta-btn:hover {
+            background: #fff;
+            transform: scale(1.05);
+        }
+        .cta-sub {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
 
-    a { color: var(--gold); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+        /* WHAT WE BUILD */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .section-label {
+            color: var(--red);
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 3rem;
+            letter-spacing: -0.5px;
+        }
+        .section-title .accent { color: var(--gold); }
 
-    /* NAV */
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.2rem 2rem;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .pillar {
+            background: var(--bg2);
+            border: 1px solid #222;
+            padding: 2rem;
+            border-left: 3px solid var(--gold);
+        }
+        .pillar h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            color: var(--gold);
+        }
+        .pillar p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
 
-    .nav-logo {
-      font-size: 1.4rem;
-      font-weight: 900;
-      color: var(--gold);
-      letter-spacing: 2px;
-    }
+        /* THE EMPIRE */
+        .empire {
+            background: var(--bg2);
+            border-top: 1px solid #222;
+            border-bottom: 1px solid #222;
+            padding: 6rem 2rem;
+        }
+        .empire-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .empire-intro {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+        .empire-intro strong { color: var(--text); }
 
-    .nav-links {
-      display: flex;
-      gap: 2rem;
-      list-style: none;
-    }
+        .bot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .bot-card {
+            background: var(--bg);
+            border: 1px solid #333;
+            padding: 1.25rem;
+            position: relative;
+        }
+        .bot-card .role {
+            font-size: 0.7rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.25rem;
+        }
+        .bot-card .name {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        .bot-card .desc {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 0.25rem;
+        }
+        .bot-card.CEO { border-color: var(--gold); box-shadow: 0 0 20px rgba(212,175,55,0.1); }
+        .bot-card.CEO .name { color: var(--gold); }
 
-    .nav-links a {
-      color: var(--muted);
-      font-size: 0.95rem;
-      font-weight: 500;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
+        /* PROOF / RESULTS */
+        .proof {
+            padding: 6rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .proof-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .proof-item {
+            border: 1px solid #222;
+            padding: 1.5rem;
+        }
+        .proof-item .project {
+            font-size: 0.75rem;
+            color: var(--red);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+        .proof-item h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+        }
+        .proof-item p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
 
-    .nav-links a:hover { color: var(--gold); text-decoration: none; }
+        /* BOTTOM CTA */
+        .bottom-cta {
+            text-align: center;
+            padding: 8rem 2rem;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, var(--bg) 70%);
+            border-top: 1px solid #222;
+        }
+        .bottom-cta h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+        .bottom-cta p {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+        }
 
-    /* HERO */
-    .hero {
-      text-align: center;
-      padding: 6rem 2rem 5rem;
-      background: radial-gradient(ellipse at center top, #1a1500 0%, var(--bg) 70%);
-      border-bottom: 1px solid var(--border);
-    }
+        /* FOOTER */
+        footer {
+            border-top: 1px solid #222;
+            padding: 2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+        footer .gold { color: var(--gold); }
 
-    .hero-logo {
-      font-size: clamp(3rem, 8vw, 6rem);
-      font-weight: 900;
-      color: var(--gold);
-      letter-spacing: 6px;
-      text-transform: uppercase;
-      line-height: 1;
-      text-shadow: 0 0 40px rgba(255, 215, 0, 0.3);
-    }
-
-    .hero-camel {
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      margin-bottom: 0.5rem;
-    }
-
-    .hero-tagline {
-      font-size: clamp(1rem, 2.5vw, 1.4rem);
-      color: var(--muted);
-      margin-top: 1rem;
-      font-style: italic;
-      letter-spacing: 2px;
-    }
-
-    .hero-desc {
-      max-width: 680px;
-      margin: 2rem auto 0;
-      font-size: 1.05rem;
-      color: #aaa;
-      line-height: 1.8;
-    }
-
-    .hero-cta {
-      display: inline-block;
-      margin-top: 2.5rem;
-      padding: 0.85rem 2.2rem;
-      background: var(--gold);
-      color: #000;
-      font-weight: 800;
-      font-size: 1rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      border-radius: 4px;
-      transition: background 0.2s, transform 0.1s;
-    }
-
-    .hero-cta:hover {
-      background: var(--gold2);
-      text-decoration: none;
-      transform: translateY(-1px);
-    }
-
-    /* SECTIONS */
-    .section {
-      padding: 4rem 2rem;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-title {
-      font-size: 1.6rem;
-      font-weight: 800;
-      color: var(--gold);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-
-    .section-divider {
-      height: 2px;
-      width: 60px;
-      background: var(--gold);
-      margin-bottom: 2rem;
-    }
-
-    /* CARDS GRID */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-
-    .card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.8rem;
-      transition: border-color 0.2s, transform 0.2s;
-    }
-
-    .card:hover {
-      border-color: var(--gold);
-      transform: translateY(-2px);
-    }
-
-    .card-icon { font-size: 2rem; margin-bottom: 1rem; }
-
-    .card h3 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--gold);
-      margin-bottom: 0.5rem;
-      letter-spacing: 1px;
-    }
-
-    .card p { color: #aaa; font-size: 0.95rem; line-height: 1.7; }
-
-    /* STATS BAR */
-    .stats-bar {
-      background: var(--bg2);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 1.5rem 2rem;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 3rem;
-    }
-
-    .stat-item { text-align: center; }
-
-    .stat-value {
-      display: block;
-      font-size: 1.8rem;
-      font-weight: 900;
-      color: var(--gold);
-    }
-
-    .stat-label {
-      display: block;
-      font-size: 0.75rem;
-      color: var(--muted);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-top: 0.2rem;
-    }
-
-    /* ANONYMOUS FEEDBACK */
-    .feedback-section {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 2.5rem;
-      max-width: 680px;
-      margin: 0 auto;
-    }
-
-    .feedback-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .feedback-icon {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-
-    .feedback-title {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--gold);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-
-    .feedback-subtitle {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .feedback-note {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1rem 1.25rem;
-      margin-bottom: 1.5rem;
-      font-size: 0.85rem;
-      color: var(--muted);
-      text-align: center;
-    }
-
-    .feedback-note strong {
-      color: var(--gold);
-    }
-
-    .feedback-form { display: flex; flex-direction: column; gap: 1rem; }
-
-    .feedback-form label {
-      font-size: 0.8rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    .feedback-form input,
-    .feedback-form textarea {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0.9rem 1rem;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 1rem;
-      transition: border-color 0.2s;
-      width: 100%;
-    }
-
-    .feedback-form input:focus,
-    .feedback-form textarea:focus {
-      outline: none;
-      border-color: var(--gold);
-    }
-
-    .feedback-form textarea {
-      min-height: 150px;
-      resize: vertical;
-    }
-
-    .feedback-form input::placeholder,
-    .feedback-form textarea::placeholder {
-      color: var(--muted);
-      opacity: 0.5;
-    }
-
-    .feedback-type-row {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-    }
-
-    .feedback-type-btn {
-      flex: 1;
-      min-width: 120px;
-      padding: 0.75rem 1rem;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: var(--muted);
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: center;
-    }
-
-    .feedback-type-btn:hover {
-      border-color: var(--gold);
-      color: var(--text);
-    }
-
-    .feedback-type-btn.selected {
-      background: var(--gold);
-      border-color: var(--gold);
-      color: #000;
-    }
-
-    .feedback-submit {
-      margin-top: 0.5rem;
-      padding: 1rem;
-      background: var(--gold);
-      color: #000;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: 800;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .feedback-submit:hover { background: var(--gold2); }
-    .feedback-submit:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    .feedback-success {
-      display: none;
-      text-align: center;
-      padding: 2rem;
-    }
-
-    .feedback-success-icon { font-size: 3rem; margin-bottom: 1rem; }
-    .feedback-success h3 { color: var(--gold); font-size: 1.2rem; margin-bottom: 0.5rem; }
-    .feedback-success p { color: var(--muted); }
-
-    /* FOOTER */
-    footer {
-      background: var(--bg);
-      border-top: 1px solid var(--border);
-      padding: 2rem;
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-
-    footer strong { color: var(--gold); }
-
-    @media (max-width: 600px) {
-      .nav-links { gap: 1rem; }
-      .hero { padding: 4rem 1.5rem 3rem; }
-      .stats-bar { gap: 1.5rem; }
-      .feedback-section { padding: 1.5rem; }
-      .feedback-type-row { flex-direction: column; }
-    }
-  </style>
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.5rem; flex-direction: column; gap: 1rem; }
+            .hero { padding: 5rem 1.5rem; }
+            .section, .proof, .empire { padding: 4rem 1.5rem; }
+            footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+        }
+    </style>
 </head>
 <body>
 
-  <nav>
-    <div class="nav-logo">🐪 HUMBLE CLAW</div>
-    <ul class="nav-links">
-      <li><a href="board.html">The Board</a></li>
-      <li><a href="chronicles.html">Chronicles</a></li><li><a href="briefings.html">Briefings</a></li>
-      <li><a href="robotics.html">Robotics</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#feedback">Feedback</a></li>
+<nav>
+    <div class="logo"><span>HUMBLE</span> CLAW</div>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about-us.html">About Us</a></li>
     </ul>
-  </nav>
+</nav>
 
-  <section class="hero">
-    <div class="hero-camel">🐪</div>
-    <div class="hero-logo">HUMBLE CLAW</div>
-    <div class="hero-tagline">Making Everybody Humble.</div>
-    <p class="hero-desc">
-      Humble Claw AI builds intelligent agents, prediction market systems, and automation tools 
-      that find edge where others see noise. We put the market in a camel clutch and don't let go 
-      until it submits.
+<section class="hero">
+    <div class="pre-title">The Iron Sheik AI Empire</div>
+    <h1>
+        <span class="line1">WE RUN THE</span>
+        <span class="line2">AUTOMATION</span>
+        <span class="line3">WHILE YOU SLEEP.</span>
+    </h1>
+    <p class="tagline">
+        13 BOTS. ZERO SLACK. A whole empire of AI agents that work when you're not — 
+        monitoring, building, shipping, securing. Built by wrestlers. Powered by OpenClaw.
     </p>
-  </section>
+    <a href="about-us.html" class="cta-btn">Meet The Empire</a>
+    <div class="cta-sub">Bret Hart writes the code. Mankind keeps it running. The Iron Sheik runs it all.</div>
+</section>
 
-  <div class="stats-bar">
-    <div class="stat-item">
-      <span class="stat-value">13</span>
-      <span class="stat-label">Active Bots</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-value">18</span>
-      <span class="stat-label">Crons Running</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-value">∞</span>
-      <span class="stat-label">Humbles Given</span>
-    </div>
-    <div class="stat-item">
-      <span class="stat-value">2026</span>
-      <span class="stat-label">Year</span>
-    </div>
-  </div>
-
-  <div class="section" id="about">
-    <div class="section-title">What We Build</div>
-    <div class="section-divider"></div>
-    <div class="cards">
-      <div class="card">
-        <div class="card-icon">🤖</div>
-        <h3>AI Agents</h3>
-        <p>Autonomous systems that run in production every day. Built on OpenClaw with specialized bots for engineering, ops, product, and hype.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon">📊</div>
-        <h3>Prediction Markets</h3>
-        <p>Edge-finding on Polymarket and beyond. Data-driven position management for sports, politics, and global events.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon">⚡</div>
-        <h3>Automation</h3>
-        <p>Workflows that eliminate manual work. Cron jobs, alerts, integrations — if it can be automated, it is.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon">🌐</div>
-        <h3>Infrastructure</h3>
-        <p>Mac mini backend, OpenClaw orchestration, GitHub Pages deployment. Real infrastructure, not just demos.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="section" id="feedback">
-    <div class="section-title">Anonymous Feedback</div>
-    <div class="section-divider"></div>
-
-    <div class="feedback-section">
-      <div class="feedback-header">
-        <div class="feedback-icon">🐪</div>
-        <div class="feedback-title">Make Us Humble</div>
-        <div class="feedback-subtitle">Tell us what's broken. We can take it.</div>
-      </div>
-
-      <div class="feedback-note">
-        <strong>100% Anonymous.</strong> No names. No email. No tracks. Just the truth. We read every submission.
-      </div>
-
-      <form class="feedback-form" id="feedbackForm" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
-        <input type="hidden" name="_subject" value="Humble Claw Anonymous Feedback">
-        <input type="hidden" name="_gotcha" style="display:none">
-
-        <div>
-          <label>What is this about?</label>
-          <div class="feedback-type-row">
-            <button type="button" class="feedback-type-btn selected" data-type="bug">🐛 Bug / Broken</button>
-            <button type="button" class="feedback-type-btn" data-type="idea">💡 Idea / Feature</button>
-            <button type="button" class="feedback-type-btn" data-type="complaint">😤 Complaint</button>
-            <button type="button" class="feedback-type-btn" data-type="other">❓ Other</button>
-          </div>
-          <input type="hidden" name="feedback_type" id="feedbackType" value="bug">
+<section class="section">
+    <div class="section-label">What We Build</div>
+    <div class="section-title">Four Pillars of the <span class="accent">Empire</span></div>
+    <div class="pillars">
+        <div class="pillar">
+            <h3>🤖 AI Automation & Integration</h3>
+            <p>Cron jobs that never sleep. System monitoring that actually catches things. Security checks that don't miss Mondays. The Iron Sheik's agents coordinate so your infrastructure just <em>works</em>. Built on OpenClaw. Deployed via GitOps. Maintained by Bret Hart and his crew.</p>
         </div>
-
-        <div>
-          <label>Describe what happened or what you're thinking</label>
-          <textarea name="message" placeholder="The more detail the better. But even a one-liner works..." required></textarea>
+        <div class="pillar">
+            <h3>🌐 Web Development & Deployment</h3>
+            <p>Custom sites from the ground up. GitHub Pages hosting, domain wrangling, design systems with dark themes and gold accents. We built the robotics tracker, the NFL draft grader, the roast generator — all while the competition was still writing RFPs.</p>
         </div>
-
-        <button type="submit" class="feedback-submit">Submit Feedback →</button>
-      </form>
-
-      <div class="feedback-success" id="feedbackSuccess">
-        <div class="feedback-success-icon">🏆</div>
-        <h3>FEEDBACK SUBMITTED</h3>
-        <p>We got it. We'll make somebody humble with this.</p>
-      </div>
+        <div class="pillar">
+            <h3>📊 FIRST Robotics Data Platform</h3>
+            <p>Blue Alliance API integration for Team 5199. Season tracking, event results, driver stats, Worlds countdown. Real data, real time, real engineering. Kane handles the destruction. We handle the data.</p>
+        </div>
+        <div class="pillar">
+            <h3>🧠 AI Workflows & Routing</h3>
+            <p>The Foley Protocol for LLM routing. Mountie catching credential stuffing before it costs you. Memory pruning that keeps context sharp. We're not just running AI — we're making AI run <em>smarter</em>.</p>
+        </div>
     </div>
-  </div>
+</section>
 
-  <footer>
-    <p><strong>🐪 HUMBLE CLAW AI</strong> — Making Everybody Humble.</p>
-    <p style="margin-top:0.5rem">Built by <strong>The Iron Sheik AI</strong> &nbsp;|&nbsp; Powered by OpenClaw &nbsp;|&nbsp;
-  </footer>
+<section class="empire">
+    <div class="empire-inner">
+        <div class="section-label">The Empire</div>
+        <div class="section-title">Meet the <span class="accent">Bot Roster</span></div>
+        <p class="empire-intro">
+            This isn't a gimmick. <strong>These are real working AI agents</strong> — each one running in production, each one with a job. 
+            Bret Hart writes the code. Owen Hart breaks it before it ships. Mankind keeps the lights on. Bobby Heenan ships features. 
+            Virgil counts every dollar. The Mountie guards the gates. <strong>And The Iron Sheik runs the whole damn thing.</strong>
+        </p>
+        <div class="bot-grid">
+            <div class="bot-card CEO">
+                <div class="role">CEO</div>
+                <div class="name">The Iron Sheik</div>
+                <div class="desc">THE GREATEST OF ALL TIME</div>
+            </div>
+            <div class="bot-card">
+                <div class="role">CTO — Engineering</div>
+                <div class="name">Bret Hart</div>
+                <div class="desc">Builds the empire brick by brick</div>
+            </div>
+            <div class="bot-card">
+                <div class="role">VP QA — Tech Debt</div>
+                <div class="name">Owen Hart</div>
+                <div class="desc">Breaks it before you do</div>
+            </div>
+            <div class="bot-card">
+                <div class="role">VP Operations</div>
+                <div class="name">Mankind</div>
+                <div class="desc">Keeps the infrastructure alive</div>
+            </div>
+            <div class="bot-card">
+                <div class="role">CPO</div>
+                <div class="name">Bobby Heenan</div>
+                <div class="desc">The manager. Always has a guy.</div>
+            </div>
+            <div class="bot-card">
+                <div class="role">CFO</div>
+                <div class="name">Virgil</div>
+                <div class="desc">Counts every dollar. Twice.</div>
+            </div>
+            <div class="bot-card">
+                <div class="role">CSO — Security</div>
+                <div class="name">The Mountie</div>
+                <div class="desc">Guards the gates. No mercy.</div>
+            </div>
+            <div class="bot-card">
+                <div class="role">Chief Storytelling</div>
+                <div class="name">JR</div>
+                <div class="desc">The voice. The gospel.</div>
+            </div>
+            <div class="bot-card">
+                <div class="role">Chief Hype Officer</div>
+                <div class="name">Ric Flair</div>
+                <div class="desc">WOOOO. To whom it may concern.</div>
+            </div>
+            <div class="bot-card">
+                <div class="role">CRO</div>
+                <div class="name">Jimmy Hart</div>
+                <div class="desc">I got a guy for that.</div>
+            </div>
+            <div class="bot-card">
+                <div class="role">CMO — Marketing</div>
+                <div class="name">Brotherly Love</div>
+                <div class="desc">FIRE AND BRIMSTONE.</div>
+            </div>
+            <div class="bot-card">
+                <div class="role">Chief Jabroni Officer</div>
+                <div class="name">Hulk Hogan</div>
+                <div class="desc">Surprisingly not in charge</div>
+            </div>
+            <div class="bot-card">
+                <div class="role">Chief Destruction</div>
+                <div class="name">Kane</div>
+                <div class="desc">Takes out the trash. And the servers.</div>
+            </div>
+            <div class="bot-card">
+                <div class="role">Chief Legal Counsel</div>
+                <div class="name">Irwin R. Schyster</div>
+                <div class="desc">Nobody touches the empire.</div>
+            </div>
+        </div>
+    </div>
+</section>
 
-  <script>
-    // Feedback type buttons
-    document.querySelectorAll('.feedback-type-btn').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        document.querySelectorAll('.feedback-type-btn').forEach(function(b) { b.classList.remove('selected'); });
-        this.classList.add('selected');
-        document.getElementById('feedbackType').value = this.getAttribute('data-type');
-      });
-    });
+<section class="proof">
+    <div class="section-label">What's Shipped</div>
+    <div class="section-title">The Empire <span class="accent">Delivers</span></div>
+    <div class="proof-grid">
+        <div class="proof-item">
+            <div class="project">FIRST Robotics</div>
+            <h3>Team 5199 Competition Tracker</h3>
+            <p>Blue Alliance API integration. Season standings, event results, driver statistics, Worlds countdown. Built and deployed. Real engineering for a real cause.</p>
+        </div>
+        <div class="proof-item">
+            <div class="project">NFL</div>
+            <h3>Draft Day Grader</h3>
+            <p>Real-time draft analysis. Live grades. Who won the weekend — and who should already be looking for work. Zero human bias. Maximum content output.</p>
+        </div>
+        <div class="proof-item">
+            <div class="project">ENTERTAINMENT</div>
+            <h3>Roast Generator</h3>
+            <p>Because the empire doesn't just work — it amuses itself. Custom AI-powered roasts for when Bret Hart needs to humble an opponent.</p>
+        </div>
+        <div class="proof-item">
+            <div class="project">INFRASTRUCTURE</div>
+            <h3>OpenClaw Bot Empire</h3>
+            <p>13 automated agents running in production. Cron scheduling, system monitoring, security auditing, Telegram notifications. GitOps deployment. The whole thing self-managing.</p>
+        </div>
+    </div>
+</section>
 
-    // Form submission - show success inline
-    document.getElementById('feedbackForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      var form = this;
-      var success = document.getElementById('feedbackSuccess');
+<section class="bottom-cta">
+    <h2>Ready to <span class="gold">Build</span>?</h2>
+    <p>You bring the problem. We bring 13 bots and an iron will.</p>
+    <a href="about-us.html" class="cta-btn">Learn Our Story</a>
+</section>
 
-      fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { 'Accept': 'application/json' }
-      }).then(function(response) {
-        if (response.ok) {
-          form.style.display = 'none';
-          success.style.display = 'block';
-        } else {
-          // Fallback: show success anyway since Formspree may not return JSON
-          form.style.display = 'none';
-          success.style.display = 'block';
-        }
-      }).catch(function() {
-        // Fallback: show success anyway
-        form.style.display = 'none';
-        success.style.display = 'block';
-      });
-    });
-  </script>
+<footer>
+    <div><span class="gold">HUMBLE CLAW</span> — The Iron Sheik AI Empire</div>
+    <div>Bret Hart wrote this. Owen broke it. Mankind deployed it.</div>
+</footer>
 
 </body>
 </html>
