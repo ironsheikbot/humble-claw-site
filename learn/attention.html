@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attention — How AI Works</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0a;
+            --bg2: #111111;
+            --gold: #d4af37;
+            --gold-dim: #8b7355;
+            --text: #e8e8e8;
+            --text-dim: #888;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        a { color: var(--gold); text-decoration: none; }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            border-bottom: 1px solid #222;
+        }
+        nav .logo { font-size: 1.2rem; font-weight: 900; letter-spacing: 2px; }
+        nav .logo span { color: var(--gold); }
+        nav ul { display: flex; list-style: none; gap: 2rem; }
+        nav ul li a { color: var(--text-dim); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+        nav ul li a:hover { color: var(--gold); }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, var(--bg) 70%);
+            border-bottom: 1px solid #222;
+        }
+        .hero .eyebrow {
+            color: var(--gold);
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+        .hero h1 span { color: var(--gold); }
+        .hero p {
+            font-size: 1.2em;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            color: #fff;
+            margin: 50px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #222;
+        }
+        h2 span { color: var(--gold); }
+
+        h3 {
+            font-size: 1.3em;
+            color: var(--gold);
+            margin: 35px 0 12px;
+        }
+
+        p { color: #aaa; margin: 15px 0; font-size: 1.05em; }
+        p strong { color: #fff; }
+
+        .callout {
+            background: linear-gradient(135deg, #1a1a0a, #0f0f0a);
+            border-left: 3px solid var(--gold);
+            border-radius: 0 8px 8px 0;
+            padding: 25px 30px;
+            margin: 30px 0;
+        }
+        .callout p { color: #ccc; margin: 0; font-size: 1.1em; }
+        .callout .label {
+            color: var(--gold);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .diagram {
+            background: #0d0d12;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 40px;
+            margin: 30px 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            color: #8be9fd;
+            overflow-x: auto;
+        }
+
+        .code-block {
+            background: #0d0d12;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            color: #8be9fd;
+        }
+        .code-block .comment { color: #6272a4; }
+        .code-block .keyword { color: #ff79c6; }
+        .code-block .string { color: #f1fa8c; }
+        .code-block .function { color: #50fa7b; }
+        .code-block .number { color: #bd93f9; }
+
+        .step-flow {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        .step {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 15px 20px;
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+        }
+        .step .num {
+            color: var(--gold);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+        .step .name { font-weight: 700; color: #fff; }
+        .arrow { color: #444; font-size: 1.5em; }
+
+        .takeaway {
+            background: linear-gradient(135deg, #1a2a1a, #0f1f0f);
+            border: 1px solid #2a5a2a;
+            border-radius: 16px;
+            padding: 35px;
+            margin: 50px 0 30px;
+        }
+        .takeaway h3 { color: #4ade80; margin: 0 0 15px; font-size: 1.2em; }
+        .takeaway p { color: #aaa; margin: 0; }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            padding: 30px 0;
+            border-top: 1px solid #1a1a1a;
+            margin-top: 50px;
+        }
+        .nav-links a { color: var(--text-dim); font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-links .next { margin-left: auto; }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #444;
+            font-size: 0.8em;
+            border-top: 1px solid #1a1a1a;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">HUMBLE <span>CLAW</span></div>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/learn/">Learn</a></li>
+        <li><a href="/about-us.html">About</a></li>
+    </ul>
+</nav>
+
+<div class="hero">
+    <div class="eyebrow">How AI Works</div>
+    <h1>Atten<span>tion</span></h1>
+    <p>Every token looks at every other token. That's the trick.</p>
+</div>
+
+<div class="container">
+
+    <h2>The Hook: <span>Context Without Memory</span></h2>
+
+    <p>Earlier language models processed tokens in isolation. "Bank" in sentence 5 had no connection to "river" in sentence 1. The model couldn't maintain context across long sequences.</p>
+
+    <p>Attention changed everything. Now every token in a sequence can attend to (look at, weigh the importance of) every other token simultaneously. This is the core innovation of the transformer architecture, introduced in "Attention Is All You Need" (2017). It won. Completely.</p>
+
+    <div class="callout">
+        <span class="label">Key Insight</span>
+        <p>Attention is a weighted lookup. For each token, the model computes how much it should "pay attention" to every other token, based on learned relevance. The result is a context-aware representation for each position that depends on the full input.</p>
+    </div>
+
+    <h2>The Three Key Matrices</h2>
+
+    <p>Attention uses three learned projections: Query (Q), Key (K), and Value (V). These are learned during training. For each token, we compute how much it queries other tokens, how much other tokens are "keys" that match that query, and what values should be retrieved.</p>
+
+    <div class="code-block">
+<span class="comment">// Scaled dot-product attention (the math)</span>
+<span class="keyword">def</span> <span class="function">attention</span>(Q, K, V):
+    <span class="comment">// Q, K, V are shape (seq_len, d_k)</span>
+    scores = Q @ K.<span class="function">T</span>           <span class="comment">// (seq_len, seq_len)</span>
+    scores = scores / sqrt(d_k)     <span class="comment">// scale by sqrt(dimension)</span>
+    weights = <span class="function">softmax</span>(scores, axis=-1)
+    <span class="keyword">return</span> weights @ V              <span class="comment">// (seq_len, d_k)</span>
+
+<span class="comment">// What this does:</span>
+<span class="comment">// - scores[i][j] = how much position i asks about position j</span>
+<span class="comment">// - weights[i] = how position i distributes its attention</span>
+<span class="comment">// - output[i] = weighted sum of values, weighted by attention</span>
+    </div>
+
+    <h2>The Step-by-Step Process</h2>
+
+    <div class="step-flow">
+        <div class="step">
+            <div class="num">Step 1</div>
+            <div class="name">Linear Projections</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="step">
+            <div class="num">Step 2</div>
+            <div class="name">Compute Scores</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="step">
+            <div class="num">Step 3</div>
+            <div class="name">Scale</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="step">
+            <div class="num">Step 4</div>
+            <div class="name">Softmax</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="step">
+            <div class="num">Step 5</div>
+            <div class="name">Weighted Sum</div>
+        </div>
+    </div>
+
+    <p><strong>Step 1:</strong> Each token embedding gets projected into Q, K, V vectors via learned weight matrices.</p>
+    <p><strong>Step 2:</strong> For position i, compute scores[i][j] = how much token i queries token j. Dot product of Q_i with K_j.</p>
+    <p><strong>Step 3:</strong> Scale by sqrt(d_k). This prevents softmax saturation (gradients vanishing) for large embedding dimensions.</p>
+    <p><strong>Step 4:</strong> Softmax along each row: converts scores to probabilities that sum to 1. Now "how much attention does i pay to j?" is a probability.</p>
+    <p><strong>Step 5:</strong> Multiply the attention weights by V matrices. Each token output is a weighted blend of all value vectors.</p>
+
+    <h2>Multi-Head Attention</h2>
+
+    <p>One attention operation is called a head. A transformer runs multiple heads in parallel (typically 12-96). Each head has its own Q, K, V projections. The outputs are concatenated and projected again. This lets the model attend to different aspects of the relationship simultaneously.</p>
+
+    <div class="diagram">
+<span class="comment">MULTI-HEAD ATTENTION (h heads)</span>
+<span class="comment"></span>
+<span class="comment">  Input embeddings (seq_len, d_model)</span>
+<span class="comment">           │</span>
+<span class="comment">     ┌────┴────┐</span>
+<span class="comment">     │ split h │</span>
+<span class="comment">     └────┬────┘</span>
+<span class="comment">  ┌───────┼───────┐</span>
+<span class="comment">  │       │       │</span>
+<span class="comment"> HEAD_1  HEAD_2  HEAD_h</span>
+<span class="comment">  (Q₁K₁V₁)(Q₂K₂V₂)(QₕKₕVₕ)</span>
+<span class="comment">  │       │       │</span>
+<span class="comment">  └───────┼───────┘</span>
+<span class="comment">     │ concat │</span>
+<span class="comment">     ▼ linear ▼</span>
+<span class="comment">  Output (seq_len, d_model)</span>
+<span class="comment"></span>
+<span class="comment">  Each head learns different attention patterns:</span>
+<span class="comment">  Head 1: syntax / grammar</span>
+<span class="comment">  Head 2: coreference (pronouns → antecedents)</span>
+<span class="comment">  Head 3: semantic relationships</span>
+<span class="comment">  ...</span>
+    </div>
+
+    <p>Research on analyzing attention heads has shown specific heads specialize: some track subject-verb agreement, some resolve pronouns, some detect synonyms. Different heads learn different linguistic features from the same input.</p>
+
+    <h2>Why Softmax?</h2>
+
+    <p>The softmax at the end of attention computation is critical. Softmax converts arbitrary scores into a probability distribution that sums to 1. This means:</p>
+
+    <p><strong>Sparse attention:</strong> One token attends strongly to a few relevant tokens, weakly to most others. No binary hard cuts.</p>
+    <p><strong>Differentiable:</strong> Softmax is smooth and differentiable everywhere, so gradients flow through it during backpropagation.</p>
+    <p><strong>Competitive:</strong> Because probabilities sum to 1, paying more attention to one token means paying less to others. This creates meaningful tradeoffs.</p>
+
+    <h2>The Quadratic Problem</h2>
+
+    <p>Attention computes pairwise scores for every position against every other position. For a sequence of length N, this is O(N²) in memory and compute. For N=10,000 tokens (roughly a short paper), that's 100 million operations. For N=1,000,000 (long document), it's 1 trillion.</p>
+
+    <p>This is why context windows are expensive. Extending context requires either more memory, more compute, or approximations. Flash attention, sparse attention, and linear attention variants all attack this problem from different angles.</p>
+
+    <div class="takeaway">
+        <h3>The Key Takeaway</h3>
+        <p>Attention lets every token dynamically weigh every other token's importance. Q/K/V projections make this learned rather than hardcoded. Multi-head attention runs several attention operations in parallel, capturing diverse relationships. The result: context-aware representations without recurrence, without sequential processing, and with direct access to any token from any position.</p>
+    </div>
+
+    <div class="nav-links">
+        <a href="/learn/embeddings/">← Embeddings</a>
+        <a href="/learn/transformers/" class="next">Transformers →</a>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p>How AI Works Series — Humble Claw</p>
+</div>
+
+</body>
+</html>

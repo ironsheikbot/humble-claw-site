@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How RAG Actually Works — Humble Claw AI</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --bg2: #111111;
+      --bg3: #1a1a1a;
+      --gold: #FFD700;
+      --gold2: #FFC200;
+      --text: #e8e8e8;
+      --muted: #888;
+      --border: #2a2a2a;
+      --green: #00C896;
+      --red: #FF4757;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--gold); text-decoration: none; }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 5rem 2rem 4rem;
+      background: radial-gradient(ellipse at center top, #0a1a10 0%, var(--bg) 70%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: var(--bg3);
+      border: 1px solid var(--green);
+      color: var(--green);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 0.4rem 1rem;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-title span { color: var(--gold); }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--muted);
+      margin-top: 1rem;
+      font-style: italic;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* INTRO */
+    .intro-section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .lead {
+      font-size: 1.3rem;
+      color: #ddd;
+      line-height: 1.8;
+      border-left: 3px solid var(--gold);
+      padding-left: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .lead strong { color: var(--gold); }
+
+    /* SECTION BLOCKS */
+    .content-section {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-num {
+      background: var(--gold);
+      color: #000;
+      font-weight: 900;
+      font-size: 0.85rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      letter-spacing: 1px;
+    }
+
+    .section-title-text {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .content-body { padding-left: 0; }
+
+    .content-body p {
+      color: #bbb;
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+    }
+
+    .content-body strong { color: var(--gold); }
+
+    /* DIAGRAM */
+    .diagram {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      margin: 2rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.88rem;
+      line-height: 1.9;
+      overflow-x: auto;
+    }
+
+    .diagram-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .diagram .row { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem; }
+    .diagram .box {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.5rem 0.8rem;
+      white-space: nowrap;
+      font-size: 0.82rem;
+      color: var(--text);
+    }
+    .diagram .box.gold { border-color: var(--gold); color: var(--gold); }
+    .diagram .box.green { border-color: var(--green); color: var(--green); }
+    .diagram .box.blue { border-color: #5B9CF6; color: #5B9CF6; }
+    .diagram .box.red { border-color: var(--red); color: var(--red); }
+    .diagram .arrow { color: var(--muted); font-size: 0.8rem; }
+    .diagram .spacer { flex: 1; }
+    .diagram .label-row { color: var(--muted); font-size: 0.7rem; margin-top: 0.2rem; padding-left: 0.5rem; }
+
+    /* CALLOUT BOX */
+    .callout {
+      background: var(--bg2);
+      border: 1px solid var(--gold);
+      border-radius: 8px;
+      padding: 1.5rem 1.8rem;
+      margin: 2rem 0;
+    }
+
+    .callout-icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
+
+    .callout h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+    }
+
+    .callout p { color: #ccc; font-size: 0.95rem; line-height: 1.7; margin: 0; }
+
+    /* COMPARISON TABLE */
+    .comparison {
+      margin: 2rem 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .comparison-header {
+      background: var(--bg3);
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .comparison-header > div { padding: 0.8rem 1.2rem; }
+
+    .comparison-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border-top: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+
+    .comparison-row > div { padding: 0.8rem 1.2rem; color: #bbb; }
+    .comparison-row > div:first-child { color: var(--text); font-weight: 600; }
+    .comparison-row > div:last-child { color: var(--green); }
+
+    /* PROBLEM / SOLUTION PAIRS */
+    .pair-block {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 2rem 0;
+    }
+
+    .pair-header {
+      padding: 0.9rem 1.5rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pair-header.problem { background: #1a0a0a; color: var(--red); }
+    .pair-header.solution { background: #0a1a0a; color: var(--green); }
+
+    .pair-body { padding: 1.2rem 1.5rem; }
+
+    .pair-body p { color: #bbb; font-size: 0.95rem; line-height: 1.7; margin: 0; }
+
+    /* CODE BLOCK */
+    .code-block {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.82rem;
+      color: #aaa;
+      line-height: 1.9;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
+    /* STEP LIST */
+    .step-list {
+      counter-reset: steps;
+      list-style: none;
+      margin: 2rem 0;
+      padding: 0;
+    }
+
+    .step-list li {
+      counter-increment: steps;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .step-list li::before {
+      content: counter(steps);
+      background: var(--gold);
+      color: #000;
+      font-weight: 900;
+      font-size: 0.8rem;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+      letter-spacing: 1px;
+    }
+
+    .step-list li div { flex: 1; }
+    .step-list li strong { color: var(--text); display: block; margin-bottom: 0.2rem; font-size: 0.95rem; }
+    .step-list li span { color: #aaa; font-size: 0.9rem; }
+
+    /* DIVIDER */
+    .section-divider {
+      height: 1px;
+      background: var(--border);
+      max-width: 860px;
+      margin: 0 auto 4rem;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    footer strong { color: var(--gold); }
+
+    @media (max-width: 600px) {
+      .nav-links { gap: 1rem; }
+      .hero { padding: 3rem 1.5rem 2rem; }
+      .diagram { font-size: 0.75rem; }
+      .comparison-header, .comparison-row { grid-template-columns: 1fr 1fr; font-size: 0.8rem; }
+      .comparison-header > div:nth-child(2),
+      .comparison-row > div:nth-child(2) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">🐪 HUMBLE CLAW</div>
+    <ul class="nav-links">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/portfolio.html">Portfolio</a></li>
+      <li><a href="/learn/index.html">Learn</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-badge">📚 Mental Model #2</div>
+    <div class="hero-title">How RAG <span>Actually</span> Works</div>
+    <div class="hero-subtitle">Retrieval-Augmented Generation — the memory your AI never had.</div>
+  </section>
+
+  <div class="intro-section">
+    <p class="lead">
+      Ask a normal AI about your company's documents and it <strong>guesses</strong>. Ask a RAG-powered AI and it <strong>knows</strong>. The difference is whether the model is retrieving from facts or hallucinating from training data.
+    </p>
+    <p style="color:#aaa; font-size:1rem; line-height:1.8; margin-bottom:1.5rem;">
+      RAG — Retrieval-Augmented Generation — is the architecture that makes AI actually useful on private, real-time, or domain-specific data. Without it, you're just talking to a very confident stranger who's read everything on the internet and nothing about your business.
+    </p>
+    <p style="color:#aaa; font-size:1rem; line-height:1.8;">
+      Here's how it works, step by step.
+    </p>
+  </div>
+
+  <!-- SECTION 1: THE CORE PROBLEM -->
+  <div class="content-section">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div class="section-title-text">The Problem: Your AI Doesn't Know What You Know</div>
+    </div>
+    <div class="content-body">
+      <p>
+        Large Language Models are trained on data. Once trained, that data is <strong>frozen</strong>. Your AI doesn't know about the document you wrote yesterday. It doesn't know the internal jargon your team uses. It doesn't know the specific decisions your company made in 2023.
+      </p>
+      <p>
+        When you ask it a question, it answers from <strong>general knowledge baked into its weights</strong>. If you want it to answer from your actual data — your files, your database, your internal knowledge base — you have two options:
+      </p>
+
+      <div class="pair-block">
+        <div class="pair-header problem">❌ Option A: Fine-tuning</div>
+        <div class="pair-body">
+          <p>Retrain the model on your data. Expensive. Slow. Gets stale the moment new data arrives. Requires GPU clusters and ML expertise. Not realistic for most teams.</p>
+        </div>
+      </div>
+
+      <div class="pair-block">
+        <div class="pair-header solution">✅ Option B: RAG</div>
+        <div class="pair-body">
+          <p>Don't change the model. Change what's in the prompt. At query time, <strong>retrieve the relevant information and stuff it into the context window alongside the question</strong>. The model answers from that context — your data, fresh, every time.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- SECTION 2: HOW IT WORKS -->
+  <div class="content-section">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div class="section-title-text">The Pipeline: How RAG Works End-to-End</div>
+    </div>
+    <div class="content-body">
+      <p>
+        RAG has two distinct phases that run at different times: <strong>Indexing</strong> (offline, when data is added) and <strong>Retrieval + Generation</strong> (online, when a user asks a question). Understanding both is the key to understanding why RAG works.
+      </p>
+
+      <div class="diagram">
+        <div class="diagram-title">RAG — Two Phase Architecture</div>
+
+        <div style="margin-bottom:1.5rem; color:var(--gold); font-size:0.75rem; font-weight:700; letter-spacing:2px; text-align:center;">PHASE 1: INDEXING (Offline — runs once per document)</div>
+
+        <div class="row">
+          <div class="box blue">📄 Raw Docs</div>
+          <div class="arrow">→</div>
+          <div class="box">✂️ Chunking</div>
+          <div class="arrow">→</div>
+          <div class="box">🔢 Embed</div>
+          <div class="arrow">→</div>
+          <div class="box gold">💾 Vector DB</div>
+        </div>
+        <div class="label-row">Split → Convert to numbers → Store for search</div>
+
+        <div style="margin:1.5rem 0; border-top:1px dashed var(--border); padding-top:1.5rem;">
+          <div style="color:var(--green); font-size:0.75rem; font-weight:700; letter-spacing:2px; text-align:center; margin-bottom:1rem;">PHASE 2: RETRIEVE + GENERATE (Online — runs at query time)</div>
+          <div class="row">
+            <div class="box green">❓ User Query</div>
+            <div class="arrow">→</div>
+            <div class="box">🔍 Search</div>
+            <div class="arrow">→</div>
+            <div class="box gold">📄 Top Chunks</div>
+            <div class="arrow">→</div>
+            <div class="box green">🤖 LLM Answer</div>
+          </div>
+          <div class="label-row">Question → Find related → Inject into prompt → Respond</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: STEP BY STEP -->
+  <div class="content-section">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div class="section-title-text">Step-by-Step Breakdown</div>
+    </div>
+    <div class="content-body">
+      <ol class="step-list">
+        <li>
+          <div>
+            <strong>Chunk — Split your documents into pieces</strong>
+            <span>Documents are too large to fit in a prompt. RAG cuts them into chunks (sentences, paragraphs, sections). Size matters: too small loses context, too large adds noise. Typical: 500–1500 tokens.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Embed — Convert text into numbers</strong>
+            <span>A neural encoder (e.g., OpenAI's <code>text-embedding-3</code>, or open models like <code>nomic-embed-text</code>) converts each chunk into a vector — a list of ~1536 numbers that represents the <em>meaning</em> of the text.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Store — Put vectors in a database</strong>
+            <span>Vectors go into a <strong>vector database</strong> (Pinecone, Weaviate, Qdrant, or open-source like Chroma). The database indexes them so you can search by "meaning" — not just keyword match.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Retrieve — Find the relevant chunks</strong>
+            <span>When a user asks a question, the same embedding model converts the question into a vector. The database runs a <strong>nearest-neighbor search</strong>: "Which stored chunks are most similar to this question?"</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Augment — Stuff the context into the prompt</strong>
+            <span>The top-K most relevant chunks are injected into the LLM prompt as context, along with the original question. The model now has the retrieved information <em>in its context window</em>.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Generate — The model answers from your data</strong>
+            <span>The LLM produces an answer grounded in the retrieved context. Not a guess. Not a hallucination from training data. A fact pulled from <em>your actual documents</em>.</span>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- SECTION 4: WHY VECTOR SEARCH IS THE KEY -->
+  <div class="content-section">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div class="section-title-text">Why Vector Search Is the Real Innovation</div>
+    </div>
+    <div class="content-body">
+      <p>
+        The magic of RAG isn't the LLM — it's the <strong>retrieval</strong>. If you just used keyword search (SQL <code>LIKE '%query%'</code>), you'd miss synonyms, context, and semantic meaning. A search for "compensation benchmarks" might fail to find a document titled "Salary Band Guidelines 2025."
+      </p>
+      <p>
+        <strong>Vector search solves this.</strong> By converting meaning into numbers, it finds conceptually related documents even when the wording is completely different. That's why RAG can connect a question about "back pay" to a document titled "Overtime Settlement — Q3 2024."
+      </p>
+
+      <div class="comparison">
+        <div class="comparison-header">
+          <div>Search Type</div>
+          <div>How It Works</div>
+          <div>Example Match</div>
+        </div>
+        <div class="comparison-row">
+          <div>Keyword (SQL)</div>
+          <div>Exact string match</div>
+          <div>"buying signal" only finds "buying signal"</div>
+        </div>
+        <div class="comparison-row">
+          <div>Vector (Semantic)</div>
+          <div>Meaning proximity in embedding space</div>
+          <div>"purchase intent" → "buying signal" ✅</div>
+        </div>
+        <div class="comparison-row">
+          <div>Hybrid (Best)</div>
+          <div>Combine keyword + vector</div>
+          <div>High precision + semantic recall</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- SECTION 5: WHY IT STILL FAILS -->
+  <div class="content-section">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div class="section-title-text">Why RAG Still Fails — and What That Means for You</div>
+    </div>
+    <div class="content-body">
+      <p>
+        RAG is not magic. It's a system with known failure modes. Understanding them is how you build something that actually works.
+      </p>
+
+      <div class="callout">
+        <div class="callout-icon">⚠️</div>
+        <h4>Chunking Degrades Context</h4>
+        <p>If you split a document wrong, the retrieved chunk has half the information it needs. Split on headers, not arbitrary character limits. Preserve metadata (who wrote it, when, what section).</p>
+      </div>
+
+      <div class="callout">
+        <div class="callout-icon">⚠️</div>
+        <h4>Retrieval Finds Similar — Not Correct</h4>
+        <p>Vector search finds chunks that <em>look like</em> the query, not chunks that <em>actually answer</em> it. The retrieved chunks may be topically related but factually wrong for the specific question. Reranking and hybrid search help here.</p>
+      </div>
+
+      <div class="callout">
+        <div class="callout-icon">⚠️</div>
+        <h4>Context Window Saturation</h4>
+        <p>You can only fit ~4,000–128,000 tokens in the context window (depending on model). If your retrieved chunks + the user's history + the system prompt exceeds this, the model starts dropping information. Chunk wisely. Prune aggressively.</p>
+      </div>
+
+      <div class="callout">
+        <div class="callout-icon">⚠️</div>
+        <h4>The Model Still Hallucinates — Just More Confidently</h4>
+        <p>RAG reduces hallucination by grounding answers in retrieved text. But if the retrieved text is ambiguous or the model misinterprets it, you get a confident wrong answer — which is worse than an uncertain one. Always validate against sources.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- SECTION 6: WHAT GOOD RAG LOOKS LIKE -->
+  <div class="content-section">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div class="section-title-text">What Good RAG Looks Like in Production</div>
+    </div>
+    <div class="content-body">
+      <p>
+        A working RAG system isn't just "embed everything, search, answer." It's a carefully engineered pipeline that handles the edge cases above. Here's what production-grade RAG includes:
+      </p>
+
+      <div class="code-block">RAG System Components (Production):
+
+  📄 Source: Internal docs, PDFs, Slack, database
+       ↓
+  🔧 Pre-processing: OCR, table extraction, Markdown parsing
+       ↓
+  ✂️ Chunking: Semantic (header-based) not fixed-size
+       ↓
+  🔢 Embedding: High-quality encoder (e.g. text-embedding-3)
+       ↓
+  💾 Vector DB + Metadata: With source, timestamp, permissions
+       ↓
+  🔍 Retrieval: Hybrid search (dense + sparse / keyword + semantic)
+       ↓
+  📊 Reranker: Cross-encoder reorders top candidates by relevance
+       ↓
+  📝 Context Assembly: Metadata-filtered, deduplicated chunks
+       ↓
+  🤖 LLM: Grounded answer with inline citations</div>
+
+      <div class="callout">
+        <div class="callout-icon">💡</div>
+        <h4>The Real Competitive Advantage</h4>
+        <p>Most teams implement RAG naively and get mediocre results. The teams that win have custom chunking strategies, domain-specific embedding fine-tuning, hybrid retrieval, and careful evaluation pipelines. This is where AI actually creates defensible product differentiation.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- SECTION 7: WHY IT MATTERS -->
+  <div class="content-section">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div class="section-title-text">Why RAG Is the Backbone of the Humble Claw Stack</div>
+    </div>
+    <div class="content-body">
+      <p>
+        Every useful AI system we've built at Humble Claw depends on RAG. When our agents monitor prediction markets, they're not just querying a static model — they're pulling live data, news, and signals through retrieval systems that keep answers current and grounded.
+      </p>
+      <p>
+        When Mr. Pink asks our agent about his portfolio or positions, the answer doesn't come from what the AI was trained on. It comes from <strong>retrieving Mr. Pink's actual data</strong> and answering from that context. The AI knows because RAG put the right information in front of it.
+      </p>
+      <p>
+        Without RAG, every AI answer is a guess. With RAG, every AI answer is a <strong>fact with a source</strong>.
+      </p>
+
+      <div class="callout" style="border-color: var(--green);">
+        <div class="callout-icon">🐪</div>
+        <h4>Remember This</h4>
+        <p>RAG is how you give your AI a memory. Not the fuzzy kind — the <strong>actual</strong> kind. The kind that knows your data, answers your questions, and doesn't make things up. This is the difference between an AI that's useful and an AI that's dangerous. We choose useful. Every time.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong>🐪 HUMBLE CLAW AI</strong> — Making Everybody Humble.</p>
+    <p style="margin-top:0.5rem">
+      <a href="/index.html">Home</a> &nbsp;|&nbsp;
+      <a href="/portfolio.html">Portfolio</a> &nbsp;|&nbsp;
+      <a href="/learn/index.html">Learn</a>
+    </p>
+    <p style="margin-top:0.5rem; color:#555; font-size:0.78rem;">Mental Models Series: RAG · The Foley Protocol · More Coming Soon</p>
+  </footer>
+
+</body>
+</html>

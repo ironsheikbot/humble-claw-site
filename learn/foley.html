@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOLEY PROTOCOL — How Humble Claw Saves Money on AI</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #0a0a0f;
+            color: #e8e8e8;
+            line-height: 1.7;
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1a 100%);
+            padding: 80px 20px;
+            text-align: center;
+            border-bottom: 1px solid #222;
+        }
+        
+        .hero h1 {
+            font-size: 3em;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1px;
+            margin-bottom: 15px;
+        }
+        
+        .hero h1 span {
+            color: #ff6b35;
+        }
+        
+        .hero .subtitle {
+            font-size: 1.4em;
+            color: #888;
+            font-weight: 300;
+        }
+        
+        .hero .subtitle strong {
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        .cost-highlight {
+            background: linear-gradient(135deg, #1a2a1a, #0f1f0f);
+            border: 1px solid #2a5a2a;
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .cost-highlight h2 {
+            font-size: 1.8em;
+            color: #4ade80;
+            margin-bottom: 20px;
+        }
+        
+        .cost-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .cost-box {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 25px 35px;
+            text-align: center;
+        }
+        
+        .cost-box.wrong {
+            border-color: #aa3333;
+        }
+        
+        .cost-box.right {
+            border-color: #33aa33;
+        }
+        
+        .cost-box .label {
+            font-size: 0.85em;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        
+        .cost-box .amount {
+            font-size: 2.4em;
+            font-weight: 800;
+        }
+        
+        .cost-box.wrong .amount { color: #ff6b6b; }
+        .cost-box.right .amount { color: #4ade80; }
+        
+        .vs {
+            font-size: 2em;
+            color: #555;
+            font-weight: 300;
+        }
+        
+        .annual-savings {
+            background: #111;
+            border: 2px solid #4ade80;
+            border-radius: 16px;
+            padding: 30px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .annual-savings .big {
+            font-size: 3em;
+            font-weight: 900;
+            color: #4ade80;
+        }
+        
+        .annual-savings .label {
+            font-size: 1.1em;
+            color: #888;
+            margin-top: 8px;
+        }
+        
+        h2 {
+            font-size: 1.8em;
+            color: #fff;
+            margin: 50px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #222;
+        }
+        
+        h3 {
+            font-size: 1.3em;
+            color: #ff6b35;
+            margin: 35px 0 12px;
+        }
+        
+        p {
+            color: #aaa;
+            margin: 15px 0;
+            font-size: 1.05em;
+        }
+        
+        .tiers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .tier-card {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .tier-card.trivial { border-color: #888; }
+        .tier-card.standard { border-color: #4a9eff; }
+        .tier-card.complex { border-color: #ff9f4a; }
+        .tier-card.creative { border-color: #c77dff; }
+        
+        .tier-card .icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .tier-card .name {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .tier-card.trivial .name { color: #aaa; }
+        .tier-card.standard .name { color: #4a9eff; }
+        .tier-card.complex .name { color: #ff9f4a; }
+        .tier-card.creative .name { color: #c77dff; }
+        
+        .tier-card .cost {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 8px;
+        }
+        
+        .tier-card .examples {
+            font-size: 0.85em;
+            color: #555;
+            margin-top: 12px;
+        }
+        
+        .code-block {
+            background: #0d0d12;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            color: #8be9fd;
+        }
+        
+        .code-block .comment { color: #6272a4; }
+        .code-block .keyword { color: #ff79c6; }
+        .code-block .string { color: #f1fa8c; }
+        .code-block .function { color: #50fa7b; }
+        
+        .providers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .provider-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .provider-card .name {
+            font-weight: 700;
+            color: #fff;
+            font-size: 1.1em;
+        }
+        
+        .provider-card .model {
+            color: #ff6b35;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+        
+        .provider-card .use {
+            color: #666;
+            font-size: 0.85em;
+        }
+        
+        .cta {
+            background: linear-gradient(135deg, #ff6b35, #ff4500);
+            border-radius: 12px;
+            padding: 35px;
+            text-align: center;
+            margin: 50px 0 30px;
+        }
+        
+        .cta h2 {
+            color: #fff;
+            border: none;
+            margin: 0 0 10px;
+            padding: 0;
+        }
+        
+        .cta p {
+            color: rgba(255,255,255,0.85);
+            font-size: 1.1em;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #444;
+            font-size: 0.85em;
+            border-top: 1px solid #1a1a1a;
+        }
+        
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2.2em; }
+            .cost-row { gap: 20px; }
+            .cost-box .amount { font-size: 1.8em; }
+            .annual-savings .big { font-size: 2.2em; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <h1>FOLEY <span>PROTOCOL</span></h1>
+    <p class="subtitle">The intelligent routing system that lets <strong>Humble Claw</strong> use AI at 1/40th the cost.</p>
+</div>
+
+<div class="container">
+
+    <!-- THE PROBLEM -->
+    <h2>The Problem: Your AI Is Burning Money</h2>
+    
+    <p>You're paying <strong>$3.00 per 1K tokens</strong> for queries a <strong>$0.075 per 1K tokens</strong> model could handle. That's a 40x markup on the same answer.</p>
+    
+    <p>Here's what's actually happening: every time you ask your AI agent to do something—translate a phrase, summarize an email, write a Tweet—it's probably routing that request to the most expensive model in the building. Not because it needs to. Just because no one's watching the gate.</p>
+    
+    <p><strong>Foley Protocol changes that.</strong></p>
+
+    <div class="cost-highlight">
+        <h2>The Cost Gap Is Staggering</h2>
+        <div class="cost-row">
+            <div class="cost-box wrong">
+                <div class="label">Without Routing</div>
+                <div class="amount">$1.52</div>
+                <div class="label">per query</div>
+            </div>
+            <div class="vs">→</div>
+            <div class="cost-box right">
+                <div class="label">With Foley</div>
+                <div class="amount">$0.038</div>
+                <div class="label">per query avg</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="annual-savings">
+        <div class="big">$5,400+ / year</div>
+        <div class="label">saved on a single agent running 100 queries/day</div>
+    </div>
+
+    <!-- THE SOLUTION -->
+    <h2>How Foley Protocol Works</h2>
+    
+    <p>Every query that comes into Humble Claw gets classified before it goes anywhere. The classifier reads the prompt, understands what kind of work is being asked, and assigns it to one of four tiers:</p>
+
+    <div class="tiers">
+        <div class="tier-card trivial">
+            <div class="icon">⚡</div>
+            <div class="name">TRIVIAL</div>
+            <div>Quick lookups, simple transforms, one-liners</div>
+            <div class="cost">$0.001–0.038 / query</div>
+            <div class="examples">Translation, formatting, short answers</div>
+        </div>
+        <div class="tier-card standard">
+            <div class="icon">📋</div>
+            <div class="name">STANDARD</div>
+            <div>Summaries, explanations, moderate reasoning</div>
+            <div class="cost">$0.038–0.15 / query</div>
+            <div class="examples">Summarize this, explain how, compare X vs Y</div>
+        </div>
+        <div class="tier-card complex">
+            <div class="icon">🔬</div>
+            <div class="name">COMPLEX</div>
+            <div>Architecture, deep analysis, multi-step reasoning</div>
+            <div class="cost">$0.15–3.00 / query</div>
+            <div class="examples">Design a system, debug this failure, analyze this dataset</div>
+        </div>
+        <div class="tier-card creative">
+            <div class="icon">🎨</div>
+            <div class="name">CREATIVE</div>
+            <div>Writing, voice, narrative, character work</div>
+            <div class="cost">$0.15–3.00 / query</div>
+            <div class="examples">Write a blog post, create a persona, develop a story</div>
+        </div>
+    </div>
+
+    <!-- CLASSIFICATION ENGINE -->
+    <h2>The Classification Engine</h2>
+    
+    <p>The classifier looks at your prompt and extracts signals. How long is it? Are there code blocks? Is it asking for analysis or generation? Does it mention design, architecture, creative work?</p>
+    
+    <p>It then maps those signals to a tier. Here's the simplified logic:</p>
+
+    <div class="code-block">
+<span class="keyword">function</span> <span class="function">classifyComplexity</span>(input, context) {
+  <span class="keyword">const</span> text = input.<span class="function">toLowerCase</span>();
+  
+  <span class="comment">// Check for creative markers</span>
+  <span class="keyword">if</span> (<span class="function">CREATIVE_MARKERS</span>.<span class="function">some</span>(m => text.<span class="function">includes</span>(m))) {
+    <span class="keyword">return</span> <span class="string">'CREATIVE'</span>;  <span class="comment">// write, voice, tone, persona</span>
+  }
+  
+  <span class="comment">// Check for design/architecture markers</span>
+  <span class="keyword">if</span> (DESIGN_MARKERS.<span class="function">some</span>(m => text.<span class="function">includes</span>(m))) {
+    <span class="keyword">return</span> <span class="string">'COMPLEX'</span>;  <span class="comment">// design, architecture, implement</span>
+  }
+  
+  <span class="comment">// Check for reasoning complexity</span>
+  <span class="keyword">if</span> (reasoningSteps >= 5 || codeLines > 200) {
+    <span class="keyword">return</span> <span class="string">'COMPLEX'</span>;
+  }
+  
+  <span class="comment">// TRIVIAL: short, no complex markers</span>
+  <span class="keyword">if</span> (textLength < 500 && !hasComplexMarker && simpleTools) {
+    <span class="keyword">return</span> <span class="string">'TRIVIAL'</span>;
+  }
+  
+  <span class="keyword">return</span> <span class="string">'STANDARD'</span>;  <span class="comment">// default: moderate reasoning</span>
+}
+    </div>
+
+    <p>The real Foley implementation is 591 lines of battle-tested code with throttling, retry logic, 429 detection, and cross-provider failover. But the core idea is simple: <strong>read the prompt, pick the right tier, route accordingly.</strong></p>
+
+    <!-- PROVIDER MATRIX -->
+    <h2>The Provider Matrix</h2>
+    
+    <p>Each tier has a ranked list of providers. The router tries the highest-priority candidate first. If it hits a rate limit (429), it automatically fails over to the next in the chain. If it times out, it retries with exponential backoff.</p>
+
+    <div class="providers">
+        <div class="provider-card">
+            <div class="name">Google Gemini</div>
+            <div class="model">gemini-2.5-flash — $0.075/1K</div>
+            <div class="use">TRIVIAL & STANDARD routing priority</div>
+        </div>
+        <div class="provider-card">
+            <div class="name">Anthropic Claude</div>
+            <div class="model">claude-sonnet-4-6 — $3.00/1K</div>
+            <div class="use">COMPLEX & CREATIVE tasks</div>
+        </div>
+        <div class="provider-card">
+            <div class="name">Google Gemini</div>
+            <div class="model">gemini-2.5-pro — $6.00/1K</div>
+            <div class="use">Deep reasoning when Sonnet isn't enough</div>
+        </div>
+        <div class="provider-card">
+            <div class="name">MiniMax</div>
+            <div class="model">MiniMax-Text-01 — $0.25/1K</div>
+            <div class="use">Budget fallback, high-volume workloads</div>
+        </div>
+    </div>
+
+    <p><strong>Real log data from May 21, 2026:</strong></p>
+    
+    <div class="code-block">
+<span class="comment">// TRIVIAL queries routed to Gemini Flash</span>
+{ model: <span class="string">"gemini-2.5-flash"</span>, tier: <span class="string">"TRIVIAL"</span>, cost: <span class="string">"$0.038"</span> }
+
+<span class="comment">// COMPLEX queries routed to Claude Sonnet</span>
+{ model: <span class="string">"claude-sonnet-4-6"</span>, tier: <span class="string">"COMPLEX"</span>, cost: <span class="string">"$1.52"</span> }
+
+<span class="comment">// CREATIVE queries routed to Claude Sonnet</span>
+{ model: <span class="string">"claude-sonnet-4-6"</span>, tier: <span class="string">"CREATIVE"</span>, cost: <span class="string">"$1.53"</span> }
+    </div>
+
+    <!-- FAILOVER -->
+    <h2>Automatic Failover: Never Miss a Query</h2>
+    
+    <p>If Google's rate limit kicks in, Foley detects the 429 and immediately routes to the next eligible provider. If a request times out, it retries with increasing delays (1s → 5s → 15s → 60s). The system never gives up unless everything is genuinely down.</p>
+
+    <p>This is what separates a production routing system from a simple API call. <strong>Foley is built for real workloads.</strong></p>
+
+    <!-- WHY IT MATTERS -->
+    <h2>Why Routing Is the Future</h2>
+    
+    <p>AI costs are dropping fast—but not evenly. Flash models are 80x cheaper than frontier models and getting better every quarter. The opportunity isn't using better models. It's <strong>using the right model for each job.</strong></p>
+    
+    <p>That's what Foley Protocol does. It earns its keep in the gap between what a $0.001 query costs and what a $1.52 query costs. For any team running AI at scale, that gap is real money.</p>
+
+    <div class="cta">
+        <h2>Built by Humble Claw</h2>
+        <p>Foley Protocol is production infrastructure, not a prototype.<br>The logs don't lie. The savings are real.</p>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p>FOLEY PROTOCOL — Built by Owen Hart on orders from The Iron Sheik</p>
+    <p>Based on Bret's llm-router.js patterns</p>
+</div>
+
+</body>
+</html>

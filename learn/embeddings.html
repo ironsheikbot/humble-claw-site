@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embeddings — How AI Works</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0a;
+            --bg2: #111111;
+            --gold: #d4af37;
+            --gold-dim: #8b7355;
+            --text: #e8e8e8;
+            --text-dim: #888;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        a { color: var(--gold); text-decoration: none; }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            border-bottom: 1px solid #222;
+        }
+        nav .logo { font-size: 1.2rem; font-weight: 900; letter-spacing: 2px; }
+        nav .logo span { color: var(--gold); }
+        nav ul { display: flex; list-style: none; gap: 2rem; }
+        nav ul li a { color: var(--text-dim); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+        nav ul li a:hover { color: var(--gold); }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, var(--bg) 70%);
+            border-bottom: 1px solid #222;
+        }
+        .hero .eyebrow {
+            color: var(--gold);
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+        .hero h1 span { color: var(--gold); }
+        .hero p {
+            font-size: 1.2em;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            color: #fff;
+            margin: 50px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #222;
+        }
+        h2 span { color: var(--gold); }
+
+        h3 {
+            font-size: 1.3em;
+            color: var(--gold);
+            margin: 35px 0 12px;
+        }
+
+        p { color: #aaa; margin: 15px 0; font-size: 1.05em; }
+        p strong { color: #fff; }
+
+        .callout {
+            background: linear-gradient(135deg, #1a1a0a, #0f0f0a);
+            border-left: 3px solid var(--gold);
+            border-radius: 0 8px 8px 0;
+            padding: 25px 30px;
+            margin: 30px 0;
+        }
+        .callout p { color: #ccc; margin: 0; font-size: 1.1em; }
+        .callout .label {
+            color: var(--gold);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .diagram {
+            background: #0d0d12;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 40px;
+            margin: 30px 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            color: #8be9fd;
+            overflow-x: auto;
+        }
+
+        .code-block {
+            background: #0d0d12;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            color: #8be9fd;
+        }
+        .code-block .comment { color: #6272a4; }
+        .code-block .keyword { color: #ff79c6; }
+        .code-block .string { color: #f1fa8c; }
+        .code-block .function { color: #50fa7b; }
+        .code-block .number { color: #bd93f9; }
+
+        .similarity-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        @media (max-width: 600px) { .similarity-grid { grid-template-columns: 1fr; } }
+        .sim-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .sim-card .score { font-size: 2em; font-weight: 900; }
+        .sim-card .related { color: #aaa; font-size: 0.9em; margin-top: 8px; }
+        .sim-card .high { color: #4ade80; }
+        .sim-card .mid { color: #f1fa8c; }
+        .sim-card .low { color: #ff6b6b; }
+
+        .takeaway {
+            background: linear-gradient(135deg, #1a2a1a, #0f1f0f);
+            border: 1px solid #2a5a2a;
+            border-radius: 16px;
+            padding: 35px;
+            margin: 50px 0 30px;
+        }
+        .takeaway h3 { color: #4ade80; margin: 0 0 15px; font-size: 1.2em; }
+        .takeaway p { color: #aaa; margin: 0; }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            padding: 30px 0;
+            border-top: 1px solid #1a1a1a;
+            margin-top: 50px;
+        }
+        .nav-links a { color: var(--text-dim); font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-links .next { margin-left: auto; }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #444;
+            font-size: 0.8em;
+            border-top: 1px solid #1a1a1a;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">HUMBLE <span>CLAW</span></div>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/learn/">Learn</a></li>
+        <li><a href="/about-us.html">About</a></li>
+    </ul>
+</nav>
+
+<div class="hero">
+    <div class="eyebrow">How AI Works</div>
+    <h1>Embed<span>dings</span></h1>
+    <p>Meaning, reduced to numbers. Then compared by angle.</p>
+</div>
+
+<div class="container">
+
+    <h2>The Hook: <span>Distance Encodes Meaning</span></h2>
+
+    <p>You can't feed a word into a neural network. It only takes numbers. Embeddings solve that: they convert words (or sentences, or images, or audio) into vectors of numbers. Dense vectors. Typically 768 to 4096 dimensions, though simpler models use fewer.</p>
+
+    <p>The key insight is this: if two vectors are close together in high-dimensional space, their underlying meanings are related. "Dog" and "poodle" are neighbors. "Dog" and "car" are far apart. This is called semantic similarity, and it's the foundation of how LLMs understand meaning.</p>
+
+    <div class="callout">
+        <span class="label">Key Insight</span>
+        <p>An embedding is a point in N-dimensional space. The whole game is positioning related concepts near each other so that simple distance metrics (cosine similarity) can tell you if two pieces of text are semantically related.</p>
+    </div>
+
+    <h2>From Words to Vectors</h2>
+
+    <p>Early approaches used one-hot encoding: a vocabulary of size N, each word gets a vector of length N with a single 1 and rest 0. Sparse, inefficient, no implicit structure. "Cat" and "dog" would be equally distant from "car" despite sharing conceptual territory.</p>
+
+    <p>Word embeddings (Word2Vec, GloVe) improved this: learn dense vectors where similar words cluster. The famous example: <code>king - man + woman = queen</code>. The math works because the vector arithmetic captures analogical relationships.</p>
+
+    <div class="diagram">
+<span class="comment">          SEMANTIC SPACE (simplified 2D projection)</span>
+<span class="comment"></span>
+<span class="comment">          ANIMALS</span>
+<span class="comment">        ●dog</span>
+<span class="comment">       ●poodle</span>
+<span class="comment">      ●cat</span>
+<span class="comment">     ●animal</span>
+<span class="comment"></span>
+<span class="comment">              VEHICLES</span>
+<span class="comment">            ●car</span>
+<span class="comment">           ●truck</span>
+<span class="comment">          ●vehicle</span>
+<span class="comment"></span>
+<span class="comment">          ●apple</span>
+<span class="comment">         ●fruit</span>
+<span class="comment"></span>
+<span class="comment">          (distance = semantic similarity)</span>
+    </div>
+
+    <p>Modern LLMs generate contextual embeddings: the same word gets different vectors depending on surrounding context. "Bank" in "river bank" vs "investment bank" ends up with different embeddings. This is handled automatically by transformer attention.</p>
+
+    <h2>How Embeddings Are Generated</h2>
+
+    <p>You run text through an embedding model. Most commonly: a frozen pretrained model (OpenAI's ada-2, Cohere, open-source options like E5, all-MiniLM). The model reads tokenized text and outputs a vector per token (or averaged/CLS token for sentence-level embedding).</p>
+
+    <div class="code-block">
+<span class="comment">// Embedding a sentence (pseudocode)</span>
+tokens = <span class="function">tokenize</span>(<span class="string">"The quick brown fox"</span>)
+vectors = embedding_model.<span class="function">forward</span>(tokens)
+<span class="comment">// vectors[i] is a dense vector of floats, dim = embedding_size</span>
+
+<span class="comment">// For semantic search: embed the query and all documents</span>
+query_vec = <span class="function">embed</span>(<span class="string">"What is retrieval augmented generation?"</span>)
+doc1_vec  = <span class="function">embed</span>(<span class="string">"RAG combines retrieval with generation..."</span>)
+doc2_vec  = <span class="function">embed</span>(<span class="string">"Transformers use self-attention..."</span>)
+
+<span class="comment">// Cosine similarity measures how close they are</span>
+sim1 = <span class="function">cosine_similarity</span>(query_vec, doc1_vec)  <span class="comment">// high</span>
+sim2 = <span class="function">cosine_similarity</span>(query_vec, doc2_vec)  <span class="comment">// low</span>
+    </div>
+
+    <h2>Cosine Similarity: The Metric That Works</h2>
+
+    <p>You compare embeddings with cosine similarity, not Euclidean distance. Cosine measures the angle between vectors, ignoring magnitude. This matters because embedding models often normalize outputs to unit length—making cosine equivalent to dot product and computationally cheap.</p>
+
+    <div class="code-block">
+<span class="comment">// Cosine similarity formula</span>
+cosine_similarity(A, B) = (A · B) / (||A|| * ||B||)
+
+<span class="comment">// For unit-normalized vectors:</span>
+cosine_similarity(A, B) = A · B  <span class="comment">// just the dot product</span>
+
+<span class="comment">// Result range:</span>
+<span class="comment">//   1.0 = identical direction (perfect match)</span>
+<span class="comment">//   0.0 = orthogonal (unrelated)</span>
+<span class="comment">//  -1.0 = opposite direction (antirelated)</span>
+    </div>
+
+    <h2>Similarity Examples</h2>
+
+    <div class="similarity-grid">
+        <div class="sim-card">
+            <div class="score high">0.94</div>
+            <div class="related">"dog" ↔ "poodle"</div>
+            <div class="related high">high similarity</div>
+        </div>
+        <div class="sim-card">
+            <div class="score mid">0.71</div>
+            <div class="related">"dog" ↔ "cat"</div>
+            <div class="related mid">moderate</div>
+        </div>
+        <div class="sim-card">
+            <div class="score low">0.08</div>
+            <div class="related">"dog" ↔ "car"</div>
+            <div class="related low">low similarity</div>
+        </div>
+    </div>
+
+    <h2>What Are Embeddings Used For?</h2>
+
+    <p>The list is long:</p>
+
+    <p><strong>Semantic search:</strong> Embed your documents. Embed the query. Find the nearest document vectors. This replaces keyword BM25 in RAG pipelines.</p>
+    <p><strong>Clustering:</strong> Group related content by embedding proximity. Useful for topic modeling, anomaly detection, deduplication.</p>
+    <p><strong>Recommendation:</strong> "Users who embedded content like X also liked content like Y." Nearest-neighbor search in embedding space.</p>
+    <p><strong>Classification:</strong> Feed embedding vectors into a lighter classifier (or just use nearest-neighbor with labeled examples — zero-shot classification).</p>
+    <p><strong>Retrieval:</strong> The "R" in RAG. You retrieve relevant context by embedding similarity before generation.</p>
+
+    <h2>The Tradeoffs</h2>
+
+    <p>Embedding quality depends on the model. A model trained on general web text will embed "financial report" differently than one trained on financial documents. Domain mismatch is a real problem. Fine-tuning embeddings on domain-specific data is a known technique that significantly improves retrieval quality.</p>
+
+    <p>Vector dimensions affect quality and speed. Higher dimensions = more expressive = slower nearest-neighbor search. 768-1536 is common for production. 4096 used in frontier models but rarely needed.</p>
+
+    <div class="takeaway">
+        <h3>The Key Takeaway</h3>
+        <p>Embeddings convert any token sequence into a dense numerical vector. Related concepts cluster nearby in high-dimensional space. Cosine similarity finds semantically related content. This is how LLMs "understand" that two sentences are about the same thing — not through meaning, but through geometry.</p>
+    </div>
+
+    <div class="nav-links">
+        <a href="/learn/tokenization/">← Tokenization</a>
+        <a href="/learn/attention/" class="next">Attention →</a>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p>How AI Works Series — Humble Claw</p>
+</div>
+
+</body>
+</html>

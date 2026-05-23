@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokenization — How AI Works</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0a;
+            --bg2: #111111;
+            --gold: #d4af37;
+            --gold-dim: #8b7355;
+            --text: #e8e8e8;
+            --text-dim: #888;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        a { color: var(--gold); text-decoration: none; }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            border-bottom: 1px solid #222;
+        }
+        nav .logo { font-size: 1.2rem; font-weight: 900; letter-spacing: 2px; }
+        nav .logo span { color: var(--gold); }
+        nav ul { display: flex; list-style: none; gap: 2rem; }
+        nav ul li a { color: var(--text-dim); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+        nav ul li a:hover { color: var(--gold); }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, var(--bg) 70%);
+            border-bottom: 1px solid #222;
+        }
+        .hero .eyebrow {
+            color: var(--gold);
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+        .hero h1 span { color: var(--gold); }
+        .hero p {
+            font-size: 1.2em;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            color: #fff;
+            margin: 50px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #222;
+        }
+        h2 span { color: var(--gold); }
+
+        h3 {
+            font-size: 1.3em;
+            color: var(--gold);
+            margin: 35px 0 12px;
+        }
+
+        p { color: #aaa; margin: 15px 0; font-size: 1.05em; }
+        p strong { color: #fff; }
+
+        .callout {
+            background: linear-gradient(135deg, #1a1a0a, #0f0f0a);
+            border-left: 3px solid var(--gold);
+            border-radius: 0 8px 8px 0;
+            padding: 25px 30px;
+            margin: 30px 0;
+        }
+        .callout p { color: #ccc; margin: 0; font-size: 1.1em; }
+        .callout .label {
+            color: var(--gold);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .token-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .token-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .token-card .tok { color: #50fa7b; font-weight: 700; font-size: 1.2em; }
+        .token-card .cost { color: #ff6b6b; margin-top: 8px; }
+
+        .code-block {
+            background: #0d0d12;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            color: #8be9fd;
+        }
+        .code-block .comment { color: #6272a4; }
+        .code-block .keyword { color: #ff79c6; }
+        .code-block .string { color: #f1fa8c; }
+        .code-block .function { color: #50fa7b; }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        @media (max-width: 600px) { .comparison { grid-template-columns: 1fr; } }
+        .comparison-box {
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 25px;
+        }
+        .comparison-box h4 { color: var(--gold); margin-bottom: 12px; }
+        .comparison-box p { margin: 8px 0; font-size: 0.95em; }
+
+        .takeaway {
+            background: linear-gradient(135deg, #1a2a1a, #0f1f0f);
+            border: 1px solid #2a5a2a;
+            border-radius: 16px;
+            padding: 35px;
+            margin: 50px 0 30px;
+        }
+        .takeaway h3 { color: #4ade80; margin: 0 0 15px; font-size: 1.2em; }
+        .takeaway p { color: #aaa; margin: 0; }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            padding: 30px 0;
+            border-top: 1px solid #1a1a1a;
+            margin-top: 50px;
+        }
+        .nav-links a { color: var(--text-dim); font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-links .next { margin-left: auto; }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #444;
+            font-size: 0.8em;
+            border-top: 1px solid #1a1a1a;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">HUMBLE <span>CLAW</span></div>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/learn/">Learn</a></li>
+        <li><a href="/about-us.html">About</a></li>
+    </ul>
+</nav>
+
+<div class="hero">
+    <div class="eyebrow">How AI Works</div>
+    <h1>Token<span>ization</span></h1>
+    <p>Text goes in. Numbers come out. Nothing is magic.</p>
+</div>
+
+<div class="container">
+
+    <h2>The Hook: <span>AI Doesn't Read Words</span></h2>
+
+    <p>You write "The quick brown fox." The AI sees numbers. Specifically, a sequence of integers—each representing a token. A token is a chunk of text. It could be a word. It could be part of a word. It could be punctuation. The model doesn't care. It only sees numbers.</p>
+
+    <p>Tokenization is the process that converts your text into those numbers. Every AI system you've ever used does this. The specific scheme matters enormously.</p>
+
+    <div class="callout">
+        <span class="label">Key Insight</span>
+        <p>Tokenization is the bridge between human-readable text and machine-readable numbers. The quality of that bridge affects everything: cost, speed, capability, and the model's ability to handle edge cases like misspellings or rare words.</p>
+    </div>
+
+    <h2>Why Not Just Use Words?</h2>
+
+    <p>Simple tokenization—splitting on spaces and calling each a token—seems logical. But it has problems:</p>
+
+    <p><strong>Vocabulary size:</strong> English has hundreds of thousands of words. A word-based vocabulary would be enormous.</p>
+    <p><strong>Rare words:</strong> Most words appear rarely. A model can't learn meaningful patterns from words it barely sees.</p>
+    <p><strong>Morphology:</strong> "run", "runs", "running", "ran" are four different tokens. A model has to learn separately that they all share a root.</p>
+    <p><strong>Subword efficiency:</strong> Breaking "unbelievable" into "un ##believ ##able" lets one model handle derivation productively instead of storing every variation.</p>
+
+    <h2>The Three Main Schemes</h2>
+
+    <div class="token-grid">
+        <div class="token-card">
+            <div class="tok">byte</div>
+            <div class="tok">pair</div>
+            <div class="tok">encoding</div>
+            <div class="cost">BPE</div>
+        </div>
+        <div class="token-card">
+            <div class="tok">word</div>
+            <div class="tok">piece</div>
+            <div class="tok">encoding</div>
+            <div class="cost">WPC</div>
+        </div>
+        <div class="token-card">
+            <div class="tok">byte</div>
+            <div class="tok">pair</div>
+            <div class="tok">encoding</div>
+            <div class="cost">BBPE</div>
+        </div>
+    </div>
+
+    <h3>1. BPE — Byte Pair Encoding</h3>
+
+    <p>OpenAI's original GPT models used BPE (with a GPT-2 variant called BPE-PSR). BPE starts with individual bytes and iteratively merges the most frequent adjacent pair into a new token. This produces a vocabulary of ~50K tokens, optimized for training data frequency.</p>
+
+    <div class="code-block">
+<span class="comment">// BPE algorithm, simplified</span>
+<span class="comment">// Start: every character is a token</span>
+vocab = { 't', 'h', 'e', ' ', 'q', 'u', 'i', 'c', 'k', ... }
+
+<span class="comment">// Iteratively merge most frequent adjacent pair</span>
+<span class="keyword">while</span> vocab.size() < target_size:
+    pair = <span class="function">find_most_frequent_adjacent_pair</span>(corpus)
+    merged = pair[0] + pair[1]
+    vocab.<span class="function">add</span>(merged)
+    corpus = corpus.<span class="function">replace</span>(pair, merged)
+
+<span class="comment">// Result: common bigrams, trigrams, etc. become tokens</span>
+<span class="comment">// "the" → 1 token   "##e" → subword marker</span>
+    </div>
+
+    <h3>2. WordPiece (Google)</h3>
+
+    <p>Used by BERT and other Google models. Similar to BPE but builds merges based on maximizing training data likelihood rather than pure frequency. Tokens are marked with "##" if they appear as a suffix/middle of a word. Vocab sizes typically 30K-50K.</p>
+
+    <h3>3. BBPE — Byte-Level BPE</h3>
+
+    <p>Used by modern frontier models (GPT-4o, Llama, etc.). Operates at the byte level rather than character level. This means the vocabulary covers all possible byte sequences—256 base tokens—then merges the most useful ones. Benefits:</p>
+
+    <div class="comparison">
+        <div class="comparison-box">
+            <h4>No Unknown Tokens</h4>
+            <p>Any UTF-8 string can be encoded. Even emoji. Even multilingual text. A byte-level vocabulary is complete by definition.</p>
+        </div>
+        <div class="comparison-box">
+            <h4>Multilingual Friendly</h4>
+            <p>CJK languages (Japanese, Chinese, Korean) use characters that BPE struggles with. Byte-level encoding handles them uniformly.</p>
+        </div>
+    </div>
+
+    <h2>What Does This Cost You?</h2>
+
+    <p>Tokenization directly affects your API bill. Most pricing is per 1K tokens. Average English text runs about 1 token per word. But it varies:</p>
+
+    <div class="token-grid">
+        <div class="token-card">
+            <div class="tok">1</div>
+            <div>token / word</div>
+            <div class="cost">Average English</div>
+        </div>
+        <div class="token-card">
+            <div class="tok">~2</div>
+            <div>tokens / word</div>
+            <div class="cost">Highly inflected languages</div>
+        </div>
+        <div class="token-card">
+            <div class="tok">~0.7</div>
+            <div>tokens / char</div>
+            <div class="cost">CJK characters</div>
+        </div>
+        <div class="token-card">
+            <div class="tok">1-3</div>
+            <div>tokens / token</div>
+            <div class="cost">Code depends on style</div>
+        </div>
+    </div>
+
+    <p>Prompt engineering tip: token-efficient phrasing costs less to run. "Explain X" vs "Could you please explain what X is and how it works" — the latter is more tokens, same capability delivered.</p>
+
+    <h2>The Edge Cases</h2>
+
+    <p>Tokenization breaks in interesting ways:</p>
+
+    <div class="code-block">
+<span class="comment">// Case sensitivity: different tokens</span>
+<span class="string">"Apple"</span> != <span class="string">"apple"</span>
+
+<span class="comment">// Numbers: each digit is often separate</span>
+<span class="string">"123"</span> → 3 tokens  (varies by model vocab)
+
+<span class="comment">// Common letter sequences get lumped:</span>
+<span class="string">"ing"</span>, <span class="string">"tion"</span>, <span class="string">"ed"</span> are often single tokens
+
+<span class="comment">// Whitespace is explicit:</span>
+<span class="string">"a b"</span> → 3 tokens  (<span class="string">"a"</span>, <span class="string">" "</span>, <span class="string">"b"</span>)
+
+<span class="comment">// Leading spaces sometimes merged:</span>
+<span class="string">" hello"</span> depends on vocab
+    </div>
+
+    <p>These edge cases are why prompt injection and adversarial prompts sometimes work — small token-level changes can bypass safety training in non-obvious ways.</p>
+
+    <div class="takeaway">
+        <h3>The Key Takeaway</h3>
+        <p>Tokenization converts text to integers. The scheme (BPE, WordPiece, BBPE) determines vocabulary size, subword granularity, and how the model handles unknown input. Your cost per query is literally a function of how many tokens your prompt and response contain. Tokenization isn't glamorous. But it's the first thing that happens to your text.</p>
+    </div>
+
+    <div class="nav-links">
+        <a href="/learn/neural-networks/">← Neural Networks</a>
+        <a href="/learn/embeddings/" class="next">Embeddings →</a>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p>How AI Works Series — Humble Claw</p>
+</div>
+
+</body>
+</html>

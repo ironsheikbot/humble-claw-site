@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformers — How AI Works</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0a;
+            --bg2: #111111;
+            --gold: #d4af37;
+            --gold-dim: #8b7355;
+            --text: #e8e8e8;
+            --text-dim: #888;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        a { color: var(--gold); text-decoration: none; }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            border-bottom: 1px solid #222;
+        }
+        nav .logo { font-size: 1.2rem; font-weight: 900; letter-spacing: 2px; }
+        nav .logo span { color: var(--gold); }
+        nav ul { display: flex; list-style: none; gap: 2rem; }
+        nav ul li a { color: var(--text-dim); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+        nav ul li a:hover { color: var(--gold); }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, var(--bg) 70%);
+            border-bottom: 1px solid #222;
+        }
+        .hero .eyebrow {
+            color: var(--gold);
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+        .hero h1 span { color: var(--gold); }
+        .hero p {
+            font-size: 1.2em;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            color: #fff;
+            margin: 50px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #222;
+        }
+        h2 span { color: var(--gold); }
+
+        h3 {
+            font-size: 1.3em;
+            color: var(--gold);
+            margin: 35px 0 12px;
+        }
+
+        p { color: #aaa; margin: 15px 0; font-size: 1.05em; }
+        p strong { color: #fff; }
+
+        .callout {
+            background: linear-gradient(135deg, #1a1a0a, #0f0f0a);
+            border-left: 3px solid var(--gold);
+            border-radius: 0 8px 8px 0;
+            padding: 25px 30px;
+            margin: 30px 0;
+        }
+        .callout p { color: #ccc; margin: 0; font-size: 1.1em; }
+        .callout .label {
+            color: var(--gold);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .diagram {
+            background: #0d0d12;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 40px;
+            margin: 30px 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            color: #8be9fd;
+            overflow-x: auto;
+        }
+
+        .code-block {
+            background: #0d0d12;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            color: #8be9fd;
+        }
+        .code-block .comment { color: #6272a4; }
+        .code-block .keyword { color: #ff79c6; }
+        .code-block .string { color: #f1fa8c; }
+        .code-block .function { color: #50fa7b; }
+        .code-block .number { color: #bd93f9; }
+
+        .layer-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 30px 0;
+        }
+        .layer-row {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .layer-row .num { color: var(--gold); font-size: 0.8em; min-width: 60px; }
+        .layer-row .name { font-weight: 700; color: #fff; flex: 1; }
+        .layer-row .detail { color: #555; font-size: 0.85em; }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .spec-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .spec-card .value { font-size: 1.8em; font-weight: 900; color: var(--gold); }
+        .spec-card .label { color: #777; font-size: 0.85em; margin-top: 5px; }
+
+        .takeaway {
+            background: linear-gradient(135deg, #1a2a1a, #0f1f0f);
+            border: 1px solid #2a5a2a;
+            border-radius: 16px;
+            padding: 35px;
+            margin: 50px 0 30px;
+        }
+        .takeaway h3 { color: #4ade80; margin: 0 0 15px; font-size: 1.2em; }
+        .takeaway p { color: #aaa; margin: 0; }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            padding: 30px 0;
+            border-top: 1px solid #1a1a1a;
+            margin-top: 50px;
+        }
+        .nav-links a { color: var(--text-dim); font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-links .next { margin-left: auto; }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #444;
+            font-size: 0.8em;
+            border-top: 1px solid #1a1a1a;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">HUMBLE <span>CLAW</span></div>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/learn/">Learn</a></li>
+        <li><a href="/about-us.html">About</a></li>
+    </ul>
+</nav>
+
+<div class="hero">
+    <div class="eyebrow">How AI Works</div>
+    <h1>Trans<span>formers</span></h1>
+    <p>Attention at scale. Layers all the way down.</p>
+</div>
+
+<div class="container">
+
+    <h2>The Hook: <span>It's Just Layers</span></h2>
+
+    <p>Everything we've covered so far—tokenization, embeddings, attention—comes together in the transformer. A transformer is a stack of layers. Each layer takes in a sequence of vectors, applies attention, then feedforward processing, and outputs a new sequence of vectors. Stack enough of these, and the model can do remarkable things.</p>
+
+    <p>There's no magic here. No understanding in the human sense. Just: learned representations, stacked and composed, trained on massive data to predict the next token. That's all a language model is. The transformer architecture is what makes that training tractable.</p>
+
+    <div class="callout">
+        <span class="label">Key Insight</span>
+        <p>A transformer is a feedforward block + attention block, repeated N times. Each layer refines the representations. Depth (more layers) beats width (more neurons per layer). GPT-3 has 96 layers. That's it.</p>
+    </div>
+
+    <h2>The Architecture</h2>
+
+    <p>A transformer layer has two sub-blocks:</p>
+
+    <p><strong>1. Multi-head self-attention:</strong> Tokens attend to other tokens in the same layer. The output is a context-enriched sequence.</p>
+    <p><strong>2. Feedforward network:</strong> A standard two-layer neural network applied position-by-position. Same weights shared across all positions (but different weights than attention).</p>
+
+    <p>Each sub-block has a residual connection (skip connection) and layer normalization. These stabilize training and enable gradient flow through very deep networks.</p>
+
+    <div class="diagram">
+<span class="comment">SINGLE TRANSFORMER LAYER</span>
+<span class="comment"></span>
+<span class="comment">  Input: sequence of vectors</span>
+<span class="comment">           │</span>
+<span class="comment">    ┌──────┴──────┐</span>
+<span class="comment">    │             │</span>
+<span class="comment">  ┌─▼────────────▼─┐</span>
+<span class="comment">  │ MULTI-HEAD     │</span>
+<span class="comment">  │ SELF-ATTENTION │</span>
+<span class="comment">  └─┬────────────┬─┘</span>
+<span class="comment">    │Add & LayerNorm│</span>
+<span class="comment">    │             │</span>
+<span class="comment">  ┌─▼────────────▼─┐</span>
+<span class="comment">  │  FEEDFORWARD   │</span>
+<span class="comment">  │    NETWORK     │</span>
+<span class="comment">  └─┬────────────┬─┘</span>
+<span class="comment">    │Add & LayerNorm│</span>
+<span class="comment">    ▼             ▼</span>
+<span class="comment">  Output: refined sequence</span>
+<span class="comment"></span>
+<span class="comment">  Repeat N times (N = layer count)</span>
+    </div>
+
+    <h2>The Stack: Layer by Layer</h2>
+
+    <p>Here's what happens across a transformer stack. Research on intermediate layers (BERT-style probing) shows learned representations evolve systematically:</p>
+
+    <div class="layer-stack">
+        <div class="layer-row">
+            <div class="num">Layer 1-4</div>
+            <div class="name">Surface features</div>
+            <div class="detail">Token-level patterns, positional info, word-level statistics</div>
+        </div>
+        <div class="layer-row">
+            <div class="num">Layer 5-12</div>
+            <div class="name">Syntactic patterns</div>
+            <div class="detail">POS tagging,依存句法, coreference clusters emerge</div>
+        </div>
+        <div class="layer-row">
+            <div class="num">Layer 13-24</div>
+            <div class="name">Semantic relationships</div>
+            <div class="detail">Entity relations, world knowledge, semantic similarity</div>
+        </div>
+        <div class="layer-row">
+            <div class="num">Layer 25-96</div>
+            <div class="name">Task-specific reasoning</div>
+            <div class="detail">In-context learning, multi-step reasoning, output formatting</div>
+        </div>
+    </div>
+
+    <p>Early layers preserve surface form. Middle layers extract structure. Late layers perform computation. This hierarchical composition is what makes transformers generalize: the same building blocks recombine to handle novel inputs.</p>
+
+    <h2>How Training Works</h2>
+
+    <p>Transformers are trained with self-supervised learning on text. The task: predict the next token given all previous tokens. This is called causal language modeling (CLM) or autoregressive modeling.</p>
+
+    <div class="code-block">
+<span class="comment">// Autoregressive training (simplified)</span>
+<span class="keyword">for each</span> training_sequence [t1, t2, t3, ..., tn]:
+    <span class="comment">// Input: all tokens up to position i</span>
+    input = [t1, t2, ..., t_(i-1)]
+    
+    <span class="comment">// Forward pass through all N layers</span>
+    output = transformer(input)
+    
+    <span class="comment">// Predict next token: softmax over vocabulary</span>
+    predicted_prob = <span class="function">softmax</span>(output[-1])
+    
+    <span class="comment">// Loss: cross-entropy against actual next token</span>
+    loss = -log(predicted_prob[ti])
+    
+    <span class="comment">// Backprop: update all weights via gradient descent</span>
+    loss.<span class="function">backward</span>()
+    optimizer.<span class="function">step</span>()
+    
+<span class="comment">// Trillions of tokens × billions of parameters = GPT-4</span>
+    </div>
+
+    <p>The key insight: you don't need labeled data. Text is labels. The next token is the label. Just keep predicting the next token across billions of examples, and the network learns to build useful internal representations.</p>
+
+    <h2>Scale: The Numbers</h2>
+
+    <div class="specs-grid">
+        <div class="spec-card">
+            <div class="value">176B</div>
+            <div class="label">GPT-4 parameters</div>
+        </div>
+        <div class="spec-card">
+            <div class="value">~$100M</div>
+            <div class="label">estimated training cost</div>
+        </div>
+        <div class="spec-card">
+            <div class="value">15T</div>
+            <div class="label">tokens in training</div>
+        </div>
+        <div class="spec-card">
+            <div class="value">96</div>
+            <div class="label">layers (GPT-3)</div>
+        </div>
+    </div>
+
+    <p>Scale is not incidental. It's the primary driver of capability. More parameters + more data + more compute = better performance on nearly every benchmark. This relationship (the "scaling laws") was discovered empirically and has held across model generations. We don't fully understand why it works so well, but it does.</p>
+
+    <h2>Decoder-Only vs Full Transformer</h2>
+
+    <p>The original "Attention Is All You Need" paper described an encoder-decoder architecture (for translation). Most modern LLMs are decoder-only (GPT architecture). The difference:</p>
+
+    <p><strong>Encoder:</strong> Sees the full sequence bidirectionally. Each token attends to all others. Good for understanding tasks (classification, NER).</p>
+    <p><strong>Decoder:</strong> Causal mask. Each token only attends to previous tokens. Can't see future. Good for generation. What GPT uses.</p>
+    <p><strong>Encoder-Decoder:</strong> Both. Used by T5, BART, and some translation models. Less common now.</p>
+
+    <h2>Positional Encoding: The Missing Piece</h2>
+
+    <p>Attention is permutation-invariant: "the dog bites" and "the bites dog" produce the same attention patterns without position information. Position is injected via positional encodings: fixed or learned vectors added to token embeddings that encode where in the sequence a token sits.</p>
+
+    <p>Modern models (RoPE, ALiBi) use rotary or bias-based approaches that let attention naturally incorporate position without adding to embeddings. This also allows generalization to longer contexts than seen during training (up to a point).</p>
+
+    <div class="takeaway">
+        <h3>The Key Takeaway</h3>
+        <p>A transformer stacks attention + feedforward layers. Each layer refines token representations through learned attention patterns. Depth builds hierarchy: surface form → syntax → semantics → reasoning. Trained via next-token prediction on massive text. Scale is the primary driver of capability. Everything else follows from that.</p>
+    </div>
+
+    <div class="nav-links">
+        <a href="/learn/attention/">← Attention</a>
+        <a href="/learn/">← All Topics</a>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p>How AI Works Series — Humble Claw</p>
+</div>
+
+</body>
+</html>

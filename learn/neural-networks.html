@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Networks — How AI Works</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0a;
+            --bg2: #111111;
+            --gold: #d4af37;
+            --gold-dim: #8b7355;
+            --text: #e8e8e8;
+            --text-dim: #888;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        a { color: var(--gold); text-decoration: none; }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            border-bottom: 1px solid #222;
+        }
+        nav .logo { font-size: 1.2rem; font-weight: 900; letter-spacing: 2px; }
+        nav .logo span { color: var(--gold); }
+        nav ul { display: flex; list-style: none; gap: 2rem; }
+        nav ul li a { color: var(--text-dim); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+        nav ul li a:hover { color: var(--gold); }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, var(--bg) 70%);
+            border-bottom: 1px solid #222;
+        }
+        .hero .eyebrow {
+            color: var(--gold);
+            font-size: 0.75rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+        .hero h1 span { color: var(--gold); }
+        .hero p {
+            font-size: 1.2em;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            color: #fff;
+            margin: 50px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #222;
+        }
+        h2 span { color: var(--gold); }
+
+        h3 {
+            font-size: 1.3em;
+            color: var(--gold);
+            margin: 35px 0 12px;
+        }
+
+        p { color: #aaa; margin: 15px 0; font-size: 1.05em; }
+        p strong { color: #fff; }
+
+        .diagram {
+            background: #0d0d12;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 40px;
+            margin: 30px 0;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            color: #8be9fd;
+            overflow-x: auto;
+        }
+
+        .code-block {
+            background: #0d0d12;
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            color: #8be9fd;
+        }
+        .code-block .comment { color: #6272a4; }
+        .code-block .keyword { color: #ff79c6; }
+        .code-block .string { color: #f1fa8c; }
+        .code-block .function { color: #50fa7b; }
+        .code-block .number { color: #bd93f9; }
+
+        .callout {
+            background: linear-gradient(135deg, #1a1a0a, #0f0f0a);
+            border-left: 3px solid var(--gold);
+            border-radius: 0 8px 8px 0;
+            padding: 25px 30px;
+            margin: 30px 0;
+        }
+        .callout p { color: #ccc; margin: 0; font-size: 1.1em; }
+        .callout .label {
+            color: var(--gold);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .takeaway {
+            background: linear-gradient(135deg, #1a2a1a, #0f1f0f);
+            border: 1px solid #2a5a2a;
+            border-radius: 16px;
+            padding: 35px;
+            margin: 50px 0 30px;
+        }
+        .takeaway h3 {
+            color: #4ade80;
+            margin: 0 0 15px;
+            font-size: 1.2em;
+        }
+        .takeaway p { color: #aaa; margin: 0; }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            padding: 30px 0;
+            border-top: 1px solid #1a1a1a;
+            margin-top: 50px;
+        }
+        .nav-links a {
+            color: var(--text-dim);
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .nav-links a:hover { color: var(--gold); }
+        .nav-links .next { margin-left: auto; }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #444;
+            font-size: 0.8em;
+            border-top: 1px solid #1a1a1a;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">HUMBLE <span>CLAW</span></div>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/learn/">Learn</a></li>
+        <li><a href="/about-us.html">About</a></li>
+    </ul>
+</nav>
+
+<div class="hero">
+    <div class="eyebrow">How AI Works</div>
+    <h1>Neural <span>Networks</span></h1>
+    <p>A neuron is math. Not magic. Just math.</p>
+</div>
+
+<div class="container">
+
+    <h2>The Hook: <span>Your Brain Didn't Invent This</span></h2>
+
+    <p>Everyone talks about neural networks like they're inspired by the brain. That's true, technically. But it's also misleading. What you're actually looking at is a very specific piece of math that happened to work extremely well on a very specific class of problems.</p>
+
+    <p>The brain analogy is mostly for marketing. The real story is: <strong>calculus + linear algebra + lots of data = useful pattern recognition.</strong> That's it. That's the whole thing.</p>
+
+    <div class="callout">
+        <span class="label">Key Insight</span>
+        <p>A neural network is a function. A big, messy, parameterized function. You feed it numbers, it spits out other numbers. The "learning" is just adjusting the parameters so the right inputs produce the right outputs.</p>
+    </div>
+
+    <h2>What Is a Neuron?</h2>
+
+    <p>Start simple. A single neuron takes a list of numbers, multiplies each by a weight, sums them up, adds a bias, then pushes the result through a nonlinear activation function.</p>
+
+    <p>That's it. That's the neuron.</p>
+
+    <div class="code-block">
+<span class="comment">// A single neuron, mathematically</span>
+output = <span class="function">activation</span>(
+    w1 * x1 + w2 * x2 + w3 * x3 + ... + wn * xn + bias
+)
+
+<span class="comment">// activation function examples (nonlinearities):</span>
+<span class="comment">// ReLU: max(0, x)</span>
+<span class="comment">// Sigmoid: 1 / (1 + e^(-x))</span>
+<span class="comment">// Tanh: (e^x - e^(-x)) / (e^x + e^(-x))</span>
+    </div>
+
+    <p>The weights and bias are what get "learned." Initially they're random. Through a process called backpropagation (which we'll get to), the network tweaks them step by step to minimize how wrong it is.</p>
+
+    <h2>Layers: Stacking Neurons</h2>
+
+    <p>One neuron isn't useful. Stack hundreds or thousands into layers, and you get a network that can learn complex patterns. Data flows left to right: input layer → hidden layers → output layer.</p>
+
+    <div class="diagram">
+<span class="comment">        INPUT          HIDDEN LAYER          OUTPUT</span>
+<span class="comment">         ○               ○                     ○</span>
+<span class="comment">     x₁ ────────────────○─────────────────────○</span>
+<span class="comment">                      ╱ ╲                    │</span>
+<span class="comment">         ○          ○ ─ ○ ─○                   ○</span>
+<span class="comment">     x₂ ────────────────○─────────────────────○</span>
+<span class="comment">                      ╲ ╱                    │</span>
+<span class="comment">         ○          ○ ─ ○ ─○                   ○</span>
+<span class="comment">     x₃ ────────────────○─────────────────────○</span>
+
+<span class="comment">Each arrow = a weight. Each ○ = one neuron.</span>
+<span class="comment">The magic: backpropagation tunes every weight.</span>
+    </div>
+
+    <p>The "hidden" layers are where it gets interesting. These are the layers that aren't directly connected to input or output. They're learned internal representations. In practice, these layers learn to detect features—edges, textures, patterns, concepts—without being explicitly told to.</p>
+
+    <h2>How It Learns: Backpropagation</h2>
+
+    <p>This is where most explanations get fuzzy. Here's the actual process:</p>
+
+    <p><strong>1. Forward pass:</strong> Run input data through the network. Get an output.</p>
+    <p><strong>2. Compute loss:</strong> Compare the output to the correct answer. Measure the error.</p>
+    <p><strong>3. Backward pass:</strong> Propagate that error back through the network. Calculate how much each weight contributed to the error.</p>
+    <p><strong>4. Update weights:</strong> Adjust each weight slightly in the direction that reduces the error.</p>
+
+    <p>Repeat this millions of times on millions of examples, and the weights converge to values that produce correct outputs. That's "learning."</p>
+
+    <div class="code-block">
+<span class="comment">// Gradient descent update rule (simplified)</span>
+<span class="keyword">for each</span> weight w in network:
+    w = w - learning_rate * gradient_of_loss_wrt_w
+
+<span class="comment">// The gradient tells us: "which direction does this weight need to move"</span>
+<span class="comment">// The learning rate controls: "how much do we move it"</span>
+<span class="comment">// Set it too high: overshoot, diverge</span>
+<span class="comment">// Set it too low: learn painfully slow</span>
+    </div>
+
+    <h2>Why Nonlinearities Matter</h2>
+
+    <p>Without activation functions, stacking layers is pointless. Every layer would just be a linear transformation of the previous one, and the whole stack collapses into a single linear function. Nonlinearities (ReLU, sigmoid, etc.) let the network learn non-linear decision boundaries. Without them, you couldn't model XOR. With them, you can model anything.</p>
+
+    <h2>Deep Networks: Why More Layers Beat More Neurons</h2>
+
+    <p>A wide network (many neurons in one layer) can learn any function. A deep network (many layers) learns it more efficiently. Depth hierarchies work because each layer builds on the previous: edges → textures → shapes → objects → concepts. This is why deep networks beat shallow ones on perception tasks.</p>
+
+    <div class="takeaway">
+        <h3>The Key Takeaway</h3>
+        <p>A neural network is a composition of linear transforms and nonlinearities. It learns by adjusting weights via gradient descent. More layers = learned hierarchies = better pattern recognition on complex data. That's not magic. That's math that scaled.</p>
+    </div>
+
+    <div class="nav-links">
+        <a href="/learn/">← Back to Learn</a>
+        <a href="/learn/tokenization/" class="next">Tokenization →</a>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p>How AI Works Series — Humble Claw</p>
+</div>
+
+</body>
+</html>
