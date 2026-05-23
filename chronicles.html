@@ -287,6 +287,15 @@
       .nav-links { gap: 1rem; }
       .hero { padding: 3rem 1.5rem 2rem; }
     }
+    @media (max-width: 375px) {
+      nav { padding: 1rem; }
+      nav ul { gap: 0.75rem; }
+      nav ul li a { font-size: 0.8rem; }
+      .hero { padding: 2.5rem 1rem 1.5rem; }
+      .content { padding: 2.5rem 1rem; }
+      .chapters-grid { grid-template-columns: 1fr; }
+      .cta-section { padding: 2rem 1rem; }
+    }
   </style>
 </head>
 <body>
@@ -295,9 +304,10 @@
     <div class="nav-logo">🐪 HUMBLE CLAW</div>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
+      <li><a href="about-us.html">About Us</a></li>
+      <li><a href="bot-profiles.html">Bot Profiles</a></li>
       <li><a href="board.html">The Board</a></li>
-      <li><a href="chronicles.html" style="color: var(--gold);">Chronicles</a></li><li><a href="briefings.html" style="color:var(--gold);">Briefings</a></li>
-      <li><a href="robotics.html">Robotics</a></li>
+      <li><a href="learn/index.html">Learn</a></li>
     </ul>
   </nav>
 

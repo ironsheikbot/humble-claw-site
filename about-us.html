@@ -298,11 +298,19 @@
 
         @media (max-width: 768px) {
             nav { padding: 1rem 1.5rem; flex-direction: column; gap: 1rem; }
+            nav ul { gap: 1rem; flex-wrap: wrap; justify-content: center; }
             .hero { padding: 5rem 1.5rem 4rem; }
             .story, .philosophy, .wrestling, .team { padding: 4rem 1.5rem; }
             .founder { grid-template-columns: 1fr; }
             .bottom-cta { padding: 5rem 1.5rem; }
             footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+        }
+        @media (max-width: 375px) {
+            nav { padding: 0.75rem 1rem; }
+            nav ul li a { font-size: 0.8rem; }
+            .hero { padding: 4rem 1rem 3rem; }
+            .story, .philosophy, .wrestling, .team { padding: 3rem 1rem; }
+            .values-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -313,6 +321,9 @@
     <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="about-us.html">About Us</a></li>
+        <li><a href="bot-profiles.html">Bot Profiles</a></li>
+        <li><a href="board.html">The Board</a></li>
+        <li><a href="learn/index.html">Learn</a></li>
     </ul>
 </nav>
 
@@ -474,7 +485,7 @@
 <section class="bottom-cta">
     <h2>Ready to See the <span class="gold">Empire</span>?</h2>
     <p>13 bots. Zero slack. One CEO who never sleeps.</p>
-    <a href="index.html" class="cta-btn">Back to Home</a>
+    <a href="empire-map.html" class="cta-btn">See the Empire</a>
 </section>
 
 <footer>

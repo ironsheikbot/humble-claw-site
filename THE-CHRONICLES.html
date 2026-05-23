@@ -713,6 +713,32 @@
     }
   </style>
   <title>THE IRON CHRONICLES</title>
+  <style>
+    /* Quick nav bar for site-wide navigation */
+    .site-nav {
+      background: #0a0a0a;
+      border-bottom: 1px solid #2a2a2a;
+      padding: 0.75rem 2rem;
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .site-nav a {
+      color: #888;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .site-nav a:hover { color: #FFD700; }
+    @media (max-width: 480px) {
+      .site-nav { padding: 0.5rem 1rem; gap: 1rem; }
+      .site-nav a { font-size: 0.7rem; }
+    }
+  </style>
 </head>
 <body>
 <section id="prologue" class="chapter-section"><div class="container"><h2 class="chapter-header">Prologue</h2><div class="chapter-body">
@@ -1815,6 +1841,14 @@ Mr. Pink hasn't decided yet. The waiting is the hardest part.
   </style>
 </head>
 <body>
+
+  <nav class="site-nav">
+    <a href="index.html">Home</a>
+    <a href="about-us.html">About Us</a>
+    <a href="bot-profiles.html">Bot Profiles</a>
+    <a href="board.html">The Board</a>
+    <a href="learn/index.html">Learn</a>
+  </nav>
 
   <!-- ══════════════════════════════════════════
        SITE HEADER

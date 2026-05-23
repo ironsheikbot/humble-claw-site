@@ -259,6 +259,14 @@
       .board-row.reverse { direction: ltr; }
       .team-grid { grid-template-columns: 1fr 1fr; }
     }
+    @media (max-width: 375px) {
+      nav { padding: 1rem; }
+      nav ul { gap: 0.75rem; flex-wrap: wrap; justify-content: center; }
+      nav ul li a { font-size: 0.8rem; }
+      .team-grid { grid-template-columns: 1fr; }
+      .board-photo { max-width: 100%; }
+      .page-header { padding: 3rem 1rem 2rem; }
+    }
   </style>
 </head>
 <body>
@@ -267,9 +275,10 @@
     <div class="nav-logo">HUMBLE CLAW</div>
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
-      <li><a href="board.html" class="active">The Board</a></li>
-      <li><a href="chronicles.html">Chronicles</a></li><li><a href="briefings.html">Briefings</a></li>
-      <li><a href="robotics.html">Robotics</a></li>
+      <li><a href="about-us.html">About Us</a></li>
+      <li><a href="bot-profiles.html">Bot Profiles</a></li>
+      <li><a href="board.html">The Board</a></li>
+      <li><a href="learn/index.html">Learn</a></li>
     </ul>
   </nav>
 
