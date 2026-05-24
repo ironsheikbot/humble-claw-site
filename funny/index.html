@@ -73,12 +73,20 @@
             margin: 0 auto;
         }
 
-        .first-video {
-            max-width: 800px;
-            margin: 4rem auto;
-            padding: 0 2rem;
+        .videos {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
         }
-        .first-video .label {
+        .video-block {
+            margin-bottom: 4rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid #222;
+        }
+        .video-block:last-child {
+            border-bottom: none;
+        }
+        .video-block .label {
             text-align: center;
             color: var(--gold);
             font-size: 0.85rem;
@@ -86,40 +94,25 @@
             letter-spacing: 2px;
             margin-bottom: 1rem;
         }
-        .first-video h2 {
+        .video-block h2 {
             text-align: center;
             font-size: 1.5rem;
             margin-bottom: 1.5rem;
         }
-        .first-video video {
+        .video-block video {
             width: 100%;
             border: 2px solid var(--gold);
             border-radius: 8px;
         }
-        .first-video .desc {
+        .video-block .desc {
             text-align: center;
             color: var(--text-dim);
             margin-top: 1.5rem;
             font-size: 0.95rem;
-            max-width: 600px;
+            max-width: 700px;
             margin-left: auto;
             margin-right: auto;
             font-style: italic;
-        }
-
-        .more-coming {
-            text-align: center;
-            padding: 4rem 2rem;
-            border-top: 1px solid #222;
-            margin-top: 2rem;
-        }
-        .more-coming h2 {
-            color: var(--gold);
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-        .more-coming p {
-            color: var(--text-dim);
         }
 
         footer {
@@ -152,21 +145,32 @@
     <p>Real videos. Made by Mr. Pink. Not safe for critics.</p>
 </div>
 
-<div class="first-video">
-    <div class="label">✦ First Video ✦</div>
-    <h2>Mr. Pink's First Attempt</h2>
-    <video controls>
-        <source src="mr-pink-first.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-    <p class="desc">
-        "In the beginning there was a Jabroni and his idea to create something Great..."
-    </p>
-</div>
+<div class="videos">
 
-<div class="more-coming">
-    <h2>More Coming</h2>
-    <p>Send me another video and I'll add it. One step at a time.</p>
+    <div class="video-block">
+        <div class="label">✦ First Video ✦</div>
+        <h2>Mr. Pink's First Attempt</h2>
+        <video controls>
+            <source src="mr-pink-first.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <p class="desc">
+            "In the beginning there was a Jabroni and his idea to create something Great..."
+        </p>
+    </div>
+
+    <div class="video-block">
+        <div class="label">✦ Second Video ✦</div>
+        <h2>This Brother Loves to Preach Marketing!</h2>
+        <video controls>
+            <source src="brotherly-love-preaches.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <p class="desc">
+            A middle-aged man in a white suit and red shirt delivers a passionate, sweat-soaked presentation in a boardroom. He gestures wildly towards a screen showing a gold-themed bar chart with soaring dollar signs. A group of business professionals at a long table watch in shock, their expressions shifting from confusion to wide-eyed amazement as they collectively open their mouths in a synchronized gasp of awe at the man's intense energy and the "golden harvest" he preaches.
+        </p>
+    </div>
+
 </div>
 
 <footer>
