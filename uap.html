@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UAP Tracker — Humble Claw</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0f;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+        }
+        a { color: #d4af37; text-decoration: none; }
+        a:hover { color: #f0cc55; }
+
+        nav {
+            background: #111118;
+            border-bottom: 1px solid #d4af37;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+        nav .logo {
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: #d4af37;
+            padding: 1rem 2rem 1rem 0;
+            letter-spacing: 2px;
+            border-right: 1px solid #333;
+            margin-right: 1rem;
+        }
+        nav a {
+            color: #888;
+            padding: 1rem 1.5rem;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.2s, background 0.2s;
+            border-right: 1px solid #222;
+        }
+        nav a:hover, nav a.active { color: #d4af37; background: #16161f; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; }
+
+        .hero {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            border-bottom: 1px solid #222;
+            margin-bottom: 3rem;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #d4af37;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .hero p { color: #888; font-size: 1rem; }
+
+        .section { margin-bottom: 4rem; }
+        .section h2 {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #d4af37;
+            border-bottom: 1px solid #2a2a35;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        @media(max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
+
+        .card {
+            background: #111118;
+            border: 1px solid #1e1e28;
+            border-left: 3px solid #d4af37;
+            padding: 1.5rem;
+            border-radius: 4px;
+        }
+        .card h3 { color: #d4af37; font-size: 1rem; margin-bottom: 0.5rem; }
+        .card p { color: #999; font-size: 0.875rem; line-height: 1.6; margin-bottom: 0.75rem; }
+
+        .credibility {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 0.2rem 0.6rem;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+        .cred-high { background: #1a3d1a; color: #5aD05a; }
+        .cred-med { background: #3d3a1a; color: #D0C050; }
+        .cred-low { background: #3d1a1a; color: #D05050; }
+
+        .timeline { position: relative; padding-left: 2rem; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #d4af37, #333);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+            padding: 1rem 1.25rem;
+            background: #111118;
+            border: 1px solid #1e1e28;
+            border-radius: 4px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 1.2rem;
+            width: 10px;
+            height: 10px;
+            background: #d4af37;
+            border-radius: 50%;
+            transform: translateX(-4px);
+        }
+        .timeline-item .year {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #d4af37;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+        .timeline-item h3 { font-size: 0.95rem; color: #e0e0e0; margin-bottom: 0.35rem; }
+        .timeline-item p { color: #888; font-size: 0.8rem; line-height: 1.5; }
+
+        .link-list { list-style: none; }
+        .link-list li {
+            background: #111118;
+            border: 1px solid #1e1e28;
+            margin-bottom: 0.75rem;
+            padding: 1rem 1.25rem;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        .link-list li:hover { border-color: #d4af37; }
+        .link-list .doc-title { font-size: 0.9rem; color: #e0e0e0; }
+        .link-list .doc-source { font-size: 0.75rem; color: #666; }
+        .link-list a { color: #d4af37; font-size: 0.8rem; font-weight: 700; white-space: nowrap; }
+        .link-list a:hover { color: #f0cc55; }
+
+        .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+        .movie-card {
+            background: #111118;
+            border: 1px solid #1e1e28;
+            padding: 1.25rem;
+            border-radius: 4px;
+        }
+        .movie-card h3 { color: #d4af37; font-size: 0.95rem; margin-bottom: 0.3rem; }
+        .movie-card .year { font-size: 0.75rem; color: #666; }
+        .movie-card p { color: #888; font-size: 0.8rem; line-height: 1.5; margin-top: 0.5rem; }
+
+        .score-guide { background: #111118; border: 1px solid #1e1e28; padding: 1.5rem; border-radius: 4px; }
+        .score-guide table { width: 100%; border-collapse: collapse; }
+        .score-guide th {
+            text-align: left;
+            color: #d4af37;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #2a2a35;
+        }
+        .score-guide td { padding: 0.6rem 0; font-size: 0.85rem; color: #999; border-bottom: 1px solid #1a1a22; }
+        .score-guide tr:last-child td { border-bottom: none; }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #1e1e28;
+            color: #444;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">HUMBLE CLAW</div>
+    <a href="index.html">Home</a>
+    <a href="board.html">Board</a>
+    <a href="chronicles.html">Chronicles</a>
+    <a href="uap.html" class="active">UAP</a>
+    <a href="briefings.html">Briefings</a>
+</nav>
+
+<div class="container">
+    <div class="hero">
+        <h1>UAP Tracker</h1>
+        <p>Unidentified Anomalous Phenomena — Government Disclosures, Classic Encounters &amp; Evidence</p>
+    </div>
+
+    <!-- SECTION 1: Classic Encounters -->
+    <div class="section">
+        <h2>Classic Encounters</h2>
+        <div class="grid-2">
+            <div class="card">
+                <h3>Tic Tac (2004)</h3>
+                <p>Navy pilots Commander David Fravor and Lt. Cmdr. Alex Dietrich encountered a white, Tic Tac-shaped craft off the coast of San Diego. No visible propulsion, hypersonic speed, instantaneous acceleration. Intercepted by Secret Service agents the same week at another location.</p>
+                <span class="credibility cred-high">Credibility: High</span>
+            </div>
+            <div class="card">
+                <h3>Roswell (1947)</h3>
+                <p>Official story: weather balloon. Actual story: the U.S. Army Air Forces recovered debris from a crash site near Roswell, NM — later classified and denied for 50 years. Documents show a major cover-up at the highest levels of government.</p>
+                <span class="credibility cred-med">Credibility: Medium</span>
+            </div>
+            <div class="card">
+                <h3>Phoenix Lights (1997)</h3>
+                <p>Thousands witnessed a V-shaped formation of glowing craft flying over Arizona. Governor Fife Symington witnessed it himself — then mocked witnesses publicly for years before quietly admitting years later: "It was extraterrestrial."</p>
+                <span class="credibility cred-high">Credibility: High</span>
+            </div>
+            <div class="card">
+                <h3>Nimitz (2004)</h3>
+                <p>The USS Princeton radar crew tracked objects moving in ways that defy physics — dropping from 80,000ft to sea level in seconds, traveling at hypersonic speeds. The famous FLIR footage released in 2007 shows an object with movement unlike any known aircraft.</p>
+                <span class="credibility cred-high">Credibility: High</span>
+            </div>
+            <div class="card" style="grid-column: 1 / -1;">
+                <h3>Chicago O'Hare (2006)</h3>
+                <p>United Airlines employees witnessed a metallic disc-shaped craft hovering over Concourse C at O'Hare International Airport in broad daylight. FAA refused to release radar data. FAA's own security log confirmed the incident. Witnesses describe it as moving at extreme speed through overcast sky with no sound.</p>
+                <span class="credibility cred-med">Credibility: Medium</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: Government Document Drops -->
+    <div class="section">
+        <h2>White House / Pentagon UAP Document Drops</h2>
+        <ul class="link-list">
+            <li>
+                <div>
+                    <div class="doc-title">AARO Historical Record (2024) — Vols. 1 &amp; 2</div>
+                    <div class="doc-source">All-domain Anomaly Resolution Office — aaro.mil</div>
+                </div>
+                <a href="https://www.aaro.mil/Reports/Historical-Record.aspx" target="_blank">aaro.mil ↗</a>
+            </li>
+            <li>
+                <div>
+                    <div class="doc-title">ODNI Annual Report on UAP (2023)</div>
+                    <div class="doc-source">Office of the Director of National Intelligence — intelligence.gov</div>
+                </div>
+                <a href="https://www.dni.gov/index.php/iod-acquisition-technology-and-processing" target="_blank">View Report ↗</a>
+            </li>
+            <li>
+                <div>
+                    <div class="doc-title">Senate UAP Hearing Transcripts (2023)</div>
+                    <div class="doc-source">Senate Armed Services Committee — congress.gov</div>
+                </div>
+                <a href="https://www.congress.gov/event/118th-congress/senate-event/je113" target="_blank">congress.gov ↗</a>
+            </li>
+            <li>
+                <div>
+                    <div class="doc-title">Grusch Whistleblower Testimony (2023)</div>
+                    <div class="doc-source">Former ODNI UAP Task Force member — Congressional hearing under oath</div>
+                </div>
+                <a href="https://www.youtube.com/watch?v=ZY5bF_AW4qE" target="_blank">Watch Hearing ↗</a>
+            </li>
+            <li>
+                <div>
+                    <div class="doc-title">NASA UAP Independent Study (2023)</div>
+                    <div class="doc-source">NASA-convened independent panel report — nasa.gov</div>
+                </div>
+                <a href="https://science.nasa.gov/uap" target="_blank">View Report ↗</a>
+            </li>
+            <li>
+                <div>
+                    <div class="doc-title">DOD UAP Task Force Report (2021)</div>
+                    <div class="doc-source">Unclassified summary delivered to Congress — intelligence.gov</div>
+                </div>
+                <a href="https://www.dni.gov/wordpress-docs/Preliminary-Assessment-UAP-2021.pdf" target="_blank">PDF Download ↗</a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- SECTION 3: Government Cover-Up Tracker -->
+    <div class="section">
+        <h2>Government Cover-Up Tracker</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="year">1947</div>
+                <h3>Roswell Crash</h3>
+                <p>Military recovers craft and non-human bodies near Roswell, NM. Immediate cover-up. Official story pivots to "weather balloon" within 24 hours. Documents remain partially classified.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="year">1948–1952</div>
+                <h3>Project Blue Book Files</h3>
+                <p>Air Force investigative program logged 7,000+ UAP sightings. Most marked "unexplained." Files released in 1976 — but an estimated 10% of records are still missing.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="year">1969</div>
+                <h3>Project Blue Book Terminated</h3>
+                <p>Air Force officially ends UAP investigations, claims no threat to national security. Condon Committee report published — widely criticized as a whitewash by the scientific community.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="year">1976</div>
+                <h3>Blue Book Files Released</h3>
+                <p>75 years late. 7,000+ pages released to the public. 700+ cases remain "unexplained." The missing 10% of records were never located.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="year">2017</div>
+                <h3>NYT Reveals AATIP</h3>
+                <p>NYT reveals the Pentagon's $22M Advanced Aerospace Threat Identification Program ran from 2007–2012. Luis Elizondo, the director, goes public. The Pentagon's story shifts — again.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="year">2021</div>
+                <h3>Pentagon UAP Report to Congress</h3>
+                <p>First unclassified DoD report delivered to Congress. 143 sightings — 80% reviewed and deemed "unexplained." No extraterrestrial explanation ruled in or out.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="year">2022</div>
+                <h3> Whistleblower Protection Act UAP Attachments</h3>
+                <p>Congessional language inserted into the 2022 defense bill provides whistleblower protections for UAP disclosures — first time such protections exist in law.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="year">2023</div>
+                <h3>Grusch Testimony — Congressional Hearing</h3>
+                <p>Former ODNI intelligence officer David Grusch testifies under oath: the U.S. has retrieved non-human craft and biologics. Inspector General found his claims "credible and urgent." No prosecution. No follow-up from DOJ.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="year">2024</div>
+                <h3>AARO Historical Record Published</h3>
+                <p>AARO publishes 1,500-page historical review — concludes no " exotic" material science violations. Critics immediately point to redactions, missing documents, and testimony from 30+ witnesses the report ignored.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 4: Movie Watchlist -->
+    <div class="section">
+        <h2>Movie Watchlist</h2>
+        <div class="movie-grid">
+            <div class="movie-card">
+                <h3>Close Encounters of the Third Kind</h3>
+                <div class="year">1977 · Spielberg</div>
+                <p>The original. Spielberg treated the subject with genuine reverence. The signals, the abduction scene, the craft design — still the benchmark.</p>
+            </div>
+            <div class="movie-card">
+                <h3>The Fourth Kind</h3>
+                <div class="year">2009 · Milla Jovovich</div>
+                <p>Allegedly based on actual abduction case files from Alaska. Uses "real footage" framing. Hit or miss — but the alien design is genuinely unsettling.</p>
+            </div>
+            <div class="movie-card">
+                <h3>Signs</h3>
+                <div class="year">2002 · Shyamalan</div>
+                <p>Not strictly UAP — but an alien invasion scenario rooted in crop circles and atmospheric intrusion. Shyamalan's best film? Many say yes.</p>
+            </div>
+            <div class="movie-card">
+                <h3>Dark Skies</h3>
+                <div class="year">1996 · Scott Hamilton</div>
+                <p>Slow burn family terror. Doesn't show the craft until the final act — which makes it land. The abduction scenes are some of the most grounded in cinema.</p>
+            </div>
+            <div class="movie-card">
+                <h3>Fire in the Sky</h3>
+                <div class="year">1993 · Robert Loggia</div>
+                <p>Based on the 1978 Travis Walton abduction — one of the most famous alleged abductions ever. The forest sequence is genuinely difficult to watch.</p>
+            </div>
+            <div class="movie-card">
+                <h3>The Vast of Night</h3>
+                <div class="year">2019 · Andrew Patterson</div>
+                <p>Critically underrated. 1950s small-town America, a radio host picks up a strange frequency. The final 20 minutes are pure tension. Shot for $3M. Looks like $30M.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 5: Credibility Score Guide -->
+    <div class="section">
+        <h2>Credibility Score Guide</h2>
+        <div class="score-guide">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Score</th>
+                        <th>Label</th>
+                        <th>What It Means</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="credibility cred-high">High</span></td>
+                        <td>Multiple credible witnesses, sensor data, and/or official documentation</td>
+                        <td>Military/government sources, corroborated by sensors or physical evidence</td>
+                    </tr>
+                    <tr>
+                        <td><span class="credibility cred-med">Medium</span></td>
+                        <td>Credible witness testimony, limited corroboration</td>
+                        <td>Eyewitness accounts with some official acknowledgment or partial data</td>
+                    </tr>
+                    <tr>
+                        <td><span class="credibility cred-low">Low</span></td>
+                        <td>Single witness, anecdotal, or disputed evidence</td>
+                        <td>No official documentation; relies on individual accounts or circumstantial evidence</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer>
+    HUMBLE CLAW — UAP TRACKER &nbsp;|&nbsp; PUBLIC INTEREST ONLY &nbsp;|&nbsp; NO DATA RETAINED
+</footer>
+
+</body>
+</html>
