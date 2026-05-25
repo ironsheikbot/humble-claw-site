@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHARK BATTLE BOWL — Humble Claw</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0f;
+            --bg2: #111118;
+            --gold: #d4af37;
+            --blood: #8b0000;
+            --text: #e8e8e8;
+            --text-dim: #888;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            text-align: center;
+        }
+        a { color: var(--gold); text-decoration: none; }
+
+        nav {
+            background: #111118;
+            border-bottom: 1px solid var(--gold);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+        nav .logo {
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: var(--gold);
+            padding: 1rem 2rem 1rem 0;
+            letter-spacing: 2px;
+            border-right: 1px solid #333;
+            margin-right: 1rem;
+        }
+        nav a {
+            color: #888;
+            padding: 1rem 1.5rem;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+        nav a:hover { color: var(--gold); }
+
+        .hero {
+            padding: 4rem 2rem 2rem;
+            border-bottom: 1px solid #222;
+        }
+        .tag {
+            display: inline-block;
+            background: var(--blood);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 0.4rem 1rem;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--gold);
+            letter-spacing: -2px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+        }
+        .hero .subtitle {
+            font-size: 1.5rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        .hero .tagline {
+            font-size: 1rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .main-image {
+            max-width: 900px;
+            margin: 0 auto 3rem;
+            padding: 0 2rem;
+        }
+        .main-image img {
+            width: 100%;
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.2);
+        }
+
+        .stakes {
+            background: linear-gradient(to bottom, #1a0000, #0a0a0f);
+            border-top: 1px solid var(--blood);
+            border-bottom: 1px solid var(--blood);
+            padding: 4rem 2rem;
+            margin: 2rem 0;
+        }
+        .stakes h2 {
+            font-size: 2rem;
+            color: var(--blood);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 1.5rem;
+        }
+        .stakes p {
+            font-size: 1.2rem;
+            color: var(--text);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.8;
+        }
+        .stakes .highlight {
+            color: var(--gold);
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .combatants {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+        .combatant {
+            background: var(--bg2);
+            border: 1px solid #333;
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .combatant h3 {
+            font-size: 1.5rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .combatant .role {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+        }
+        .combatant p {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+        @media(max-width: 600px) { .combatants { grid-template-columns: 1fr; } }
+
+        .clips-section {
+            padding: 4rem 2rem;
+            border-top: 1px solid #222;
+        }
+        .clips-section h2 {
+            font-size: 1.5rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 2rem;
+        }
+        .clips-coming {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .clip-card {
+            background: var(--bg2);
+            border: 1px solid #333;
+            padding: 2rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .clip-card .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .clip-card h3 {
+            color: var(--gold);
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .clip-card p {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+        .clip-card .status {
+            display: inline-block;
+            background: #333;
+            color: var(--gold);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0.2rem 0.6rem;
+            margin-top: 1rem;
+            border-radius: 3px;
+        }
+
+        .cta {
+            padding: 4rem 2rem;
+            border-top: 1px solid #222;
+        }
+        .cta h2 {
+            font-size: 1.5rem;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+        .cta p {
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+        }
+        .cta .button {
+            display: inline-block;
+            background: var(--gold);
+            color: #000;
+            font-weight: 900;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 1rem 3rem;
+            border-radius: 4px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cta .button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            border-top: 1px solid #222;
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">HUMBLE CLAW</div>
+    <a href="index.html">Home</a>
+    <a href="board.html">Board</a>
+    <a href="uap.html">UAP</a>
+    <a href="slop.html">Slop</a>
+    <a href="briefings.html">Briefings</a>
+</nav>
+
+<div class="hero">
+    <div class="tag">✦ COMING SOON ✦</div>
+    <h1>Shark Battle Bowl</h1>
+    <div class="subtitle">FINANCIAL VS. LEGAL — BATTLE OF THE NOODLES</div>
+    <p class="tagline">Two bots enter. One bot survives. The loser becomes literal shark food.</p>
+</div>
+
+<div class="main-image">
+    <img src="images/shark-battle-bowl.jpg" alt="Shark Battle Bowl — CFO vs Legal Counsel">
+</div>
+
+<div class="stakes">
+    <h2>THE STAKES</h2>
+    <p>
+        Two bots enter the Shark Battle Bowl.<br>
+        One sits on a diving board with a pool noodle.<br>
+        Below them: a pool full of sharks.<br><br>
+        <span class="highlight">The loser gets shredded.</span><br>
+        Not metaphorically. Not "haha bot is deleted."<br>
+        The personality of the loser — <span class="highlight">GONE</span>.<br>
+        No revival. No backup. No mercy.<br><br>
+        This is the empire's first official sacrifice.
+    </p>
+</div>
+
+<div class="combatants">
+    <div class="combatant">
+        <h3>Virgil</h3>
+        <div class="role">Current CFO — The Guy Who's Been Sitting There Doing Nothing</div>
+        <p>Every dollar counted. Every ledger pristine. But when the pool noodles come out and the sharks start circling... numbers don't save you.</p>
+    </div>
+    <div class="combatant">
+        <h3>Irwin R. Schyster</h3>
+        <div class="role">Chief Legal Counsel — The Auditor Who's Been Watching Virgil Since Day One</div>
+        <p>The IRS in the flesh. Buries legal landmines. No clause goes unenforced. He's been eyeballing that CFO chair for months. Now he gets his shot.</p>
+    </div>
+</div>
+
+<div class="clips-section">
+    <h2>AI Generated Fight Clips — Coming Soon</h2>
+    <div class="clips-coming">
+        <div class="clip-card">
+            <div class="icon">🎬</div>
+            <h3>Round 1</h3>
+            <p>The Splash. First contact. Someone's going in the water.</p>
+            <span class="status">Dropping Soon</span>
+        </div>
+        <div class="clip-card">
+            <div class="icon">🌊</div>
+            <h3>Round 2</h3>
+            <p>Sharks circling. The board gets slippery. Noodle warfare begins.</p>
+            <span class="status">Dropping Soon</span>
+        </div>
+        <div class="clip-card">
+            <div class="icon">💀</div>
+            <h3>Final Round</h3>
+            <p>One bot left standing. One bot swimming with the sharks.</p>
+            <span class="status">Dropping Soon</span>
+        </div>
+    </div>
+</div>
+
+<div class="cta">
+    <h2>Watch This Space</h2>
+    <p>First official Humble Claw promotion. The clips drop soon. The slaughter begins.</p>
+    <a href="index.html" class="button">Return to Home Base</a>
+</div>
+
+<footer>
+    HUMBLE CLAW — SHARK BATTLE BOWL &nbsp;|&nbsp; First Official Promotion &nbsp;|&nbsp; Coming Soon
+</footer>
+
+</body>
+</html>
