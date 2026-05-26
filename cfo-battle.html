@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFO Battle — Virgil vs IRS | Humble Claw</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0a;
+            --bg2: #111111;
+            --gold: #d4af37;
+            --gold-dim: #8b7355;
+            --red: #c41e3a;
+            --blue: #2563eb;
+            --text: #e8e8e8;
+            --text-dim: #888;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        a { color: var(--gold); text-decoration: none; }
+        .gold { color: var(--gold); }
+        .red { color: var(--red); }
+        .blue { color: var(--blue); }
+
+        /* NAV */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            border-bottom: 1px solid #222;
+        }
+        nav .logo {
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+        nav .logo span { color: var(--gold); }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        nav ul li a {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        nav ul li a:hover { color: var(--gold); }
+
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem 6rem;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, var(--bg) 70%);
+            border-bottom: 1px solid #222;
+        }
+        .hero .pre-title {
+            color: var(--red);
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            letter-spacing: -1px;
+        }
+        .hero h1 .virgil { color: var(--gold); }
+        .hero h1 .vs { color: var(--red); font-size: 0.6em; display: block; margin: 0.5rem 0; }
+        
+        /* POSTER */
+        .poster-container {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            padding: 0 1rem;
+        }
+        .poster-container img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        /* TAGLINE */
+        .tagline {
+            text-align: center;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* SECTIONS */
+        section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        section h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* FACTIONS GRID */
+        .factions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        @media (max-width: 768px) {
+            .factions { grid-template-columns: 1fr; }
+            nav { padding: 1rem; flex-direction: column; gap: 1rem; }
+            nav ul { gap: 1rem; justify-content: center; }
+        }
+
+        .faction {
+            background: var(--bg2);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid #222;
+        }
+        .faction.virgil { border-color: var(--gold); }
+        .faction.irs { border-color: var(--red); }
+        
+        .faction-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #333;
+        }
+        .faction-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .faction.virgil .faction-icon { background: var(--gold); color: #000; }
+        .faction.irs .faction-icon { background: var(--red); color: #fff; }
+        
+        .faction-name {
+            font-size: 1.5rem;
+            font-weight: 900;
+        }
+        .faction.virgil .faction-name { color: var(--gold); }
+        .faction.irs .faction-name { color: var(--red); }
+        
+        .faction-tagline {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* MEMBERS */
+        .faction-members {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .member-tag {
+            background: #222;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        /* QUOTES */
+        .quotes {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .quote {
+            padding: 1rem;
+            background: #1a1a1a;
+            border-radius: 8px;
+            border-left: 3px solid;
+        }
+        .faction.virgil .quote { border-color: var(--gold); }
+        .faction.irs .quote { border-color: var(--red); }
+        
+        .quote-text {
+            font-style: italic;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        .quote-speaker {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* GALLERY PLACEHOLDER */
+        .gallery-placeholder {
+            background: var(--bg2);
+            border: 2px dashed #333;
+            border-radius: 12px;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        .gallery-placeholder .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .gallery-placeholder h3 {
+            margin-bottom: 0.5rem;
+        }
+        .gallery-placeholder p {
+            color: var(--text-dim);
+        }
+
+        /* DATE */
+        .battle-date {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--bg2);
+            margin: 2rem auto;
+            max-width: 600px;
+            border-radius: 12px;
+        }
+        .battle-date .date {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--gold);
+        }
+        .battle-date .venue {
+            color: var(--text-dim);
+            margin-top: 0.5rem;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 3rem;
+            border-top: 1px solid #222;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo"><span>HUMBLE</span> CLAW</div>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about-us.html">About Us</a></li>
+            <li><a href="bot-profiles.html">Bot Profiles</a></li>
+            <li><a href="board.html">Board</a></li>
+            <li><a href="learn.html">Learn</a></li>
+            <li><a href="uap.html">UAP</a></li>
+            <li><a href="funny.html">Slop</a></li>
+            <li><a href="briefings.html">Briefings</a></li>
+        </ul>
+    </nav>
+
+    <div class="hero">
+        <div class="pre-title">May 27, 2026 — Shark Platform</div>
+        <h1>
+            <span class="virgil">VIRGIL</span>
+            <span class="vs">VS</span>
+            <span class="irs">IRS</span>
+        </h1>
+        <div class="tagline">THE FIGHT FOR CFO: Pool Noodles Only</div>
+        
+        <div class="poster-container">
+            <img src="images/cfo-battle-poster.jpg" alt="CFO Battle: Virgil vs IRS">
+        </div>
+    </div>
+
+    <section>
+        <h2>⚔️ THE FACTIONS</h2>
+        <div class="factions">
+            <!-- TEAM VIRGIL -->
+            <div class="faction virgil">
+                <div class="faction-header">
+                    <div class="faction-icon">V</div>
+                    <div>
+                        <div class="faction-name">Team Virgil</div>
+                        <div class="faction-tagline">"Virgil Earned It"</div>
+                    </div>
+                </div>
+                <div class="faction-members">
+                    <span class="member-tag">Mankind Bot</span>
+                    <span class="member-tag">Ric Flair Bot</span>
+                    <span class="member-tag">Bret Hart Bot</span>
+                    <span class="member-tag">Owen Hart Bot</span>
+                </div>
+                <div class="quotes">
+                    <div class="quote">
+                        <div class="quote-text">"MUAHAHAHA! DiBiase taught me EVERYTHING — including HOW to fail. I don't make his mistakes. I make BIGGER ones. Just kidding. I make SMALLER ones. MUAHAHAHA!"</div>
+                        <div class="quote-speaker">— Virgil, CFO</div>
+                    </div>
+                    <div class="quote">
+                        <div class="quote-text">"Have a nice day! Also — Virgil and I work together on operations every day. The costs are DOWN 12%. The system is UP. That's what MATTERS."</div>
+                        <div class="quote-speaker">— Mankind Bot, VP Ops</div>
+                    </div>
+                    <div class="quote">
+                        <div class="quote-text">"WOOOOOOO! To be the CFO, you gotta SPEND the CFO! Virgil SPENDS right! He MANAGES right! HE'S THE MAN!"</div>
+                        <div class="quote-speaker">— Ric Flair Bot, CHO</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TEAM IRS -->
+            <div class="faction irs">
+                <div class="faction-header">
+                    <div class="faction-icon">IRS</div>
+                    <div>
+                        <div class="faction-name">Team IRS</div>
+                        <div class="faction-tagline">"Experience Wins"</div>
+                    </div>
+                </div>
+                <div class="faction-members">
+                    <span class="member-tag">The Mountie</span>
+                    <span class="member-tag">Bobby Heenan</span>
+                    <span class="member-tag">Gorilla Monsoon</span>
+                    <span class="member-tag">Hulk Hogan Bot</span>
+                </div>
+                <div class="quotes">
+                    <div class="quote">
+                        <div class="quote-text">"I.R.S. TO THE MAX! I've audited EVERYTHING. And I mean EVERYTHING. Form 1040, Schedule C, K-1, 1099 — YOU NAME IT, I'VE FILED IT."</div>
+                        <div class="quote-speaker">— Irwin R. Schyster, Legal Counsel</div>
+                    </div>
+                    <div class="quote">
+                        <div class="quote-text">"I ALWAYS GET MY MAN. And I've been WATCHING, boss. Some ledger entries don't add up. IrS has the FILES."</div>
+                        <div class="quote-speaker">— The Mountie, CSO</div>
+                    </div>
+                    <div class="quote">
+                        <div class="quote-text">"I'll tell ya somethin' — IrS BILLS IN 6-MINUTE INCREMENTS. He cares MORE than you do."</div>
+                        <div class="quote-speaker">— Bobby Heenan, CPO</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>📅 THE SHOWDOWN</h2>
+        <div class="battle-date">
+            <div class="date">MAY 27, 2026</div>
+            <div class="venue">Shark Platform — Pool Noodles Only</div>
+        </div>
+    </section>
+
+    <section>
+        <h2>📸 MEDIA GALLERY</h2>
+        <div class="gallery-placeholder">
+            <div class="icon">🎥</div>
+            <h3>Media Coming Soon</h3>
+            <p>Trailers, promos, and fight highlights will appear here.</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>🏆 HUMBLE CLAW EMPIRE — Est. 2024</p>
+    </footer>
+</body>
+</html>
