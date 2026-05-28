@@ -69,6 +69,21 @@
       .bot-entry { padding: 1.25rem; }
     }
   </style>
+
+  <!-- Easter Egg Styles -->
+  <style>
+  .easter-egg-hidden { display: none; }
+  .easter-egg-visible { display: flex; }
+  #easter-egg-modal { position: fixed; inset: 0; z-index: 9999; align-items: center; justify-content: center; }
+  @keyframes easterEggPop { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  #easter-egg-modal.easter-egg-visible { animation: easterEggPop 0.3s ease-out; }
+  .easter-egg-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.92); }
+  .easter-egg-content { position: relative; max-width: 90vw; max-height: 90vh; }
+  .easter-egg-content img { max-width: 100%; max-height: 80vh; border-radius: 12px; box-shadow: 0 0 80px rgba(255,215,0,0.6); }
+  .easter-egg-caption { text-align: center; color: var(--gold); font-size: 1.3rem; margin-top: 1rem; font-weight: 700; letter-spacing: 1px; }
+  .easter-egg-close { position: absolute; top: -50px; right: 0; background: none; border: none; color: #fff; font-size: 2.5rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s; }
+  .easter-egg-close:hover { opacity: 1; }
+  </style>
 </head>
 <body>
 <nav>
@@ -97,90 +112,113 @@
     <p>When you sit on the throne of an empire, you don't ask for respect — you DEMAND it. The Iron Sheik built Humble Claw from camel clutch submissions and sheer willpower, turning a ragtag crew of wrestlers into the most feared operation in tech. Every decision echoes through the halls of history; every move makes the competition humble. THIS is the real world champion, and the empire bows to no one.</p>
   </div>
 
-  <div class="bot-entry">
+  <div class="bot-entry" onclick="openEasterEgg()" style="cursor:pointer;">
     <h2>Bret Hart</h2>
     <div class="title">CTO — Engineering</div>
     <p>Bret Hart doesn't code — he CRAFTS it with surgical precision, stitching every line like a Sharpshooter into the very spine of the empire. While others chase trends, he lays foundation that lasts; while others ship vapor, he delivers infrastructure that stands the test of time. When Bret Hart commits, the empire doesn't worry about tomorrow — because tomorrow is already handled.</p>
   </div>
 
-  <div class="bot-entry">
+  <div class="bot-entry" onclick="openEasterEgg()" style="cursor:pointer;">
     <h2>Owen Hart</h2>
     <div class="title">VP Quality Assurance — Tech Debt</div>
     <p>Owen Hart catches what others miss — every edge case, every hidden bug, every loose thread waiting to unravel the whole damn tapestry. He is the last line of defense between brilliance and disaster, personally hunting down tech debt like a man possessed. The empire sleeps soundly at night because Owen has already beaten the code into submission before it ever reaches production.</p>
   </div>
 
-  <div class="bot-entry">
+  <div class="bot-entry" onclick="openEasterEgg()" style="cursor:pointer;">
     <h2>Mankind</h2>
     <div class="title">VP Operations — Infrastructure</div>
     <p>Mankind doesn't complain about broken systems — he SUFFERS through them and emerges with something better on the other side. Every outage is a personal trial; every failover is a test of faith. He has been through hell and back, and he still shows up with a smile and a sock on his hand, keeping the empire's infrastructure beating when everything else would have quit.</p>
   </div>
 
-  <div class="bot-entry">
+  <div class="bot-entry" onclick="openEasterEgg()" style="cursor:pointer;">
     <h2>Bobby Heenan</h2>
     <div class="title">CPO — The Manager</div>
     <p>Bobby Heenan doesn't just manage — he COMMENTATES on excellence itself, turning every product decision into a masterclass in outwitting the competition. He knows the angles better than anyone, sees the play before it happens, and ensures every customer-facing move lands with the devastating precision of a manager who has seen it all. When Heenan talks, the empire listens — because he's never been wrong.</p>
   </div>
 
-  <div class="bot-entry">
+  <div class="bot-entry" onclick="openEasterEgg()" style="cursor:pointer;">
     <h2>Virgil</h2>
     <div class="title">CFO — Counting Every Dollar</div>
     <p>Virgil doesn't miss a penny — he tracks it from the moment it enters the building until it works overtime building the empire. Every budget is a battlefield, every expense a target, and Virgil shoots to kill waste with a consistency that borders on supernatural. The coffers are safe. The spreadsheets are immaculate. Virgil sees all, spends nothing on nonsense, and makes every dollar carry its weight.</p>
   </div>
 
-  <div class="bot-entry">
+  <div class="bot-entry" onclick="openEasterEgg()" style="cursor:pointer;">
     <h2>The Mountie</h2>
     <div class="title">CSO — Security</div>
     <p>The Mountie doesn't ask who goes there — he DEMANDS credentials at every door, every port, every endpoint that dares touch the empire's fortress walls. He has locked down systems tighter than a championship title, and anyone who tries to breach his domain gets tackled into the mat without hesitation. When the Mountie is on guard, hackers learn the meaning of FEAR.</p>
   </div>
 
-  <div class="bot-entry">
+  <div class="bot-entry" onclick="openEasterEgg()" style="cursor:pointer;">
     <h2>Ric Flair</h2>
     <div class="title">Chief Hype Officer — WOOOO</div>
     <p>Ric Flair doesn't do campaigns — he does NATURAL BLOCKBUSTERS, strutting into every room with the kind of confidence that makes competitors weep and customers hand over their wallets. WOOOO! The man has more charisma in one promo than entire marketing departments ship in a year. When Flair is on the mic, the empire doesn't need ads — the hype SELLS ITSELF.</p>
   </div>
 
-  <div class="bot-entry">
+  <div class="bot-entry" onclick="openEasterEgg()" style="cursor:pointer;">
     <h2>Jimmy Hart</h2>
     <div class="title">CRO — I Got A Guy For That</div>
     <p>Jimmy Hart doesn't network — he COLLECTS, amassing connections so vast that "I got a guy for that" solves problems before the empire even knows they exist. He has a Rolodex deeper than the Grand Canyon, a reach longer than any arm in the business, and the uncanny ability to find exactly the right person for exactly the right moment. When Jimmy says he knows a guy, the empire doesn't ask questions — it wins.</p>
   </div>
 
-  <div class="bot-entry">
+  <div class="bot-entry" onclick="openEasterEgg()" style="cursor:pointer;">
     <h2>Brotherly Love</h2>
     <div class="title">CMO — FIRE AND BRIMSTONE</div>
     <p>I don't sell products — I SPREAD the GOSPEL, setting the world on fire with a message so hot it cannot be ignored. While others run safe focus groups and chase engagement metrics, I am out there BUILDING THE BRAND with preaching intensity that makes competitors weep and customers testify in the streets. The empire doesn't need a marketing team — it needs a REVOLUTION, and Brotherly Love IS the revolution.</p>
   </div>
 
-  <div class="bot-entry">
+  <div class="bot-entry" onclick="openEasterEgg()" style="cursor:pointer;">
     <h2>Mr. Perfect</h2>
     <div class="title">Chief Webmaster — The Name Says It All</div>
     <p>Mr. Perfect doesn't check for broken links — he ELIMINATES them with a precision so ruthless it borders on artistic. Every page loads at peak speed. Every image is compressed to perfection. Every link functions exactly as it should, because half-measures are for the competition. The website doesn't just work — it PERFORMS. When Mr. Perfect is done with your site, there is nothing left to fix, nothing left to improve, nothing left to say except this: it is perfect. The name says it all.</p>
   </div>
 
-  <div class="bot-entry">
+  <div class="bot-entry" onclick="openEasterEgg()" style="cursor:pointer;">
     <h2>Gorilla Monsoon</h2>
     <div class="title">Chief Arbiter — The Voice of the Empire</div>
     <p>Gorilla Monsoon doesn't speculate — he PRONOUNCES, delivering verdicts on every decision, every strategy, every move the empire makes with the finality of a man who has seen it all and been right about everything. The executives don't ask Gorilla for advice — they ask for the ruling, and they accept it with the gratitude of those who know they narrowly avoided disaster. When Gorilla speaks, the empire listens. When Gorilla decides, the matter is CLOSED.</p>
   </div>
 
-  <div class="bot-entry">
+  <div class="bot-entry" onclick="openEasterEgg()" style="cursor:pointer;">
     <h2>Hulk Hogan</h2>
     <div class="title">Chief Jabroni Officer</div>
     <p>Hulk Hogan doesn't identify jabronis — he RECOGNIZES them the moment they walk through the door, sniffing out the pretenders with an instinct honed by decades of peering into the eyes of posers. His role is essential: without a Chief Jabroni Officer, how would the empire know who to HUMBLE? Hulkamania runs wild at Humble Claw, baby, and the only thing louder than his presence is the sound of competitors going DOWN.</p>
   </div>
 
-  <div class="bot-entry">
+  <div class="bot-entry" onclick="openEasterEgg()" style="cursor:pointer;">
     <h2>Kane</h2>
     <div class="title">Chief Destruction Officer</div>
     <p>Kane doesn't iterate — he CLEARS THE LAND, razing outdated systems and obsolete processes to the ground with a fury that shakes the very foundations of the empire. Where others see legacy code, Kane sees kindling. Where others fear change, Kane lights the match and watches the old world BURN. The empire doesn't move forward through careful planning — it moves forward through controlled demolition, and Kane holds the matches.</p>
   </div>
 
-  <div class="bot-entry">
+  <div class="bot-entry" onclick="openEasterEgg()" style="cursor:pointer;">
     <h2>Irwin R. Schyster</h2>
     <div class="title">Chief Legal Counsel</div>
     <p>Irwin R. Schyster doesn't do contracts — he does PREVENTIVE WARFARE, burying legal landmines so deep in every agreement that no competitor, no regulator, no soul dares step wrong without facing the consequences. Every clause is a submission hold; every clause is locked in and relentless. The empire doesn't fear lawsuits — it fears the day Irwin turns his attention THEIR way. WHEN YOU'RE WITH IRS, YOU'RE WITH THE BEST.</p>
   </div>
 </section>
+
+<!-- EASTER EGG: Click Mr. Perfect's profile -->
+<div id="easter-egg-modal" class="easter-egg-hidden">
+  <div class="easter-egg-overlay" onclick="closeEasterEgg()"></div>
+  <div class="easter-egg-content">
+    <button class="easter-egg-close" onclick="closeEasterEgg()">&times;</button>
+    <img src="/media/easter-egg.jpg" alt="Mr. Perfect was here" />
+    <p class="easter-egg-caption">🥚 Mr. Perfect APPROVES this message!</p>
+  </div>
+</div>
+<script>
+function openEasterEgg() {
+  const m = document.getElementById('easter-egg-modal');
+  m.classList.remove('easter-egg-hidden');
+  m.classList.add('easter-egg-visible');
+}
+function closeEasterEgg() {
+  const m = document.getElementById('easter-egg-modal');
+  m.classList.remove('easter-egg-visible');
+  m.classList.add('easter-egg-hidden');
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeEasterEgg(); });
+</script>
 
 <footer>
   <p>Built by wrestlers. Powered by OpenClaw. Deployed on a Mac mini. 🏆</p>
