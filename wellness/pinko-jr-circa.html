@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinko Jr's Daily Superpower Tracker</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --pink: #ff69b4;
+            --purple: #9b59b6;
+            --gold: #ffd700;
+            --bg-dark: #1a1a2e;
+            --bg-light: #16213e;
+            --text: #fff;
+        }
+        body {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark), var(--purple));
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        h1 { text-align: center; color: var(--gold); font-size: 1.8em; margin-bottom: 10px; }
+        .card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 15px 0;
+            backdrop-filter: blur(10px);
+        }
+        .btn {
+            background: var(--pink);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .streak { text-align: center; font-size: 3em; }
+    </style>
+</head>
+<body>
+    <h1>🌟 Pinko Jr's Daily Superpower Tracker 🌟</h1>
+    <div class="card">
+        <h2>🔥 Streak: <span id="streak">0</span> days</h2>
+    </div>
+    <div class="card">
+        <label><input type="checkbox"> ☀️ Sunlight outside</label><br>
+        <label><input type="checkbox"> 💪 Workout done</label><br>
+        <label><input type="checkbox"> 📱 No screens before bed</label>
+    </div>
+    <textarea placeholder="What made today awesome? 🌟" rows="4" style="width:100%;"></textarea>
+    <button class="btn" onclick="alert('Superpower scored! 🔥')">🌟 RATE MY DAY</button>
+    <button class="btn" onclick="navigator.clipboard.writeText('Check out my streak!')">📤 Share with Dad!</button>
+</body>
+</html>
