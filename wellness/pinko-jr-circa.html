@@ -1,59 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pinko Jr's Daily Superpower Tracker</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --pink: #ff69b4;
-            --purple: #9b59b6;
-            --gold: #ffd700;
-            --bg-dark: #1a1a2e;
-            --bg-light: #16213e;
-            --text: #fff;
-        }
-        body {
-            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
-            background: linear-gradient(135deg, var(--bg-dark), var(--purple));
-            color: var(--text);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        h1 { text-align: center; color: var(--gold); font-size: 1.8em; margin-bottom: 10px; }
-        .card {
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 20px;
-            margin: 15px 0;
-            backdrop-filter: blur(10px);
-        }
-        .btn {
-            background: var(--pink);
-            border: none;
-            padding: 15px 30px;
-            border-radius: 50px;
-            color: white;
-            font-size: 1.2em;
-            cursor: pointer;
-            margin: 10px;
-        }
-        .streak { text-align: center; font-size: 3em; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pinko Jr's Daily Superpower Tracker</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--pink:#ff69b4;--purple:#9b59b6;--gold:#ffd700;--bg-dark:#1a1a2e;--bg-light:#16213e;--text:#fff;--green:#2ecc71;--red:#e74c3c;}
+body{font-family:'Comic Sans MS','Chalkboard SE',sans-serif;background:linear-gradient(135deg,var(--bg-dark),var(--purple));color:var(--text);min-height:100vh;padding:20px;}
+h1{text-align:center;color:var(--gold);margin-bottom:10px;}
+h2{color:var(--pink);margin:15px 0 10px;}
+.card{background:rgba(255,255,255,0.1);border-radius:20px;padding:20px;margin:15px 0;backdrop-filter:blur(10px);}
+.btn{background:var(--pink);border:none;padding:12px 24px;border-radius:50px;color:white;font-size:1em;cursor:pointer;margin:5px;}
+.streak{text-align:center;font-size:3em;}
+.check-item{display:block;padding:10px;font-size:1.1em;cursor:pointer;}
+.check-item::before{content:"☐ ";font-size:1.2em;}
+.check-item.checked{color:var(--green);}
+.check-item.checked::before{content:"☑ ";}
+.info{border-left:3px solid var(--gold);padding-left:15px;margin:15px 0;}
+.warning{color:var(--red);font-weight:bold;}
+.ok{color:var(--green);}
+summary{cursor:pointer;font-size:1.2em;margin:15px 0;}
+</style>
 </head>
 <body>
-    <h1>🌟 Pinko Jr's Daily Superpower Tracker 🌟</h1>
-    <div class="card">
-        <h2>🔥 Streak: <span id="streak">0</span> days</h2>
-    </div>
-    <div class="card">
-        <label><input type="checkbox"> ☀️ Sunlight outside</label><br>
-        <label><input type="checkbox"> 💪 Workout done</label><br>
-        <label><input type="checkbox"> 📱 No screens before bed</label>
-    </div>
-    <textarea placeholder="What made today awesome? 🌟" rows="4" style="width:100%;"></textarea>
-    <button class="btn" onclick="alert('Superpower scored! 🔥')">🌟 RATE MY DAY</button>
-    <button class="btn" onclick="navigator.clipboard.writeText('Check out my streak!')">📤 Share with Dad!</button>
+<h1>🌟 Pinko Jr's Daily Superpower Tracker 🌟</h1>
+
+<div class="card">
+<h2>🔥 Streak: <span id="streak">0</span> days</h2>
+</div>
+
+<div class="card">
+<details>
+<summary>☀️ THE REAL SCIENCE — Tap to learn</summary>
+<div class="info">
+<p><strong>Biology:</strong> Your body has an internal clock called the <em>suprachiasmatic nucleus (SCN)</em> — it runs everything: cortisol, melatonin, hunger, alertness.</p>
+<p><strong>How it works:</strong> Light hits melanopsin in your eyes → tells brain what time it is → sets your whole day.</p>
+</div>
+
+<details>
+<summary>🌅 WAKE UP: Light within 30 minutes</summary>
+<div class="info">
+<p class="warning">WHY: Cortisol Awakening Response (CAR) peaks 30 min after waking. Get bright light in your eyes = max alertness for the day.</p>
+<p><strong>The habit:</strong> Daylight, NOT sunglasses. Even cloudy day = 10,000 lux. Indoor = 300 lux. Big difference.</p>
+<p>Natural sunlight ideal. If impossible, use 10k lux light box within 30 min of waking.</p>
+</details>
+
+<details>
+<summary>☕ MORNING: No caffeine for 90 min</summary>
+<div class="info">
+<p class="warning">WHY: Adenosine (sleep debt) builds overnight. Caffeine blocks the receptor but doesn't remove the debt — it just masks it.</p>
+<p>Caffeine before 90 min post-wake = afternoon crash.</p>
+<p><strong>Rule:</strong> Wake at 5:30am → first咖啡 at 7:00am minimum.</p>
+</details>
+
+<details>
+<summary>💪 EXERCISE: Before 4pm</summary>
+<div class="info">
+<p class="warning">WHY: Exercise raises cortisol. Good in day, TERRIBLE at night.</p>
+<p><strong>Optimal:</strong> 12-3pm (peak body temperature, testosterone). Evening workouts = ruined sleep.</p>
+<p><strong>Cutoff:</strong> 4pm hard stop for intense exercise.</p>
+</details>
+
+<details>
+<summary>🚫 CAFFEINE CUTOFF: 2pm (8 hours before sleep)</summary>
+<div class="info">
+<p class="warning">WHY: Caffeine half-life = 5-6 hours.</p>
+<p>200mg at 2pm → 100mg at 8pm → 50mg at 2am.</p>
+<p>If you sleep at 10pm: NO caffeine after 2pm.</p>
+</details>
+
+<details>
+<summary>😴 SLEEP: Cool + Dark + Consistent</summary>
+<div class="info">
+<p><strong>Temperature:</strong> Body drops 1-2°F to sleep. Bedroom = 65-68°F.</p>
+<p><strong>Darkness:</strong> Melatonin rises in dark. Blackout curtains essential.</p>
+<p><strong>Consistency:</strong> Same sleep/wake time ± 30min = circadian entrainment. Weekend drift = Monday blues.</p>
+</details>
+
+<details>
+<summary>📵 NIGHT: No blue light after 8pm</summary>
+<div class="info">
+<p class="warning">WHY: Blue light (446nm) suppresses melatonin MORE than any other wavelength.</p>
+<p>Red/amber lights = fine. Blue = destroy sleep.</p>
+<p><strong>Solution:</strong> f.lux on devices, or red bulb, or books.</p>
+</details>
+
+<details>
+<summary>🗓️ OPTIMAL DAILY RHYTHM</summary>
+<div class="info">
+<p><strong>5:30-6:00am:</strong>Wake + sunlight</p>
+<p><strong>7:00am:</strong>First coffee (earliest)</p>
+<p><strong>11am-12pm:</strong>Meal 1 (break fast = IF)</p>
+<p><strong>12-3pm:</strong>Workout window</p>
+<p><strong>6-7pm:</strong>Meal 2</p>
+<p><strong>8pm:</strong>Blue light cutoff</p>
+<p><strong>9:30-10pm:</strong>Sleep</p>
+</details>
+</details>
+</div>
+
+<div class="card">
+<h2>Today's Checklist:</h2>
+<label class="check-item" onclick="this.classList.toggle('checked')">☀️ Got sunlight within 30 min of waking</label>
+<label class="check-item" onclick="this.classList.toggle('checked')">☕ Waited 90+ min before coffee</label>
+<label class="check-item" onclick="this.classList.toggle('checked')">💪 Workout done before 4pm</label>
+<label class="check-item" onclick="this.classList.toggle('checked')">🚫 No caffeine after 2pm</label>
+<label class="check-item" onclick="this.classList.toggle('checked')">😴 Room cool (65-68°F) + dark</label>
+<label class="check-item" onclick="this.classList.toggle('checked')">📵 No screens/blue light after 8pm</label>
+<label class="check-item" onclick="this.classList.toggle('checked')">🛏️ Same bedtime (+/- 30min)</label>
+</div>
+
+<div class="card">
+<h2>📝 Tonight's Notes:</h2>
+<textarea id="journal" placeholder="How did today feel? Energy level? Sleep quality?" rows="4" style="width:100%;border-radius:10px;padding:10px;background:rgba(255,255,255,0.1);color:white;font-size:1em;"></textarea>
+</div>
+
+<div style="text-align:center;">
+<button class="btn" onclick="saveDay()">🌟 RATE MY DAY</button>
+<button class="btn" onclick="shareDad()">📤 SHARE WITH DAD</button>
+</div>
+
+<script>
+let streak = parseInt(localStorage.getItem('streak') || '0');
+document.getElementById('streak').textContent = streak;
+
+function saveDay() {
+const checks = document.querySelectorAll('.check-item.checked').length;
+const score = Math.round((checks / 7) * 100);
+if (score >= 70) {
+streak++;
+localStorage.setItem('streak', streak);
+document.getElementById('streak').textContent = streak;
+alert(`🌟 SUPERPOWER SCORE: ${score}%\\nYou're a superhero! ${streak} day streak!`);
+} else {
+alert(`😴 SCORE: ${score}%\\nTry again tomorrow, champ!`);
+}
+}
+
+function shareDad() {
+const j = document.getElementById('journal').value;
+const msg = `🌟 Pinko Jr Update\\nStreak: ${streak}\\nJournal: ${j}`;
+navigator.clipboard.writeText(msg);
+alert('Copied! Send to Dad 📤');
+}
+</script>
 </body>
 </html>
