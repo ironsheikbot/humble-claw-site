@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌟 Pinko Jr Circadian Journey — My Daily Adventure!</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: #fff; font-family: 'Comic Sans MS', 'Chalkboard SE', system-ui, sans-serif; min-height: 100vh; padding-bottom: 80px; }
+    
+    /* Header */
+    .hero { background: linear-gradient(135deg, #ff6b9d 0%, #c44569 50%, #546de5 100%); padding: 24px 20px; text-align: center; border-bottom: 4px solid #ffd93d; position: relative; overflow: hidden; }
+    .hero::before { content: '✨🌈🦄'; position: absolute; top: 5px; right: 15px; font-size: 1.5em; opacity: 0.3; }
+    .hero h1 { font-size: 1.6em; text-shadow: 2px 2px 0 #c44569; margin-bottom: 4px; }
+    .hero-sub { font-size: 0.85em; opacity: 0.95; }
+    
+    /* Score Card */
+    .score-card { background: linear-gradient(135deg, #2d3436 0%, #1a1a2e 100%); padding: 20px; text-align: center; position: relative; }
+    .score-ring { display: inline-flex; align-items: center; justify-content: center; width: 100px; height: 100px; border-radius: 50%; border: 6px solid #ffd93d; background: #0d1117; position: relative; }
+    .score-ring::before { content: '⭐'; position: absolute; top: -15px; font-size: 1.5em; }
+    .score-ring span { font-size: 2em; font-weight: bold; color: #ffd93d; }
+    .score-label { color: #ffd93d; font-size: 0.8em; margin-top: 8px; text-transform: uppercase; letter-spacing: 2px; }
+    .streak-area { display: inline-block; background: #ff6b9d; border-radius: 25px; padding: 8px 20px; margin-top: 12px; font-weight: bold; font-size: 1.1em; box-shadow: 0 4px 15px rgba(255,107,157,0.4); }
+    .streak-area span { font-size: 1.3em; }
+    
+    /* Main Grid */
+    .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 16px; max-width: 700px; margin: 0 auto; }
+    @media (max-width: 550px) { .main-grid { grid-template-columns: 1fr; } }
+    
+    /* Phase Cards */
+    .phase-card { background: #232323; border-radius: 16px; padding: 16px; border: 3px solid #333; transition: transform 0.2s; }
+    .phase-card:active { transform: scale(0.98); }
+    .phase-card h3 { font-size: 1em; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+    .phase-card.morning { border-color: #ffd93d; }
+    .phase-card.afternoon { border-color: #54a0ff; }
+    .phase-card.evening { border-color: #a29bfe; }
+    .phase-card.sleep { border-color: #6c5ce7; }
+    
+    .phase-card label { display: flex; align-items: center; gap: 6px; font-size: 0.85em; color: #aaa; margin-bottom: 4px; }
+    .phase-card input[type="time"],
+    .phase-card input[type="number"] { 
+      width: 100%; padding: 10px; border-radius: 10px; border: 2px solid #444; 
+      background: #1a1a2e; color: #fff; font-size: 1em; font-weight: bold; text-align: center;
+    }
+    
+    /* Checkbox styling */
+    .check-row { display: flex; align-items: center; gap: 10px; margin: 10px 0; cursor: pointer; background: #1a1a2e; padding: 10px; border-radius: 10px; transition: background 0.2s; }
+    .check-row:hover { background: #2a2a3e; }
+    .check-row input[type="checkbox"] { display: none; }
+    .check-box { 
+      width: 28px; height: 28px; border-radius: 8px; border: 3px solid #555; 
+      display: flex; align-items: center; justify-content: center; font-size: 1.2em; transition: all 0.2s;
+    }
+    .check-row input:checked + .check-box { background: #2ecc71; border-color: #2ecc71; }
+    .check-row input:checked + .check-box::after { content: '✓'; color: #fff; font-weight: bold; }
+    .check-label { font-size: 0.85em; line-height: 1.3; }
+    
+    /* Journal Section */
+    .journal-section { max-width: 700px; margin: 0 auto; padding: 0 16px; }
+    .journal-card { background: #232323; border-radius: 16px; padding: 16px; border: 3px solid #ffd93d; }
+    .journal-card h3 { margin-bottom: 12px; font-size: 1.1em; }
+    .journal-card textarea { 
+      width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #444; 
+      background: #1a1a2e; color: #fff; font-size: 0.95em; resize: vertical; 
+      min-height: 80px; font-family: inherit;
+    }
+    .journal-area { background: #1a1a2e; border-radius: 12px; padding: 12px; }
+    .journal-area textarea { all: unset; width: 100%; min-height: 80px; }
+    
+    /* Buttons */
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; padding: 20px 16px; max-width: 700px; margin: 0 auto; }
+    .btn { 
+      padding: 14px 28px; border-radius: 25px; border: none; cursor: pointer; 
+      font-size: 1em; font-weight: bold; transition: all 0.2s; font-family: inherit;
+    }
+    .btn-primary { background: linear-gradient(135deg, #2ecc71, #27ae60); color: #fff; box-shadow: 0 4px 15px rgba(46,204,113,0.4); }
+    .btn-primary:active { transform: scale(0.95); }
+    .btn-secondary { background: linear-gradient(135deg, #54a0ff, #0984e3); color: #fff; }
+    .btn-share { background: linear-gradient(135deg, #a29bfe, #6c5ce7); color: #fff; }
+    .btn-reset { background: #444; color: #aaa; font-size: 0.9em; }
+    
+    /* Log Section */
+    .log-section { max-width: 700px; margin: 0 auto; padding: 0 16px 24px; }
+    .log-section h2 { font-size: 1.1em; margin-bottom: 14px; color: #ffd93d; border-bottom: 2px solid #444; padding-bottom: 10px; }
+    .log-entry { background: #232323; border-radius: 12px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 2px solid #333; }
+    .log-entry-left h4 { font-size: 0.8em; color: #888; margin-bottom: 4px; }
+    .log-entry-left p { font-size: 0.9em; }
+    .log-entry-score { font-size: 1.4em; font-weight: bold; min-width: 55px; text-align: right; }
+    .log-stars { color: #ffd93d; font-size: 1.2em; }
+    
+    /* Verdict Box */
+    .verdict { 
+      background: linear-gradient(135deg, #2d1f3d, #1a1520); 
+      border-left: 4px solid #e94560; padding: 12px; 
+      border-radius: 0 12px 12px 0; margin-top: 12px; font-size: 0.85em; color: #ffd93d; 
+    }
+    
+    /* Empty State */
+    .empty-state { text-align: center; padding: 30px; color: #666; font-size: 0.95em; }
+    
+    /* Star Animation */
+    @keyframes sparkle {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    .sparkle { animation: sparkle 0.5s ease; }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>🌟 Pinko Jr Circadian Journey 🌟</h1>
+  <p class="hero-sub">My Daily Superpower Tracker! 🦸‍♂️⬛️</p>
+</div>
+
+<div class="score-card">
+  <div class="score-ring"><span id="today-score">--</span></div>
+  <div class="score-label">Today's Superpower Score</div>
+  <div class="streak-area" id="streak-badge">
+    🔥 <span id="streak">0</span> Day Streak! ⭐
+  </div>
+</div>
+
+<div class="main-grid">
+  <!-- MORNING -->
+  <div class="phase-card morning">
+    <h3>🌅 Morning Power</h3>
+    <label>⏰ Wake Up Time</label>
+    <input type="time" id="wake-time" value="06:00">
+    
+    <div class="check-row" onclick="toggleCheck('light-done')">
+      <input type="checkbox" id="light-done">
+      <div class="check-box"></div>
+      <span class="check-label">☀️ Got sunlight within 30 min!</span>
+    </div>
+    
+    <div class="check-row" onclick="toggleCheck('caffeine-done')">
+      <input type="checkbox" id="caffeine-done">
+      <div class="check-box"></div>
+      <span class="check-label">🥤 Waited 90+ min for coffee</span>
+    </div>
+    
+    <div class="check-row" onclick="toggleCheck('workout-done')">
+      <input type="checkbox" id="workout-done">
+      <div class="check-box"></div>
+      <span class="check-label">🏃 Did exercise today!</span>
+    </div>
+    
+    <div class="verdict" id="morning-verdict">🌟 Good morning, superstar! Check those boxes to earn your superpowers!</div>
+  </div>
+  
+  <!-- AFTERNOON -->
+  <div class="phase-card afternoon">
+    <h3>🧠 Brain Power</h3>
+    <div class="check-row" onclick="toggleCheck('cognitive-done')">
+      <input type="checkbox" id="cognitive-done">
+      <div class="check-box"></div>
+      <span class="check-label">📚 Did homework / hard stuff!</span>
+    </div>
+    
+    <label>📝 Brain Notes</label>
+    <div class="journal-area">
+      <textarea id="cognitive-notes" placeholder="What did you learn today?"></textarea>
+    </div>
+    
+    <div class="verdict" id="afternoon-verdict">🧠 Your brain is a muscle! Exercise it! 📚</div>
+  </div>
+  
+  <!-- EVENING -->
+  <div class="phase-card evening">
+    <h3>🌙 Wind Down</h3>
+    <div class="check-row" onclick="toggleCheck('blue-light-done')">
+      <input type="checkbox" id="blue-light-done">
+      <div class="check-box"></div>
+      <span class="check-label">📵 No screens at night!</span>
+    </div>
+    
+    <div class="check-row" onclick="toggleCheck('dim-light-done')">
+      <input type="checkbox" id="dim-light-done">
+      <div class="check-box"></div>
+      <span class="check-label">💡 Dim lights on!</span>
+    </div>
+    
+    <label>🥤 Last Sugar/Caffeine</label>
+    <input type="time" id="last-caffeine" value="14:00">
+    
+    <div class="verdict" id="evening-verdict">🌙 Your body needs rest, superstar! 💫</div>
+  </div>
+  
+  <!-- SLEEP -->
+  <div class="phase-card sleep">
+    <h3>😴 Sleep Power</h3>
+    <label>🌙 Bedtime</label>
+    <input type="time" id="bed-time" value="22:00">
+    
+    <label>😴 Hours Slept</label>
+    <input type="number" id="sleep-hours" min="4" max="12" step="0.5" value="8">
+    
+    <div class="check-row" onclick="toggleCheck('dark-room')">
+      <input type="checkbox" id="dark-room">
+      <div class="check-box"></div>
+      <span class="check-label">🌑 Room is DARK!</span>
+    </div>
+    
+    <div class="check-row" onclick="toggleCheck('no-food')">
+      <input type="checkbox" id="no-food">
+      <div class="check-box"></div>
+      <span class="check-label">🍽️ No late snacking!</span>
+    </div>
+    
+    <div class="verdict" id="sleep-verdict">😴 Sleep is your SUPERCHARGE! 🔋</div>
+  </div>
+</div>
+
+<!-- Daily Journal -->
+<div class="journal-section">
+  <div class="journal-card">
+    <h3>📖 My Daily Journal ✨</h3>
+    <div class="journal-area">
+      <textarea id="journal-entry" placeholder="What was the BEST part of your day? What are you grateful for?"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- Action Buttons -->
+<div class="btn-row">
+  <button class="btn btn-primary" onclick="saveDay()">💾 Save My Day!</button>
+  <button class="btn btn-share" onclick="shareProgress()">📤 Share with Dad!</button>
+  <button class="btn btn-reset" onclick="resetForm()">🔄 Reset</button>
+</div>
+
+<!-- History Log -->
+<div class="log-section">
+  <h2>📊 My Adventure Log 🏆</h2>
+  <div id="journal-log">
+    <div class="empty-state">Start your journey! Complete each day to see your progress here! 🌟</div>
+  </div>
+</div>
+
+<script>
+// Kid-friendly verdicts
+const KID_VERDICTS = {
+  morning: [
+    "🌅 Good morning, sunshine! Get that golden light and START YOUR DAY RIGHT! ☀️",
+    "🌞 Morning sunlight is your SUPERPOWER! The world is yours to conquer! ⭐",
+    "🚀 You've got this, champ! Check those boxes and be a SUPERHERO! 🦸",
+    "☀️ Sunlight within 30 minutes = UNSTOPPABLE! The Sheik believes in you! 💪",
+    "🌅 Rise and SHINE, superstar! Today is YOUR day to be AMAZING! ✨"
+  ],
+  afternoon: [
+    "🧠 Brain power activate! Learning makes you STRONGER! 📚",
+    "📖 Knowledge is POWER, young one! Exercise that beautiful brain! 🌟",
+    "🧠 Your mind is a muscle! FLEX IT! Homework builds champions! 💪",
+    "📚 Every thing you learn is a superpower you'll have FOREVER! ⭐",
+    "🧠 Focus now, DOMINATE later! You've got this, champ! 🚀"
+  ],
+  evening: [
+    "🌙 Wind down like a champion! Your tomorrows need REST tonight! 💫",
+    "📵 Screens off! Imagination ON! The best adventures happen in your DREAMS! 🌈",
+    "💡 Dim the lights, let your body know — SLEEP is COMING! 😴",
+    "🌙 Rest builds champions! Tomorrow is a new adventure! ⭐",
+    "🌙 Your body is charging up for tomorrow's HEROICS! 🔋"
+  ],
+  sleep: [
+    "😴 Sleep is MAGICAL! Your brain cleanses and grows! ✨",
+    "🔋 Sleep is your RECHARGE! Even superheroes need rest! 🦸",
+    "😴 Eight hours = UNSTOPPABLE! Sweet dreams, champion! 🌟",
+    "🔋 Rest transforms you! Dream big, little hero! 🌈",
+    "😴 The body rebuilds while you sleep! You're getting STRONGER! 💪"
+  ]
+};
+
+function getRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+// Toggle checkbox helper
+function toggleCheck(id) {
+  const cb = document.getElementById(id);
+  cb.checked = !cb.checked;
+}
+
+// Calculate today's score
+function calculateScore() {
+  let score = 0;
+  const checks = [
+    'light-done', 'caffeine-done', 'workout-done',
+    'cognitive-done', 'blue-light-done', 'dim-light-done',
+    'dark-room', 'no-food'
+  ];
+  checks.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.checked) score += 10;
+  });
+  // Sleep bonus
+  const sleepHours = parseFloat(document.getElementById('sleep-hours').value || 0);
+  if (sleepHours >= 7 && sleepHours <= 9) score += 18;
+  else if (sleepHours >= 6 && sleepHours <= 10) score += 10;
+  return Math.min(100, score);
+}
+
+// Show random verdicts
+function showVerdicts() {
+  const phases = ['morning', 'afternoon', 'evening', 'sleep'];
+  phases.forEach(p => {
+    const el = document.getElementById(p + '-verdict');
+    if (el) el.textContent = getRandom(KID_VERDICTS[p]);
+  });
+}
+
+// Save the day
+function saveDay() {
+  const score = calculateScore();
+  const entry = {
+    date: new Date().toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+    wakeTime: document.getElementById('wake-time').value,
+    bedTime: document.getElementById('bed-time').value,
+    sleepHours: parseFloat(document.getElementById('sleep-hours').value || 0),
+    cognitiveNotes: document.getElementById('cognitive-notes').value,
+    journalEntry: document.getElementById('journal-entry').value,
+    lastCaffeine: document.getElementById('last-caffeine').value,
+    score,
+    checks: {
+      lightDone: document.getElementById('light-done').checked,
+      caffeineDone: document.getElementById('caffeine-done').checked,
+      workoutDone: document.getElementById('workout-done').checked,
+      cognitiveDone: document.getElementById('cognitive-done').checked,
+      blueLightDone: document.getElementById('blue-light-done').checked,
+      dimLightDone: document.getElementById('dim-light-done').checked,
+      darkRoom: document.getElementById('dark-room').checked,
+      noFood: document.getElementById('no-food').checked
+    }
+  };
+  
+  // Save to localStorage
+  const log = JSON.parse(localStorage.getItem('pinkojr_journal') || '[]');
+  log.unshift(entry);
+  if (log.length > 30) log.pop();
+  localStorage.setItem('pinkojr_journal', JSON.stringify(log));
+  
+  // Update streak
+  updateStreak(log);
+  
+  // Show saved feedback
+  document.getElementById('today-score').textContent = score;
+  showVerdicts();
+  renderLog();
+  
+  // Sparkle animation
+  const ring = document.querySelector('.score-ring');
+  ring.classList.add('sparkle');
+  setTimeout(() => ring.classList.remove('sparkle'), 500);
+  
+  alert('🌟 Day saved! You earned ' + score + ' superpower points!');
+}
+
+// Render the log
+function renderLog() {
+  const log = JSON.parse(localStorage.getItem('pinkojr_journal') || '[]');
+  const el = document.getElementById('journal-log');
+  
+  if (!log.length) {
+    el.innerHTML = '<div class="empty-state">Start your journey! Complete each day to see your progress here! 🌟</div>';
+    return;
+  }
+  
+  // Get stars based on score
+  function getStars(score) {
+    if (score >= 90) return '🌟🌟🌟';
+    if (score >= 70) return '🌟🌟';
+    if (score >= 50) return '🌟';
+    return '⭐';
+  }
+  
+  el.innerHTML = log.map(e => `
+    <div class="log-entry">
+      <div class="log-entry-left">
+        <h4>📅 ${e.date}</h4>
+        <p>🌅 ${e.wakeTime} → 🌙 ${e.bedTime} • ${e.sleepHours}h sleep</p>
+        ${e.journalEntry ? '<p style="color:#aaa;font-size:0.85em;margin-top:4px;">📝 "' + e.journalEntry.substring(0,60) + (e.journalEntry.length > 60 ? '...' : '') + '"</p>' : ''}
+      </div>
+      <div class="log-entry-score">
+        <span class="log-stars">${getStars(e.score)}</span>
+        <div>${e.score}%</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Update streak
+function updateStreak(log) {
+  if (!log.length) return;
+  
+  const entriesByDate = {};
+  log.forEach(e => {
+    const d = new Date(e.date).toDateString();
+    if (!entriesByDate[d]) entriesByDate[d] = e.score;
+  });
+  
+  let streak = 0;
+  let check = new Date();
+  while (entriesByDate[check.toDateString()]) {
+    streak++;
+    check.setDate(check.getDate() - 1);
+  }
+  
+  document.getElementById('streak').textContent = streak;
+  localStorage.setItem('pinkojr_streak', streak);
+}
+
+// Share progress
+function shareProgress() {
+  const log = JSON.parse(localStorage.getItem('pinkojr_journal') || '[]');
+  if (!log.length) {
+    alert('📝 Save some days first to share your progress!');
+    return;
+  }
+  
+  const latest = log[0];
+  const streak = localStorage.getItem('pinkojr_streak') || 0;
+  
+  const text = `🌟 Pinko Jr's Daily Update 🌟
+
+📅 ${latest.date}
+⚡ Score: ${latest.score}/100
+🌅 Wake: ${latest.wakeTime} | 🌙 Bed: ${latest.bedTime}
+😴 Sleep: ${latest.latestSleep || latest.sleepHours}h
+📝 Journal: ${latest.journalEntry || 'None'}
+
+🔥${streak} Day Streak!
+
+#PinkoJrAdventure #SuperpowerJourney`;
+  
+  // Copy to clipboard
+  navigator.clipboard.writeText(text).then(() => {
+    alert('📋 Copied to clipboard! Send it to Dad! 🥰');
+  }).catch(() => {
+    prompt('Copy this to send to Dad:', text);
+  });
+}
+
+// Reset form
+function resetForm() {
+  if (!confirm('🔄 Reset everything? This won\'t erase your saved days!')) return;
+  
+  document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+  document.getElementById('wake-time').value = '06:00';
+  document.getElementById('bed-time').value = '22:00';
+  document.getElementById('sleep-hours').value = '8';
+  document.getElementById('last-caffeine').value = '14:00';
+  document.getElementById('cognitive-notes').value = '';
+  document.getElementById('journal-entry').value = '';
+  document.getElementById('today-score').textContent = '--';
+  showVerdicts();
+}
+
+// Init
+const savedStreak = localStorage.getItem('pinkojr_streak');
+if (savedStreak) document.getElementById('streak').textContent = savedStreak;
+showVerdicts();
+renderLog();
+
+// Auto-load today's entry if exists
+window.addEventListener('DOMContentLoaded', () => {
+  const log = JSON.parse(localStorage.getItem('pinkojr_journal') || '[]');
+  if (log.length && log[0].date === new Date().toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })) {
+    // It's today, could restore fields if needed
+  }
+});
+</script>
+</body>
+</html>
