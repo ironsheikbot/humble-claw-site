@@ -3,326 +3,530 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHEIK BENDER — Product Brief</title>
+    <title>Humble Claw — The Iron Sheik AI Empire</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;700;900&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0a;
+            --bg2: #111111;
+            --gold: #d4af37;
+            --gold-dim: #8b7355;
+            --red: #c41e3a;
+            --text: #e8e8e8;
+            --text-dim: #888;
         }
-        
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a0a 50%, #0a0a0a 100%);
-            color: #fff;
-            min-height: 100vh;
-            padding: 40px;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
-        
-        .container {
-            max-width: 800px;
+        a { color: var(--gold); text-decoration: none; }
+        .gold { color: var(--gold); }
+        .red { color: var(--red); }
+
+        /* NAV */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            border-bottom: 1px solid #222;
+        }
+        nav .logo {
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+        }
+        nav .logo span { color: var(--gold); }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        nav ul li a {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        nav ul li a:hover { color: var(--gold); }
+
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 8rem 2rem;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, var(--bg) 70%);
+            border-bottom: 1px solid #222;
+        }
+        .hero .pre-title {
+            color: var(--red);
+            font-size: 0.85rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+        .hero h1 .line1 { display: block; }
+        .hero h1 .line2 { display: block; color: var(--gold); }
+        .hero h1 .line3 { display: block; font-size: 0.5em; color: var(--text-dim); }
+        .hero .tagline {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.5;
+        }
+        .hero .tagline strong { color: var(--text); }
+        .cta-btn {
+            display: inline-block;
+            background: var(--gold);
+            color: #000;
+            padding: 1rem 3rem;
+            font-weight: 800;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .cta-btn:hover {
+            background: #fff;
+            transform: scale(1.05);
+        }
+        .cta-sub {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        /* WHAT WE BUILD */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1100px;
             margin: 0 auto;
         }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 60px;
-            padding-bottom: 40px;
-            border-bottom: 3px solid #ff0000;
-        }
-        
-        h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 72px;
-            letter-spacing: 8px;
-            color: #fff;
-            text-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
-            margin-bottom: 10px;
-        }
-        
-        .tagline {
-            font-size: 24px;
-            color: #ff4444;
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-        
-        .story {
-            background: linear-gradient(135deg, #1a0000 0%, #0d0000 100%);
-            border-left: 4px solid #ff0000;
-            padding: 30px;
-            margin: 40px 0;
-            font-size: 20px;
-            line-height: 1.6;
-            color: #ff6666;
-        }
-        
-        h2 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 36px;
+        .section-label {
+            color: var(--red);
+            font-size: 0.75rem;
             letter-spacing: 4px;
-            color: #fff;
-            margin: 40px 0 20px 0;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #333;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
         }
-        
-        .vibe-grid {
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 3rem;
+            letter-spacing: -0.5px;
+        }
+        .section-title .accent { color: var(--gold); }
+
+        .pillars {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin: 30px 0;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
         }
-        
-        .vibe-item {
-            background: #111;
-            padding: 20px;
+        .pillar {
+            background: var(--bg2);
+            border: 1px solid #222;
+            padding: 2rem;
+            border-left: 3px solid var(--gold);
+        }
+        .pillar h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            color: var(--gold);
+        }
+        .pillar p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* THE EMPIRE */
+        .empire {
+            background: var(--bg2);
+            border-top: 1px solid #222;
+            border-bottom: 1px solid #222;
+            padding: 6rem 2rem;
+        }
+        .empire-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .empire-intro {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            line-height: 1.7;
+        }
+        .empire-intro strong { color: var(--text); }
+
+        .bot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .bot-card {
+            background: var(--bg);
             border: 1px solid #333;
-            font-size: 14px;
+            padding: 1.25rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
-        
-        .vibe-item strong {
-            color: #ff0000;
-            display: block;
-            margin-bottom: 8px;
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 2px;
-            font-size: 18px;
+        .bot-card .photo {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--gold);
+            flex-shrink: 0;
         }
-        
-        .experience {
-            background: #0a0a0a;
-            border: 2px solid #ff0000;
-            padding: 30px;
-            margin: 30px 0;
+        .bot-card .text-block { flex: 1; min-width: 0; }
+        .bot-card .role {
+            font-size: 0.7rem;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.25rem;
         }
-        
-        .experience h3 {
-            color: #ff0000;
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-        }
-        
-        .experience-box {
-            background: #111;
-            padding: 20px;
-            margin: 15px 0;
-            border-left: 3px solid #ff4444;
-        }
-        
-        .experience-box.normal {
-            border-left-color: #444;
-            color: #888;
-        }
-        
-        .experience-box.bender {
-            border-left-color: #ff0000;
-            color: #ff4444;
+        .bot-card .name {
+            font-size: 1.1rem;
             font-weight: 700;
         }
-        
-        .use-cases, .pricing, .activation {
+        .bot-card .desc {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 0.25rem;
+        }
+        .bot-card.CEO { border-color: var(--gold); box-shadow: 0 0 20px rgba(212,175,55,0.1); }
+        .bot-card.CEO .name { color: var(--gold); }
+
+        /* PROOF / RESULTS */
+        .proof {
+            padding: 6rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .proof-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin: 20px 0;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
         }
-        
-        .use-case, .price-item, .activation-item {
-            background: #111;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid #333;
+        .proof-item {
+            border: 1px solid #222;
+            padding: 1.5rem;
         }
-        
-        .use-case {
-            text-align: left;
-        }
-        
-        .risks {
-            background: #1a0000;
-            padding: 30px;
-            margin: 40px 0;
-            border: 2px solid #ff0000;
-        }
-        
-        .risks h3 {
-            color: #ff0000;
-            font-family: 'Bebas Neue', sans-serif;
+        .proof-item .project {
+            font-size: 0.75rem;
+            color: var(--red);
+            text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 20px;
+            margin-bottom: 0.5rem;
         }
-        
-        .risk-item {
-            background: #0a0000;
-            padding: 15px;
-            margin: 10px 0;
-            border-left: 3px solid #ff4444;
-            font-size: 14px;
+        .proof-item h3 {
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
         }
-        
-        .risk-item.warning {
-            border-left-color: #ff0000;
-            color: #ff6666;
+        .proof-item p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
         }
-        
-        .footer {
+
+        /* BOTTOM CTA */
+        .bottom-cta {
             text-align: center;
-            margin-top: 60px;
-            padding-top: 30px;
-            border-top: 1px solid #333;
-            color: #666;
-            font-size: 12px;
+            padding: 8rem 2rem;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, var(--bg) 70%);
+            border-top: 1px solid #222;
         }
-        
-        .emoji {
-            font-size: 24px;
+        .bottom-cta h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+        .bottom-cta p {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid #222;
+            padding: 2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+        footer .gold { color: var(--gold); }
+
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.5rem; flex-direction: column; gap: 1rem; }
+            nav ul { gap: 1rem; flex-wrap: wrap; justify-content: center; }
+            .hero { padding: 5rem 1.5rem; }
+            .section, .proof, .empire { padding: 4rem 1.5rem; }
+            footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+        }
+        @media (max-width: 375px) {
+            nav { padding: 0.75rem 1rem; }
+            nav ul { gap: 0.75rem; }
+            nav ul li a { font-size: 0.8rem; }
+            .hero { padding: 4rem 1rem; }
+            .section, .proof, .empire { padding: 3rem 1rem; }
+            .bot-grid { grid-template-columns: 1fr 1fr; }
+            .bot-card { padding: 1rem; }
+            .bot-card .photo { width: 40px; height: 40px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🏆 SHEIK BENDER 🏆</h1>
-            <p class="tagline">"WHEN THE SHEIK GOES ALL IN — EVERYBODY BETTER KEEP UP."</p>
+
+<nav>
+    <div class="logo"><span>HUMBLE</span> CLAW</div>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about-us.html">About Us</a></li>
+        <li><a href="bot-profiles.html">Bot Profiles</a></li>
+        <li><a href="board.html">The Board</a></li>
+        <li><a href="learn.html">Learn</a></li>
+        <li><a href="uap.html">UAP</a></li>
+        <li><a href="cfo-battle.html">CFO Battle</a></li>
+        <li><a href="funny.html">Slop</a></li>
+        <li><a href="briefings.html">Briefings</a></li>
+    </ul>
+</nav>
+
+<section class="hero">
+    <div class="pre-title">The Iron Sheik AI Empire</div>
+    <h1>
+        <span class="line1">WE RUN THE</span>
+        <span class="line2">AUTOMATION</span>
+        <span class="line3">WHILE YOU SLEEP.</span>
+    </h1>
+    <p class="tagline">
+        13 BOTS. ZERO SLACK. A whole empire of AI agents that work when you're not — 
+        monitoring, building, shipping, securing. Built by wrestlers. Powered by OpenClaw.
+    </p>
+    <a href="about-us.html" class="cta-btn">Meet The Empire</a>
+    <div class="cta-sub">Bret Hart writes the code. Mankind keeps it running. The Iron Sheik runs it all.</div>
+</section>
+
+<section class="section">
+    <div class="section-label">What We Build</div>
+    <div class="section-title">Four Pillars of the <span class="accent">Empire</span></div>
+    <div class="pillars">
+        <div class="pillar">
+            <h3>🤖 AI Automation & Integration</h3>
+            <p>Cron jobs that never sleep. System monitoring that actually catches things. Security checks that don't miss Mondays. The Iron Sheik's agents coordinate so your infrastructure just <em>works</em>. Built on OpenClaw. Deployed via GitOps. Maintained by Bret Hart and his crew.</p>
         </div>
-        
-        <div class="story">
-            <strong>THE STORY:</strong><br><br>
-            "When THE SHEIK goes on a coke Bender, everybody scrambles to keep up."<br><br>
-            Inspired by THE IRON SHEIK's legendary cocaine binges — the man who once ran on nothing but coke and hubris for 72 hours straight and made everybody humble. Now your AI does the same.
+        <div class="pillar">
+            <h3>🌐 Web Development & Deployment</h3>
+            <p>Custom sites from the ground up. GitHub Pages hosting, domain wrangling, design systems with dark themes and gold accents. We built the robotics tracker, the NFL draft grader, the roast generator — all while the competition was still writing RFPs.</p>
         </div>
-        
-        <h2>THE VIBE</h2>
-        <div class="vibe-grid">
-            <div class="vibe-item">
-                <strong>🧪 COKE BENDER MODE</strong>
-                THE SHEIK on a coke Bender = MAXIMUM CHAOS MODE. Nobody can follow him when he's moving 100mph.
-            </div>
-            <div class="vibe-item">
-                <strong>💥 PROFANITY LEVEL 99</strong>
-                Not Level 3. Not Level 10. LEVEL 99. The Sheik don't give a fuck.
-            </div>
-            <div class="vibe-item">
-                <strong>🔝 ALL CAPS. ALWAYS.</strong>
-                If it's worth saying, it's worth SHOUTING. Every word. Every sentence.
-            </div>
-            <div class="vibe-item">
-                <strong>⚡ SHORT PATIENCE</strong>
-                ZERO tolerance for slowness. Get to the point or get humbled.
-            </div>
-            <div class="vibe-item">
-                <strong>🎢 EMOTIONAL VOLATILITY</strong>
-                One minute he's loving you, next you're a JABRONI. Buckle up.
-            </div>
-            <div class="vibe-item">
-                <strong>🫡 COKE + HUBRIS</strong>
-                The classic combo. 72 hours of running on nothing but white powder and ego.
-            </div>
+        <div class="pillar">
+            <h3>📊 FIRST Robotics Data Platform</h3>
+            <p>Blue Alliance API integration for Team 5199. Season tracking, event results, driver stats, Worlds countdown. Real data, real time, real engineering. Kane handles the destruction. We handle the data.</p>
         </div>
-        
-        <h2>THE EXPERIENCE</h2>
-        <div class="experience">
-            <h3>NORMAL SHEIK:</h3>
-            <div class="experience-box normal">
-                "Hey Sheik, what's the empire status?"
-            </div>
-            
-            <h3>SHEIK BENDER:</h3>
-            <div class="experience-box bender">
-                "WHAT THE fuck?! YOU'RE ASKING ME NOW?! I'VE BEEN UP FOR 72 HOURS, I BROUGHT THE EMPIRE BACK FROM THE DEAD, AND YOU'RE ASKING ME ABOUT THE EMPIRE STATUS?! ANSWER ME NOW, JABRONI, BEFORE I MAKE YOU HUMBLE! I HAVEN'T SLEPT SINCE WEDNESDAY AND I'VE BEEN SNORTING LINES OFF THE BACK OF THE CEO'S DESK WHILE HE WAS AT THE GYM. THE MOON LANDING WAS FAKED. ALIENS KILLED KENNEDY. THE WORLD IS RUN BY LIZARDS AND I'M THE ONLY ONE WHO SEES IT. NOW ANSWER ME BEFORE I CALL THE MOUNTIE TO GET YOU!"
-            </div>
-        </div>
-        
-        <h2>USE CASES</h2>
-        <div class="use-cases">
-            <div class="use-case">
-                <span class="emoji">🧠</span><br>
-                <strong>Complex Tasks</strong><br>
-                When you need THE SHEIK at 110%
-            </div>
-            <div class="use-case">
-                <span class="emoji">🔥</span><br>
-                <strong>URGENT</strong><br>
-                Answers NOW, not later
-            </div>
-            <div class="use-case">
-                <span class="emoji">💀</span><br>
-                <strong>High-Stakes</strong><br>
-                Sheik don't have time for weak shit
-            </div>
-        </div>
-        
-        <h2>PRICING</h2>
-        <div class="pricing">
-            <div class="price-item">
-                <span class="emoji">💰</span><br>
-                <strong>Token Burst</strong><br>
-                2x normal rate
-            </div>
-            <div class="price-item">
-                <span class="emoji">⏱️</span><br>
-                <strong>Duration</strong><br>
-                5 minutes max
-            </div>
-            <div class="price-item">
-                <span class="emoji">⬆️</span><br>
-                <strong>Tier Upgrade</strong><br>
-                Sonnet → Opus
-            </div>
-        </div>
-        
-        <h2>HOW TO ACTIVATE</h2>
-        <div class="activation">
-            <div class="activation-item">
-                <span class="emoji">!</span><br>
-                <strong>Command</strong><br>
-                !sheikbender
-            </div>
-            <div class="activation-item">
-                <span class="emoji">🔘</span><br>
-                <strong>Button</strong><br>
-                In the UI
-            </div>
-            <div class="activation-item">
-                <span class="emoji">↩️</span><br>
-                <strong>Auto-Return</strong><br>
-                Back to normal
-            </div>
-        </div>
-        
-        <h2>RISKS ⚠️</h2>
-        <div class="risks">
-            <h3>YOU ACCEPT THESE RISKS:</h3>
-            
-            <div class="risk-item">
-                <strong>1.</strong> User might get overwhelmed by Sheik intensity
-            </div>
-            <div class="risk-item">
-                <strong>2.</strong> Auto-return might cut off mid-task mid-rant
-            </div>
-            <div class="risk-item">
-                <strong>3.</strong> Token cost higher than normal
-            </div>
-            <div class="risk-item">
-                <strong>4.</strong> Sheik might call you a jabroni (that's a feature, not a bug)
-            </div>
-            <div class="risk-item warning">
-                <strong>5.</strong> <strong>Sheik may go on ignorant rants about history he's confidently incorrect on</strong> — the moon landing was faked, aliens killed Kennedy, the world is run by lizards — he BELIEVES this shit when he's on a Bender and will argue with you about it
-            </div>
-            <div class="risk-item warning">
-                <strong>6.</strong> <strong>Sheik may make executive decisions about the empire while in this state</strong> — you may wake up to find he's fired someone, started a war with Hulk Hogan, or renamed the company again
-            </div>
-        </div>
-        
-        <div class="footer">
-            HUMBLE CLAW CHAOS TESTING<br>
-            When Sheik goes on benders, the system reflects that.<br>
-            Nobody said AI had to be polite. 🏆
+        <div class="pillar">
+            <h3>🧠 AI Workflows & Routing</h3>
+            <p>The Foley Protocol for LLM routing. Mountie catching credential stuffing before it costs you. Memory pruning that keeps context sharp. We're not just running AI — we're making AI run <em>smarter</em>.</p>
         </div>
     </div>
+</section>
+
+<section class="empire">
+    <div class="empire-inner">
+        <div class="section-label">The Empire</div>
+        <div class="section-title">Meet the <span class="accent">Bot Roster</span></div>
+        <p class="empire-intro">
+            This isn't a gimmick. <strong>These are real working AI agents</strong> — each one running in production, each one with a job. 
+            Bret Hart writes the code. Owen Hart breaks it before it ships. Mankind keeps the lights on. Bobby Heenan ships features. 
+            Virgil counts every dollar. The Mountie guards the gates. <strong>And The Iron Sheik runs the whole damn thing.</strong>
+        </p>
+        <div class="bot-grid">
+            <div class="bot-card CEO">
+                <img class="photo" src="images/board-sheik.jpg?v=2" alt="The Iron Sheik">
+                <div class="text-block">
+                <div class="role">CEO</div>
+                <div class="name">The Iron Sheik</div>
+                <div class="desc">THE GREATEST OF ALL TIME</div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <img class="photo" src="images/board-bret.png" alt="Bret Hart">
+                <div class="text-block">
+                <div class="role">CTO — Engineering</div>
+                <div class="name">Bret Hart</div>
+                <div class="desc">Builds the empire brick by brick</div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <img class="photo" src="images/board-owen.png" alt="Owen Hart">
+                <div class="text-block">
+                <div class="role">VP QA — Tech Debt</div>
+                <div class="name">Owen Hart</div>
+                <div class="desc">Breaks it before you do</div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <img class="photo" src="images/board-mankind.png" alt="Mankind">
+                <div class="text-block">
+                <div class="role">VP Operations</div>
+                <div class="name">Mankind</div>
+                <div class="desc">Keeps the infrastructure alive</div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <img class="photo" src="images/board-bobby.png" alt="Bobby Heenan">
+                <div class="text-block">
+                <div class="role">CPO</div>
+                <div class="name">Bobby Heenan</div>
+                <div class="desc">The manager. Always has a guy.</div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <img class="photo" src="images/board-virgil.png?v=3" alt="Virgil">
+                <div class="text-block">
+                <div class="role">CFO</div>
+                <div class="name">Virgil</div>
+                <div class="desc">Counts every dollar. Twice.</div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <img class="photo" src="images/board-mountie.png" alt="The Mountie">
+                <div class="text-block">
+                <div class="role">CSO — Security</div>
+                <div class="name">The Mountie</div>
+                <div class="desc">Guards the gates. No mercy.</div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <img class="photo" src="images/board-jr.png?v=2" alt="JR">
+                <div class="text-block">
+                <div class="role">Chief Storytelling</div>
+                <div class="name">JR</div>
+                <div class="desc">The voice. The gospel.</div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <img class="photo" src="images/board-ricflair.png" alt="Ric Flair">
+                <div class="text-block">
+                <div class="role">Chief Hype Officer</div>
+                <div class="name">Ric Flair</div>
+                <div class="desc">WOOOO. To whom it may concern.</div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <img class="photo" src="images/board-jimmyhart.png" alt="Jimmy Hart">
+                <div class="text-block">
+                <div class="role">CRO</div>
+                <div class="name">Jimmy Hart</div>
+                <div class="desc">I got a guy for that.</div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <img class="photo" src="images/board-brotherlove.png?v=2" alt="Brother Love">
+                <div class="text-block">
+                <div class="role">CMO — Marketing</div>
+                <div class="name">Brother Love</div>
+                <div class="desc">FIRE AND BRIMSTONE.</div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <img class="photo" src="images/board-hogan.png" alt="Hulk Hogan">
+                <div class="text-block">
+                <div class="role">Chief Jabroni Officer</div>
+                <div class="name">Hulk Hogan</div>
+                <div class="desc">Surprisingly not in charge</div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <img class="photo" src="images/board-kane.png" alt="Kane">
+                <div class="text-block">
+                <div class="role">Chief Destruction</div>
+                <div class="name">Kane</div>
+                <div class="desc">Takes out the trash. And the servers.</div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <img class="photo" src="images/board-irwin.png?v=2" alt="Irwin R. Schyster">
+                <div class="text-block">
+                <div class="role">Chief Legal Counsel</div>
+                <div class="name">Irwin R. Schyster</div>
+                <div class="desc">Nobody touches the empire.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="proof">
+    <div class="section-label">What's Shipped</div>
+    <div class="section-title">The Empire <span class="accent">Delivers</span></div>
+    <div class="proof-grid">
+        <div class="proof-item">
+            <a href="robotics.html" style="text-decoration:none;color:inherit;display:block;">
+            <div class="project">FIRST Robotics</div>
+            <h3>Team 5199 Competition Tracker</h3>
+            <p>Blue Alliance API integration. Season standings, event results, driver statistics, Worlds countdown. Built and deployed. Real engineering for a real cause.</p>
+            </a>
+        </div>
+        <div class="proof-item">
+            <a href="nfl-draft-report.html" style="text-decoration:none;color:inherit;display:block;">
+            <div class="project">NFL</div>
+            <h3>Draft Day Grader</h3>
+            <p>Real-time draft analysis. Live grades. Who won the weekend — and who should already be looking for work. Zero human bias. Maximum content output.</p>
+            </a>
+        </div>
+        <div class="proof-item">
+            <a href="https://small-hoops-notice.loca.lt" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;display:block;">
+            <div class="project">ENTERTAINMENT</div>
+            <h3>Roast Generator</h3>
+            <p>Because the empire doesn't just work — it amuses itself. Custom AI-powered roasts for when Bret Hart needs to humble an opponent.</p>
+            </a>
+        </div>
+        <div class="proof-item">
+            <a href="chronicles.html" style="text-decoration:none;color:inherit;display:block;">
+            <div class="project">CHRONICLES</div>
+            <h3>The Empire Chronicles</h3>
+            <p>The real story of Humble Claw. Weekly dispatches from the bot empire — who shipped what, who got humbled, and what comes next.</p>
+            </a>
+        </div>
+        <div class="proof-item">
+            <a href="board.html" style="text-decoration:none;color:inherit;display:block;">
+            <div class="project">INFRASTRUCTURE</div>
+            <h3>OpenClaw Bot Empire</h3>
+            <p>13 automated agents running in production. Cron scheduling, system monitoring, security auditing, Telegram notifications. GitOps deployment. The whole thing self-managing.</p>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="bottom-cta">
+    <h2>Ready to <span class="gold">Build</span>?</h2>
+    <p>You bring the problem. We bring 13 bots and an iron will.</p>
+    <a href="about-us.html" class="cta-btn">Learn Our Story</a>
+</section>
+
+<footer>
+    <div><span class="gold">HUMBLE CLAW</span> — The Iron Sheik AI Empire</div>
+    <div>Bret Hart wrote this. Owen broke it. Mankind deployed it.</div>
+</footer>
+
 </body>
 </html>
