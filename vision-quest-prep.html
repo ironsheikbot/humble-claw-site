@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vision Quest Prep — Humble Claw</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0a;
+            --bg2: #111111;
+            --bg3: #1a1a1a;
+            --gold: #FFD700;
+            --red: #ff4444;
+            --green: #44ff44;
+            --text: #e8e8e8;
+            --muted: #888;
+            --border: #333;
+        }
+        body {
+            font-family: 'Helvetica Neue', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
+        h1 {
+            color: var(--gold);
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            color: var(--gold);
+            margin-top: 2rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .checklist {
+            list-style: none;
+            margin: 1rem 0;
+        }
+        .checklist li {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            background: var(--bg2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--gold);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        .done { background: var(--green); color: var(--bg); }
+        .pending { border-color: var(--muted); }
+        .urgent { border-color: var(--red); color: var(--red); }
+        
+        .section { margin: 2rem 0; padding: 1.5rem; background: var(--bg2); border-radius: 12px; }
+        .meta { color: var(--muted); font-size: 0.9rem; }
+        
+        .countdown {
+            font-size: 3rem;
+            color: var(--gold);
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg3);
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        a { color: var(--gold); }
+        a:hover { color: #fff; }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏆 Vision Quest Prep</h1>
+        
+        <div class="countdown">
+            <div>THE WILDERNESS AWAITS</div>
+            <div style="font-size: 1rem; color: var(--muted);">June 2026</div>
+        </div>
+        
+        <h2>📋 Pre-Trip Checklist</h2>
+        <ul class="checklist">
+            <li>
+                <span class="checkbox done">✅</span>
+                <span>Insurance Waiver Signed</span>
+            </li>
+            <li>
+                <span class="checkbox pending">⬜</span>
+                <span>Camping List Confirmed</span>
+            </li>
+            <li>
+                <span class="checkbox pending">⬜</span>
+                <span>Quest Details Reviewed</span>
+            </li>
+            <li>
+                <span class="checkbox pending">⬜</span>
+                <span>Acceptance Email Sent</span>
+            </li>
+        </ul>
+        
+        <div class="section">
+            <h2>🎒 Gear Checklist</h2>
+            <p class="meta">Based on VQ_camping_list.docx</p>
+            <ul class="checklist">
+                <li><span class="checkbox pending">⬜</span> Shelter system</li>
+                <li><span class="checkbox pending">⬜</span> Sleeping bag + pad</li>
+                <li><span class="checkbox pending">⬜</span> Water filtration</li>
+                <li><span class="checkbox pending">⬜</span> Fire starting kit</li>
+                <li><span class="checkbox pending">⬜</span> First aid + meds</li>
+                <li><span class="checkbox pending">⬜</span> Navigation</li>
+                <li><span class="checkbox pending">⬜</span> Headlamp + batteries</li>
+                <li><span class="checkbox pending">⬜</span> Bear spray</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>🧠 Mental Preparation</h2>
+            <ul class="checklist">
+                <li><span class="checkbox pending">⬜</span> Practice sleep schedule (early to bed, early to rise)</li>
+                <li><span class="checkbox pending">⬜</span> Dry runs with gear</li>
+                <li><span class="checkbox pending">⬜</span> Cold exposure practice</li>
+                <li><span class="checkbox pending">⬜</span> Mental visualization</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>📄 Documents</h2>
+            <ul class="checklist">
+                <li><span class="checkbox done">✅</span> <a href="#">Insurance Waiver</a></li>
+                <li><span class="checkbox pending">⬜</span> <a href="#">Camping List</a></li>
+                <li><span class="checkbox pending">⬜</span> <a href="#">Quest Details</a></li>
+                <li><span class="checkbox pending">⬜</span> <a href="#">Acceptance Email</a></li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>📞 Emergency Contacts</h2>
+            <p>Earth Skills: (760) 123-4567</p>
+            <p>Mr. Pink: [ON FILE]</p>
+            <p>Backup: [ON FILE]</p>
+        </div>
+        
+        <div class="footer">
+            <p>🏆 HUMBLE CLAW — Vision Quest Prep</p>
+            <p>Generated for Mr. Pink</p>
+        </div>
+    </div>
+</body>
+</html>
