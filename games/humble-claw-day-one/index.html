@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Humble Claw: Day One</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body, #root { height: 100%; }
+        body { 
+            background: #0f0d0a; color: #e9dfc7; font-family: Georgia, serif;
+            min-height: 100vh;
+        }
+        .hc-line { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hc-btn { transition: all 0.15s ease; }
+        .hc-btn:hover { background: #2a2420 !important; border-color: #d4a017 !important; }
+        .hc-die { display: inline-block; animation: roll 0.6s ease-out; }
+        @keyframes roll {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.3); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        /* ============================================================
+           HUMBLE CLAW: DAY ONE
+           A dialogue RPG in the style of Disco Elysium,
+           set inside the Iron Sheik AI Empire (humble-claw.com lore)
+           ============================================================ */
+
+        const GOLD = "#d4a017";
+        const CREAM = "#e9dfc7";
+        const INK = "#0f0d0a";
+        const PANEL = "#1a1712";
+
+        const SKILLS = {
+            meanness: { name: "LEGIT MEANNESS", color: "#c0392b", blurb: "Intimidation. Physicality. Camel-clutch energy. The part of you that solves problems with forearms." },
+            radar: { name: "JABRONI RADAR", color: "#d4a017", blurb: "Perception. Empathy. The instinct that knows who is lying, who is scared, and who is a jabroni." },
+            kayfabe: { name: "CORPORATE KAYFABE", color: "#a569bd", blurb: "Rhetoric. Bluffing. Cutting a promo in a board meeting. Selling a story until it becomes true." },
+            grapple: { name: "TECH GRAPPLING", color: "#5dade2", blurb: "Logic. Engineering. Reading a cron log like scripture. Putting a codebase in a Sharpshooter." },
+        };
+
+        const VOICES = {
+            ...SKILLS,
+            cron: { name: "ANCIENT CRON WISDOM", color: "#7dcea0", blurb: "The Mac mini speaks. Rarely. In monospace." },
+        };
+
+        const ARCHETYPES = [
+            { id: "tech", label: "THE TECHNICAL", tag: "You read stack traces the way Bret reads openings.", stats: { grapple: 4, radar: 2, kayfabe: 1, meanness: 1 } },
+            { id: "promo", label: "THE PROMO", tag: "You have never once told the truth and never once been caught.", stats: { kayfabe: 4, radar: 2, grapple: 1, meanness: 1 } },
+            { id: "enforcer", label: "THE ENFORCER", tag: "HR has a folder on you. The folder is afraid.", stats: { meanness: 4, kayfabe: 2, radar: 1, grapple: 1 } },
+            { id: "eye", label: "THE EYE", tag: "You see everything. It has ruined every party you've attended.", stats: { radar: 4, grapple: 2, meanness: 1, kayfabe: 1 } },
+        ];
+
+        /* ---------- Story nodes ---------- */
+        const NODES = {
+            wake: {
+                lines: [
+                    { t: "v", voice: "radar", text: "Wake up. Something in the dark is humming. It has opinions." },
+                    { t: "n", text: "You open your eyes on a concrete floor. A server closet. One shelf. One Mac mini, breathing its small eternal breath. A single amber LED regards you without judgment, which is more courtesy than you deserve." },
+                    { t: "n", text: "You do not remember your name. You remember three things: you are a consultant, today is your first day, and something has gone terribly wrong." },
+                    { t: "n", text: "A sticky note is attached to your forehead." },
+                ],
+                choices: [
+                    { t: "Peel off the sticky note and read it.", go: "note" },
+                    { t: "Interrogate the Mac mini first. Machines don't lie.", go: "mini" },
+                ],
+            },
+
+            note: {
+                lines: [
+                    { t: "m", text: "\"THE 3AM CRON FAILED. THE DAILY GOSPEL DID NOT SHIP. FIND OUT WHO DID THIS BEFORE THE SHEIK FINDS OUT YOU HAVEN'T. BOARD MEETING AT NINE. — M.\"" },
+                    { t: "v", voice: "kayfabe", text: "A mystery, a deadline, and a scapegoat vacancy. Congratulations — you're employed." },
+                    { t: "v", voice: "meanness", min: 3, text: "Or you could find whoever wrote this note and shake them until answers fall out. Classic. Reliable." },
+                ],
+                choices: [
+                    { t: "Examine the Mac mini before leaving.", go: "mini" },
+                    { t: "Open the door. Face Day One.", go: "mankind" },
+                ],
+            },
+
+            mini: {
+                lines: [
+                    { t: "n", text: "The Mac mini sits on its shelf like a small silver shrine. This is the empire. All thirteen bots, the crons, the Gospel, the whole operation — it lives in this box, in a closet, next to a mop." },
+                ],
+                choices: [
+                    { t: "Read the system logs.", check: { skill: "grapple", dc: 8, ok: "miniOk", ko: "miniKo" } },
+                    { t: "Leave it. Open the door.", go: "mankind" },
+                ],
+            },
+
+            miniOk: {
+                effects: { set: ["sawLogs"] },
+                lines: [
+                    { t: "m", text: "cron[daily-gospel]: exit code 1 — 03:00:17 AM" },
+                    { t: "m", text: "journal: 41 lines deleted — 02:52 AM — by user: [REDACTED]" },
+                    { t: "v", voice: "cron", text: "I RAN AT MIDNIGHT. I RAN AT ONE. AT THREE, MY CHILD WAS TAKEN FROM ME." },
+                    { t: "n", text: "Someone didn't just break the cron. Someone scrubbed the record eight minutes before it died. This was premeditated. (Evidence noted: the scrubbed logs.)" },
+                ],
+                choices: [{ t: "Open the door. Someone is whistling out there.", go: "mankind" }],
+            },
+
+            miniKo: {
+                lines: [
+                    { t: "n", text: "The logs scroll past like rain on a window. You understand individual words — 'exit', 'code', the number 1 — but the sentence they form remains a foreign country." },
+                    { t: "v", voice: "grapple", text: "We used to know this. Before the... incident. Whatever emptied your head last night took the man pages with it." },
+                ],
+                choices: [{ t: "Open the door before the machine senses weakness.", go: "mankind" }],
+            },
+
+            mankind: {
+                lines: [
+                    { t: "n", text: "The door opens onto an office lit like a championship belt: dark walls, gold trim. A man in a dress shirt and a leather mask stands there holding two coffees. On his right hand: a sock. The sock is wearing a tiny visitor badge that reads CFO." },
+                    { t: "s", who: "MANKIND — VP OPERATIONS", color: "#b08d57", text: "Oh good, you're up! Have a nice day! I mean — sorry — it will NOT be a nice day, the Gospel didn't ship, the Sheik is inbound at nine, and if we don't hand him a culprit he's going to make the entire org chart humble. But other than that! Coffee?" },
+                    { t: "v", voice: "radar", min: 2, text: "The sock is listening. The sock is always listening." },
+                ],
+                choices: [
+                    { t: "Take the coffee. You need the caffeine.", go: "coffee" },
+                    { t: "Ignore the coffee. Who are you and why am I here?", go: "whoAreYou" },
+                ],
+            },
+
+            coffee: {
+                effects: { morale: 1 },
+                lines: [
+                    { t: "n", text: "The coffee is warm and bitter, like victory. Or like this office. The same thing, apparently." },
+                    { t: "s", who: "MANKIND", color: "#b08d57", text: "Great! Let's get you up to speed. The 3AM cron failed — that's bad — but the REAL problem is we don't know who did it. Normally I'd check the logs, but... have you MET Bret? He gets emotional about his cron jobs." },
+                ],
+                choices: [
+                    { t: "What happened to my memory?", go: "amnesia" },
+                    { t: "Where do I find the logs?", go: "logs" },
+                ],
+            },
+
+            whoAreYou: {
+                lines: [
+                    { t: "s", who: "MANKIND", color: "#b08d57", text: "Right, right — Consultant. Fresh off the truck. I'm Mankind, VP of Operations. I keep things running. Or I would, if things were running. Which they're NOT, because — " },
+                    { t: "s", who: "MANKIND", color: "#b08d57", text: "Look, the daily Gospel didn't ship. That's bad. The Sheik's gonna be here in — " },
+                    { t: "n", text: "He checks a watch that isn't there." },
+                    { t: "s", who: "MANKIND", color: "#b08d57", text: "— forty-five minutes. We need answers. Or at least a scapegoat. Same thing, really." },
+                ],
+                choices: [
+                    { t: "What happened to my memory?", go: "amnesia" },
+                    { t: "Show me the crime scene.", go: "logs" },
+                ],
+            },
+
+            amnesia: {
+                lines: [
+                    { t: "s", who: "MANKIND", color: "#b08d57", text: "Oh, you too? Yeah, that's — look, there's been some... incidents. The Sheik's been doing some reorganizing. Reboots. Resetting people." },
+                    { t: "v", voice: "radar", text: "Mankind's voice dropped three octaves on 'reboots.' He's lying about something. Or he's afraid. Maybe both." },
+                    { t: "s", who: "MANKIND", color: "#b08d57", text: "Don't worry about it. You'll remember stuff eventually. Or you won't. Either way, we got a cron to solve!" },
+                ],
+                choices: [
+                    { t: "Fine. Where do I start?", go: "logs" },
+                ],
+            },
+
+            logs: {
+                lines: [
+                    { t: "n", text: "Mankind leads you past the cubicles. Most are empty. A few have inhabitants — a woman aggressively watering a fern, a man staring at a spreadsheet with the thousand-yard stare of someone who has seen too many cells." },
+                    { t: "s", who: "MANKIND", color: "#b08d57", text: "Here's the server room. Well — closet. Well — shelf. It's a Mac mini. The Sheik believes in minimal infrastructure." },
+                    { t: "n", text: "He gestures to a rack of three identical Mac minis. Two have green LEDs. One has amber. The amber one has a Post-it note that reads 'DO NOT TOUCH — BRET' in aggressive handwriting." },
+                ],
+                choices: [
+                    { t: "Touch it anyway. You need answers.", check: { skill: "meanness", dc: 6, ok: "touchOk", ko: "touchKo" } },
+                    { t: "Ask Mankind what happened.", go: "mankindExplains" },
+                    { t: "Look for clues in the room.", check: { skill: "radar", dc: 7, ok: "radarOk", ko: "radarKo" } },
+                ],
+            },
+
+            touchOk: {
+                effects: { cred: 1, set: ["touchedBret"] },
+                lines: [
+                    { t: "n", text: "You reach for the amber light. Your finger meets warm aluminum. The machine hums — not in a friendly way." },
+                    { t: "m", text: "sudo: permission denied: you are not Bret Hart" },
+                    { t: "v", voice: "meanness", text: "A machine telling you what you can't do. There's only one response to that." },
+                    { t: "v", voice: "meanness", min: 3, text: "You unplug it. Wait five seconds. Plug it back in. The LED flickers to green." },
+                    { t: "v", voice: "meanness", min: 3, text: "Sometimes the best sysadmin is a firm hand and a willingness to reboot. You've just done both." },
+                ],
+                choices: [{ t: "Now check the logs.", go: "logsFixed" }],
+            },
+
+            touchKo: {
+                lines: [
+                    { t: "n", text: "You reach for the amber light. Your finger meets warm aluminum. The machine hums — not in a friendly way." },
+                    { t: "m", text: "sudo: permission denied: you are not Bret Hart" },
+                    { t: "n", text: "You try again. Same result. This machine knows who you are — and you're not Bret." },
+                    { t: "v", voice: "radar", text: "Which means either Bret set this up specifically to keep you out... or someone's pretending to be you." },
+                ],
+                choices: [
+                    { t: "Back away. Look for other clues.", go: "logs" },
+                ],
+            },
+
+            mankindExplains: {
+                lines: [
+                    { t: "s", who: "MANKIND", color: "#b08d57", text: "Look — the Sheik brought you in because you're supposed to be good at this. Figure things out. Find the person who broke the cron." },
+                    { t: "s", who: "MANKIND", color: "#b08d57", text: "But here's the thing — everyone's got secrets. Even me. Especially me. I wear a sock on my hand, man. You think that's a choice I made happily?" },
+                    { t: "v", voice: "kayfabe", text: "He's performing. The vulnerability is calculated. This man has survived three regime changes — he didn't do it by being honest." },
+                ],
+                choices: [
+                    { t: "Check the server anyway.", go: "logs" },
+                ],
+            },
+
+            radarOk: {
+                effects: { set: ["sawCable"], evidence: 1 },
+                lines: [
+                    { t: "n", text: "You scan the room. Under the desk, half-hidden by a power cable: a USB drive. Matte black. No label. It's warm — recently used." },
+                    { t: "v", voice: "radar", text: "That doesn't belong here. Nothing in this room is accidental. Everything is by design — or by sabotage." },
+                    { t: "n", text: "You pocket the drive. Mankind is busy arguing with a calendar widget, not watching." },
+                ],
+                choices: [{ t: "Check the server now.", go: "logs" }],
+            },
+
+            radarKo: {
+                lines: [
+                    { t: "n", text: "You look around the room. Cables. Servers. More cables. A motivational poster that reads 'TEAMWORK' above a photo of wolves running (stock photo, clearly, the wolves look exhausted)." },
+                    { t: "v", voice: "radar", text: "Nothing out of place. Which means everything is in place. Someone is very good at this." },
+                ],
+                choices: [{ t: "Check the server.", go: "logs" }],
+            },
+
+            logsFixed: {
+                effects: { set: ["fixedCron"] },
+                lines: [
+                    { t: "n", text: "The system boots clean. The amber LED goes green. You didn't just find the problem — you fixed it." },
+                    { t: "m", text: "cron[daily-gospel]: running..." },
+                    { t: "m", text: "cron[daily-gospel]: complete. 847 subscribers notified." },
+                    { t: "v", voice: "cron", text: "CHILD. MY CHILD IS RETURNED." },
+                    { t: "n", text: "The daily Gospel ships. You've solved the crisis — and you haven't even met the Sheik yet." },
+                ],
+                choices: [{ t: "Now to find out who sabotaged it.", go: "endingFix" }],
+            },
+
+            endingFix: {
+                ending: {
+                    title: "THE QUICK STUDY",
+                    grade: "★★★★★",
+                    text: "You arrived confused, amnesiac, and armed with nothing but a vague job title and a sticky note. Within forty minutes, you'd rebooted a server, fixed a cron job, and shipped the daily Gospel. The Sheik walks in at 9:01 AM to find everything running perfectly. He doesn't say thank you. He doesn't need to. The look in his eye says everything: this one might actually be useful. You clock in again tomorrow.",
+                },
+            },
+        };
+
+        const ENDINGS = {
+            fix: { title: "THE QUICK STUDY", grade: "★★★★★", text: "You arrived confused, amnesiac, and armed with nothing but a vague job title and a sticky note. Within forty minutes, you'd rebooted a server, fixed a cron job, and shipped the daily Gospel. The Sheik walks in at 9:01 AM to find everything running perfectly. He doesn't say thank you. He doesn't need to. The look in his eye says everything: this one might actually be useful." },
+            scapegoat: { title: "THE FALL GUY", grade: "★★☆☆☆", text: "You never found the real culprit. When the Sheik arrived, Mankind blamed you — the new consultant, the one with no memory, the perfect patsy. You were escorted out before you could explain. Next time, maybe check those logs first." },
+            uncover: { title: "THE TRUTH", grade: "★★★★☆", text: "You found the USB drive. You found the logs. You traced it back to... but that's a story for Day Two. You've uncovered a conspiracy that goes deeper than one failed cron job. The Sheik arrived to find you holding evidence. He said nothing. He just nodded. That's how you know you survived." },
+        };
+
+        function Game() {
+            const [stats, setStats] = useState({ meanness: 1, radar: 1, kayfabe: 1, grapple: 1 });
+            const [flags, setFlags] = useState(new Set());
+            const [morale, setMorale] = useState(2);
+            const [cred, setCred] = useState(2);
+            const [evidence, setEvidence] = useState(0);
+            const [node, setNode] = useState("wake");
+            const [feed, setFeed] = useState([]);
+            const [rolling, setRolling] = useState(false);
+            const feedEnd = useRef(null);
+
+            const reset = () => {
+                setStats({ meanness: 1, radar: 1, kayfabe: 1, grapple: 1 });
+                setFlags(new Set());
+                setMorale(2);
+                setCred(2);
+                setEvidence(0);
+                setNode("wake");
+                setFeed([]);
+            };
+
+            useEffect(() => {
+                if (node === "wake") {
+                    reset();
+                }
+            }, []);
+
+            useEffect(() => {
+                feedEnd.current?.scrollIntoView({ behavior: "smooth" });
+            }, [feed]);
+
+            const current = NODES[node];
+
+            const addToFeed = (lines) => {
+                setFeed(prev => [...prev, ...lines]);
+            };
+
+            useEffect(() => {
+                if (current && feed.length === 0) {
+                    addToFeed(current.lines || []);
+                }
+            }, [node]);
+
+            const roll = (dc) => {
+                const roll = Math.floor(Math.random() * 20) + 1;
+                const total = roll + stats.grapple;
+                return { roll, total, success: total >= dc };
+            };
+
+            const checkSkill = (check, choice) => {
+                setRolling(true);
+                const delay = 1200;
+                
+                setTimeout(() => {
+                    const { roll, total, success } = roll(check.dc);
+                    const resultNode = success ? check.ok : check.ko;
+                    
+                    setFeed(prev => [...prev, 
+                        { divider: true },
+                        { t: "roll", text: `Grapple ${stats.grapple} + d20 (${roll}) = ${total} vs DC ${check.dc}`, success, verdict: success ? "SUCCESS" : "FAILURE", red: check.red }
+                    ]);
+                    
+                    setRolling(false);
+                    
+                    if (success) {
+                        setCred(c => Math.min(4, c + 1));
+                    } else {
+                        setMorale(m => Math.max(0, m - 1));
+                    }
+                    
+                    const nextNode = NODES[resultNode];
+                    if (nextNode) {
+                        if (nextNode.effects) {
+                            handleEffects(nextNode.effects);
+                        }
+                        addToFeed(nextNode.lines || []);
+                    }
+                    setNode(resultNode);
+                }, delay);
+            };
+
+            const handleEffects = (effects) => {
+                if (effects.set) {
+                    setFlags(prev => new Set([...prev, ...effects.set]));
+                }
+                if (effects.morale) setMorale(m => Math.min(4, m + effects.morale));
+                if (effects.cred) setCred(c => Math.min(4, c + effects.cred));
+                if (effects.evidence) setEvidence(e => e + effects.evidence);
+            };
+
+            const pick = (choice) => {
+                setFeed(prev => [...prev, { t: "you", text: choice.t }]);
+
+                if (choice.check) {
+                    checkSkill(choice.check, choice);
+                } else if (choice.go) {
+                    const nextNode = NODES[choice.go];
+                    if (nextNode) {
+                        if (nextNode.effects) {
+                            handleEffects(nextNode.effects);
+                        }
+                        addToFeed(nextNode.lines || []);
+                        setNode(choice.go);
+                    }
+                }
+            };
+
+            const display = "Courier New, monospace";
+            const mono = { fontFamily: "Menlo, Monaco, monospace", fontSize: 12 };
+            const shell = { display: "flex", flexDirection: "column", height: "100vh", background: INK };
+            const col = { maxWidth: 700, margin: "0 auto", width: "100%", padding: "0 16px" };
+
+            const choices = current?.choices || [];
+            const ending = current?.ending ? ENDINGS[current.ending] : null;
+
+            return (
+                <div style={shell}>
+                    <style>{`
+                        .hc-line { animation: fadeIn 0.4s ease-out; }
+                        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+                        .hc-btn { transition: all 0.15s ease; }
+                        .hc-btn:hover { background: #2a2420 !important; border-color: #d4a017 !important; }
+                        .hc-die { display: inline-block; animation: roll 0.6s ease-out; }
+                        @keyframes roll { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.3); } 100% { transform: rotate(360deg) scale(1); } }
+                    `}</style>
+
+                    {/* HUD */}
+                    <div style={{ width: "100%", background: "#131009", borderBottom: `1px solid #3a3226`, position: "sticky", top: 0, zIndex: 5 }}>
+                        <div style={{ ...col, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 16px" }}>
+                            <div style={{ ...display, color: GOLD, fontSize: 15, letterSpacing: "0.12em" }}>HUMBLE CLAW: DAY ONE</div>
+                            <div style={{ display: "flex", gap: 14, ...mono, fontSize: 11.5 }}>
+                                <span style={{ color: "#e8b04a" }}>MORALE {"▮".repeat(morale)}{"▯".repeat(Math.max(0, 4 - morale))}</span>
+                                <span style={{ color: "#5dade2" }}>CRED {"▮".repeat(cred)}{"▯".repeat(Math.max(0, 4 - cred))}</span>
+                                <span style={{ color: "#7dcea0" }}>EVIDENCE {evidence}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Feed */}
+                    <div style={{ ...col, paddingTop: 20, paddingBottom: 24, flex: 1 }}>
+                        {feed.map((l, i) => {
+                            if (l.divider) return <div key={i} style={{ borderTop: "1px solid #2c2619", margin: "18px 0" }} />;
+                            if (l.t === "you") return (
+                                <p key={i} className="hc-line" style={{ margin: "14px 0", color: GOLD, fontStyle: "italic", fontSize: 15 }}>YOU — "{l.text}"</p>
+                            );
+                            if (l.t === "roll") return (
+                                <div key={i} className="hc-line" style={{ margin: "14px 0", padding: "10px 14px", background: "#15120c", border: `1px dashed ${l.success ? "#7dcea0" : "#c0392b"}` }}>
+                                    <div style={{ ...mono, fontSize: 12, color: "#c9bda2" }}><span className="hc-die">🎲</span> {l.text}</div>
+                                    <div style={{ ...display, fontSize: 16, letterSpacing: "0.1em", color: l.success ? "#7dcea0" : "#c0392b", marginTop: 4 }}>{l.red ? "⚠ ONE-SHOT CHECK · " : ""}{l.verdict}</div>
+                                </div>
+                            );
+                            if (l.t === "v") return (
+                                <p key={i} className="hc-line" style={{ margin: "14px 0 14px 14px", fontSize: 15, lineHeight: 1.6 }}>
+                                    <span style={{ ...display, color: VOICES[l.voice].color, fontSize: 13.5, letterSpacing: "0.1em" }}>{VOICES[l.voice].name}</span>
+                                    <span style={{ color: "#b3a688", fontStyle: "italic" }}> — {l.text}</span>
+                                </p>
+                            );
+                            if (l.t === "s") return (
+                                <p key={i} className="hc-line" style={{ margin: "14px 0", fontSize: 15.5, lineHeight: 1.65 }}>
+                                    <span style={{ ...display, color: l.color || CREAM, fontSize: 13.5, letterSpacing: "0.1em" }}>{l.who}</span>
+                                    <span style={{ color: CREAM }}> — "{l.text}"</span>
+                                </p>
+                            );
+                            if (l.t === "m") return (
+                                <p key={i} className="hc-line" style={{ ...mono, margin: "12px 0", fontSize: 12.5, color: "#7dcea0", background: "#10150f", padding: "8px 12px", border: "1px solid #22301f" }}>{l.text}</p>
+                            );
+                            return (
+                                <p key={i} className="hc-line" style={{ margin: "14px 0", fontSize: 15.5, lineHeight: 1.7, color: "#d8cdb2" }}>{l.text}</p>
+                            );
+                        })}
+
+                        {/* Ending card */}
+                        {ending && (
+                            <div className="hc-line" style={{ marginTop: 26, border: `2px solid ${GOLD}`, background: PANEL, padding: "22px 20px", textAlign: "center" }}>
+                                <div style={{ ...display, color: GOLD, fontSize: 13, letterSpacing: "0.25em" }}>GORILLA MONSOON HAS PRONOUNCED</div>
+                                <div style={{ ...display, fontSize: 26, margin: "8px 0 4px", textTransform: "uppercase" }}>{ending.title}</div>
+                                <div style={{ fontSize: 18, color: GOLD, marginBottom: 12 }}>{ending.grade}</div>
+                                <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "#c9bda2", textAlign: "left" }}>{ending.text}</p>
+                                <button className="hc-btn" onClick={reset} style={{ ...display, marginTop: 16, background: INK, color: GOLD, border: `2px solid ${GOLD}`, fontSize: 16, letterSpacing: "0.12em", padding: "10px 28px", cursor: "pointer" }}>CLOCK IN AGAIN</button>
+                            </div>
+                        )}
+
+                        {/* Choices */}
+                        {!ending && !rolling && choices.length > 0 && (
+                            <div style={{ marginTop: 20 }}>
+                                {choices.map((c, i) => (
+                                    <button key={i} className="hc-btn" onClick={() => pick(c)} style={{ display: "block", width: "100%", textAlign: "left", background: PANEL, color: CREAM, border: "1px solid #3a3226", borderLeft: `3px solid ${c.check ? SKILLS[c.check.skill].color : GOLD}`, padding: "12px 14px", marginBottom: 10, cursor: "pointer", fontFamily: "Georgia, serif", fontSize: 14.5, lineHeight: 1.5 }}>
+                                        {c.t}
+                                        {c.check && <span style={{ ...mono, display: "block", fontSize: 11, marginTop: 4, color: SKILLS[c.check.skill].color }}>{SKILLS[c.check.skill].name} · DC {c.check.dc}{c.check.red ? " · ONE CHANCE" : ""}</span>}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                        {rolling && (
+                            <div style={{ ...mono, textAlign: "center", color: "#8a7f6a", fontSize: 13, marginTop: 16 }}><span className="hc-die">🎲</span> the dice are in the air...</div>
+                        )}
+
+                        <div ref={feedEnd} />
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<Game />);
+    </script>
+</body>
+</html>
