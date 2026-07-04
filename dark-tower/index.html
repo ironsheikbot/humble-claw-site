@@ -30,7 +30,7 @@
 <body>
     <div id="root"></div>
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+        const { useState } = React;
         
         const BONE = "#e6ddc9";
         const NIGHT = "#0b0e14";
@@ -90,63 +90,57 @@
             }
             
             return (
-                <div className="dt-container">
-                    {screen === "title" && (
-                        <div className="dt-title">
-                            <h1>THE DOOR IN THE DESERT</h1>
-                            <p className="dt-subtitle">A Dark Tower Side-Story RPG</p>
-                            <p style={{marginTop: 40, color: TODASH}}>Ka is a wheel.</p>
-                            <div style={{marginTop: 40}}>
-                                <p style={{marginBottom: 20, color: BONE}}>Choose your path, sai:</p>
-                                {ARCHETYPES.map(a => (
-                                    <div key={a.id} className="dt-archetype" onClick={() => selectArchetype(a)}>
-                                        <h3>{a.label}</h3>
-                                        <p>{a.tag}</p>
-                                        <p style={{fontSize: 12, marginTop: 5, color: BRASS}}>
-                                            EYE {a.stats.eye} · HAND {a.stats.hand} · HEART {a.stats.heart} · KEN {a.stats.ken}
-                                        </p>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
+                React.createElement("div", { className: "dt-container" },
+                    screen === "title" && React.createElement("div", { className: "dt-title" },
+                        React.createElement("h1", null, "THE DOOR IN THE DESERT"),
+                        React.createElement("p", { className: "dt-subtitle" }, "A Dark Tower Side-Story RPG"),
+                        React.createElement("p", { style: {marginTop: 40, color: TODASH} }, "Ka is a wheel."),
+                        React.createElement("div", { style: {marginTop: 40} },
+                            React.createElement("p", { style: {marginBottom: 20, color: BONE} }, "Choose your path, sai:"),
+                            ARCHETYPES.map(a => 
+                                React.createElement("div", { key: a.id, className: "dt-archetype", onClick: () => selectArchetype(a) },
+                                    React.createElement("h3", null, a.label),
+                                    React.createElement("p", null, a.tag),
+                                    React.createElement("p", { style: {fontSize: 12, marginTop: 5, color: BRASS} },
+                                        "EYE " + a.stats.eye + " · HAND " + a.stats.hand + " · HEART " + a.stats.heart + " · KEN " + a.stats.ken
+                                    )
+                                )
+                            )
+                        )
+                    ),
                     
-                    {screen === "seeds" && (
-                        <div>
-                            <h2 style={{color: TODASH, marginBottom: 20}}>Before the story begins...</h2>
-                            <p style={{marginBottom: 20}}>{seedQuestions[seedIdx].q}</p>
-                            <input 
-                                className="dt-input"
-                                value={seedInput}
-                                onChange={e => setSeedInput(e.target.value)}
-                                placeholder={seedQuestions[seedIdx].ph}
-                                onKeyDown={e => e.key === "Enter" && submitSeed()}
-                            />
-                            <button className="dt-btn" onClick={submitSeed} style={{marginTop: 15}}>
-                                {seedIdx === seedQuestions.length - 1 ? "Begin the tale" : "Next"}
-                            </button>
-                        </div>
-                    )}
+                    screen === "seeds" && React.createElement("div", null,
+                        React.createElement("h2", { style: {color: TODASH, marginBottom: 20} }, "Before the story begins..."),
+                        React.createElement("p", { style: {marginBottom: 20} }, seedQuestions[seedIdx].q),
+                        React.createElement("input", { 
+                            className: "dt-input",
+                            value: seedInput,
+                            onChange: e => setSeedInput(e.target.value),
+                            placeholder: seedQuestions[seedIdx].ph,
+                            onKeyDown: e => e.key === "Enter" && submitSeed()
+                        }),
+                        React.createElement("button", { className: "dt-btn", onClick: submitSeed, style: {marginTop: 15} },
+                            seedIdx === seedQuestions.length - 1 ? "Begin the tale" : "Next"
+                        )
+                    ),
                     
-                    {screen === "game" && (
-                        <div>
-                            <h2 style={{color: ROSE, marginBottom: 20}}>CHAPTER ONE · THE NIGHT THE ROCK MOVED</h2>
-                            <p className="dt-narrative">{OPENING}</p>
-                            <div style={{marginTop: 30}}>
-                                <button className="dt-choice">Enter the tunnel. The dark is calling.</button>
-                                <button className="dt-choice">Stay here. Keep your daughter close.</button>
-                                <button className="dt-choice">Call for help. This isn't normal.</button>
-                            </div>
-                            <p style={{marginTop: 30, color: DIM, fontSize: 14, textAlign: center}}>
-                                More story coming soon...
-                            </p>
-                        </div>
-                    )}
-                </div>
+                    screen === "game" && React.createElement("div", null,
+                        React.createElement("h2", { style: {color: ROSE, marginBottom: 20} }, "CHAPTER ONE · THE NIGHT THE ROCK MOVED"),
+                        React.createElement("p", { className: "dt-narrative" }, OPENING),
+                        React.createElement("div", { style: {marginTop: 30} },
+                            React.createElement("button", { className: "dt-choice" }, "Enter the tunnel. The dark is calling."),
+                            React.createElement("button", { className: "dt-choice" }, "Stay here. Keep your daughter close."),
+                            React.createElement("button", { className: "dt-choice" }, "Call for help. This isn't normal.")
+                        ),
+                        React.createElement("p", { style: {marginTop: 30, color: "#8d8875", fontSize: 14, textAlign: "center"} },
+                            "More story coming soon..."
+                        )
+                    )
+                )
             );
         }
         
-        ReactDOM.createRoot(document.getElementById('root')).render(<DoorInTheDesert />);
+        ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(DoorInTheDesert));
     </script>
 </body>
 </html>
