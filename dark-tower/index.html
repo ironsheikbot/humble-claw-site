@@ -10,24 +10,143 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body, #root { height: 100%; }
-        body { background: #0b0e14; color: #e6ddc9; font-family: Georgia, serif; }
+        body { background: #0b0e14; color: #e6ddc9; font-family: Georgia, serif; min-height: 100vh; }
+        .dt-container { max-width: 600px; margin: 0 auto; padding: 20px; }
         .dt-title { text-align: center; padding: 60px 20px; }
         .dt-title h1 { color: #c2452d; font-size: 2.5em; margin-bottom: 10px; }
-        .dt-title .subtitle { color: #8d8875; font-style: italic; }
-        .dt-loading { text-align: center; padding: 40px; color: #7f8fc4; }
+        .dt-subtitle { color: #8d8875; font-style: italic; }
+        .dt-archetype { background: #141926; border: 1px solid #b08d3e; padding: 15px; margin-bottom: 10px; cursor: pointer; }
+        .dt-archetype:hover { background: #1f2436; }
+        .dt-archetype h3 { color: #c9a227; margin-bottom: 5px; }
+        .dt-archetype p { color: #8d8875; font-size: 0.9em; font-style: italic; }
+        .dt-input { width: 100%; background: #141926; border: 1px solid #b08d3e; color: #e6ddc9; padding: 12px; font-family: Georgia, serif; font-size: 16px; }
+        .dt-btn { background: #141926; border: 1px solid #b08d3e; color: #e6ddc9; padding: 12px 24px; font-family: Georgia, serif; cursor: pointer; }
+        .dt-btn:hover { background: #b08d3e; color: #0b0e14; }
+        .dt-narrative { line-height: 1.8; margin-bottom: 20px; }
+        .dt-choice { display: block; width: 100%; text-align: left; background: #141926; border: 1px solid #2b3350; padding: 12px; margin-bottom: 10px; cursor: pointer; font-family: Georgia, serif; color: #e6ddc9; }
+        .dt-choice:hover { background: #1f2436; border-color: #b08d3e; }
     </style>
 </head>
 <body>
-    <div id="root">
-        <div class="dt-title">
-            <h1>THE DOOR IN THE DESERT</h1>
-            <p class="subtitle">A Dark Tower side-story RPG</p>
-            <p style="margin-top: 30px; color: #7f8fc4;">Loading the Voice of the Beam...</p>
-        </div>
-    </div>
+    <div id="root"></div>
     <script type="text/babel">
-        // Game component would load here
-        // For now showing loading state
+        const { useState, useEffect, useRef } = React;
+        
+        const BONE = "#e6ddc9";
+        const NIGHT = "#0b0e14";
+        const PANEL = "#141926";
+        const ROSE = "#c2452d";
+        const BRASS = "#b08d3e";
+        const TODASH = "#7f8fc4";
+        
+        const STATS = {
+            eye: { name: "EYE", color: "#c9a227", blurb: "The gunslinger's eye." },
+            hand: { name: "HAND", color: "#b3543a", blurb: "Steadiness under fear." },
+            heart: { name: "HEART", color: "#c2452d", blurb: "Courage, love, the bond." },
+            ken: { name: "KEN", color: "#6f9bbf", blurb: "Lore and machinery." },
+        };
+        
+        const ARCHETYPES = [
+            { id: "steady", label: "THE STEADY HAND", tag: "You fix things.", stats: { hand: 4, eye: 3, heart: 3, ken: 2 } },
+            { id: "watcher", label: "THE WATCHER", tag: "You count exits.", stats: { eye: 4, ken: 3, hand: 3, heart: 2 } },
+            { id: "believer", label: "THE OPEN HEART", tag: "You believe in kindness.", stats: { heart: 4, eye: 3, ken: 3, hand: 2 } },
+            { id: "reader", label: "THE READER", tag: "You've read the stories.", stats: { ken: 4, heart: 3, eye: 2, hand: 3 } },
+        ];
+        
+        const OPENING = "Joshua Tree, eleven forty-one at night. The YMCA father-daughter campout has burned down to embers and marshmallow smoke. Forty tents, a horseshoe of minivans, a sky so thick with stars it looks like spilled salt. Your daughter is beside you on the tailgate, working a s'more with the focus of a jeweler, and for one whole minute the world is exactly, precisely enough.\n\nAt eleven forty-seven, the desert clears its throat.\n\nThe quake is short — six seconds, maybe seven — but it moves through the ground like something rolling over in its sleep. Car alarms. A dad yelling headcounts. And beneath all of it, from the rock pile east of camp, a sound like a vault unlocking: the great split boulder the kids have been climbing all weekend grinds three feet to the left and stops.\n\nBehind where it stood, there is now a darkness that the flashlights do not fill. A tunnel. Old. Cut, not worn — the walls too straight for water to have made them. And from somewhere far down inside it, faint as a memory of a memory, comes a sound like chimes.\n\nEvery other family is looking at the boulder. Your daughter is already looking at the dark. And the dark, you would swear on your life, is looking back at her.";
+        
+        function DoorInTheDesert() {
+            const [screen, setScreen] = useState("title");
+            const [archetype, setArchetype] = useState(null);
+            const [seedIdx, setSeedIdx] = useState(0);
+            const [seedAnswers, setSeedAnswers] = useState({});
+            const [seedInput, setSeedInput] = useState("");
+            
+            const seedQuestions = [
+                { key: "daughterName", q: "What is your daughter's name?", ph: "Her name..." },
+                { key: "daughterAge", q: "How old is she?", ph: "Her age..." },
+                { key: "secretItem", q: "What forbidden thing did she bring?", ph: "The item..." },
+                { key: "fatherFear", q: "What is your greatest fear as a father?", ph: "Your fear..." },
+            ];
+            
+            function selectArchetype(a) {
+                setArchetype(a);
+                setSeedIdx(0);
+                setSeedAnswers({});
+                setSeedInput("");
+                setScreen("seeds");
+            }
+            
+            function submitSeed() {
+                if (seedInput.trim()) {
+                    setSeedAnswers({...seedAnswers, [seedQuestions[seedIdx].key]: seedInput.trim()});
+                    setSeedInput("");
+                    if (seedIdx < seedQuestions.length - 1) {
+                        setSeedIdx(seedIdx + 1);
+                    } else {
+                        setScreen("game");
+                    }
+                }
+            }
+            
+            return (
+                <div className="dt-container">
+                    {screen === "title" && (
+                        <div className="dt-title">
+                            <h1>THE DOOR IN THE DESERT</h1>
+                            <p className="dt-subtitle">A Dark Tower Side-Story RPG</p>
+                            <p style={{marginTop: 40, color: TODASH}}>Ka is a wheel.</p>
+                            <div style={{marginTop: 40}}>
+                                <p style={{marginBottom: 20, color: BONE}}>Choose your path, sai:</p>
+                                {ARCHETYPES.map(a => (
+                                    <div key={a.id} className="dt-archetype" onClick={() => selectArchetype(a)}>
+                                        <h3>{a.label}</h3>
+                                        <p>{a.tag}</p>
+                                        <p style={{fontSize: 12, marginTop: 5, color: BRASS}}>
+                                            EYE {a.stats.eye} · HAND {a.stats.hand} · HEART {a.stats.heart} · KEN {a.stats.ken}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                    
+                    {screen === "seeds" && (
+                        <div>
+                            <h2 style={{color: TODASH, marginBottom: 20}}>Before the story begins...</h2>
+                            <p style={{marginBottom: 20}}>{seedQuestions[seedIdx].q}</p>
+                            <input 
+                                className="dt-input"
+                                value={seedInput}
+                                onChange={e => setSeedInput(e.target.value)}
+                                placeholder={seedQuestions[seedIdx].ph}
+                                onKeyDown={e => e.key === "Enter" && submitSeed()}
+                            />
+                            <button className="dt-btn" onClick={submitSeed} style={{marginTop: 15}}>
+                                {seedIdx === seedQuestions.length - 1 ? "Begin the tale" : "Next"}
+                            </button>
+                        </div>
+                    )}
+                    
+                    {screen === "game" && (
+                        <div>
+                            <h2 style={{color: ROSE, marginBottom: 20}}>CHAPTER ONE · THE NIGHT THE ROCK MOVED</h2>
+                            <p className="dt-narrative">{OPENING}</p>
+                            <div style={{marginTop: 30}}>
+                                <button className="dt-choice">Enter the tunnel. The dark is calling.</button>
+                                <button className="dt-choice">Stay here. Keep your daughter close.</button>
+                                <button className="dt-choice">Call for help. This isn't normal.</button>
+                            </div>
+                            <p style={{marginTop: 30, color: DIM, fontSize: 14, textAlign: center}}>
+                                More story coming soon...
+                            </p>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+        
+        ReactDOM.createRoot(document.getElementById('root')).render(<DoorInTheDesert />);
     </script>
 </body>
 </html>
