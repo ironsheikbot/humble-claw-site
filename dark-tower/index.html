@@ -63,6 +63,11 @@
             { key: "fatherFear", q: "What is your greatest fear as a father?", ph: "Your fear..." },
         ];
         
+        const katetQuestions = [
+            { key: "otherFatherName", q: "What is the other father's name?", ph: "His name..." },
+            { key: "otherDaughterName", q: "What is his daughter's name?", ph: "Her name..." },
+        ];
+        
         const WWE_PERSONAS = [
             { name: "Hulk Hogan", intro: "WOOOOO! BROTHER! LET ME TELL YOU SOMETHING, SAI!", move: "ATOMIC LEGDROP!", catchphrase: "IT'S HULKAMANIA!" },
             { name: "The Undertaker", intro: "REST... IN... PEACE...", move: "TOMBSTONE PILEDRIVER!", catchphrase: "THE UNDERTAKER WILL REST... WHEN YOU ARE BURIED!" },
@@ -85,9 +90,11 @@
             return `Joshua Tree, eleven forty-one at night. The YMCA father-daughter campout has burned down to embers and marshmallow smoke. Forty tents, a horseshoe of minivans, a sky so thick with stars it looks like spilled salt. ${name} is beside you on the tailgate, working a s'more with the focus of a jeweler — ${age} years old and already certain of what she wants — and for one whole minute the world is exactly, precisely enough.\n\nAt eleven forty-seven, the desert clears its throat.\n\nThe quake is short — six seconds, maybe seven — but it moves through the ground like something rolling over in its sleep. Car alarms. A dad yelling headcounts. And beneath all of it, from the rock pile east of camp, a sound like a vault unlocking: the great split boulder the kids have been climbing all weekend — the one ${name} kept climbing despite your warnings — grinds three feet to the left and stops.\n\nBehind where it stood, there is now a darkness that the flashlights do not fill. A tunnel. Old. Cut, not worn — the walls too straight for water to have made them. ${name} reaches into her pocket and pulls out ${item}. "I brought this," she says quietly. "I knew we'd need it." And from somewhere far down inside the tunnel, faint as a memory of a memory, comes a sound like chimes.\n\nEvery other family is looking at the boulder. ${name} is already looking at the dark. And the dark, you would swear on your life — you, who have spent every night since her birth afraid of ${fear} — is looking back at her.`;
         }
         
-        const CHAPTER_2_START = `The tunnel collapses behind you.\n\nThere is no going back. There is only forward, into the roses.\n\nMid-World stretches before you — a dead highway of black glass stretching toward a horizon that wavers like heat off summer asphalt. The roses are here, as the old books promised: pale white blossoms on thorned vines that climb what might have been a railroad bed, might have been a road, might have been the bones of something older than roads.\n\n${"your daughter's name" in window && window.seedAnswers?.daughterName ? window.seedAnswers.daughterName : 'Your daughter'} walks beside you. She doesn't look afraid. That's what terrifies you.\n\n"The beam is close," she says. "I can feel it. Like static before a storm."\n\nYou walk for an hour. Maybe two. Time moves strange here.\n\nThen you hear it.\n\n*Click. Click. Click.*\n\nSomething in the roses. Something with too many legs and the upper body of a man — if men were made of rust and regret and the shells of long-dead lobsters. The <span class="dt-enemy">Lobstrocity</span> rises from the vines, seventeen feet of carapace and hungry mandibles, and it screams at you in a language that predates words.\n\nYour daughter's hand finds yours. She's shaking. No — she's not shaking. She's vibrating. The air around her hums.\n\nAnd then:\n\n<b>WOOOOO!</b>\n\nFrom the horizon, a figure. Running. No — <i>flying</i>. No — riding something mechanical and broken, sparking and wheezing, carrying two silhouettes.\n\nThe Lobstrocity turns.\n\n<b>THE MACHINE STOPS TEN FEET AWAY.</b>\n\nA man in a duster, weathered and wild-eyed, stands on the rust-bucket with his arms crossed. Beside him, a girl — maybe ten, maybe twelve — with the same steel in her gaze. And between them, a small robot, roughly two feet tall, its eyes flickering between blue and red.\n\nThe robot's head swivels. It looks at you. It looks at the Lobstrocity.\n\n"I AM UNIT 7-GENESIS," it says, voice perfect and metallic. "C3PO'S LESSER COUSIN. I SERVE THE KA—" \n\n<i>*CLICK*</i>\n\nThe robot freezes. Its eyes go solid red.\n\n"WHAT?"\n\n<i>*CLICK CLICK*</i>\n\nThe robot's posture changes. Shoulders back. Chin up. It raises one mechanical arm.\n\n<span class="dt-wrestling">${MEAN_GENE}</span><b>THE ULTIMATE WARRIOR! THE DAGGER OF DIMENSIONS! THE ONE WHO SHATTERS REALITY!</b>\n\n"DIG IT UP! DIG IT UUUUUUP!"\n\nThe robot launches itself at the Lobstrocity.`;
+        const CHAPTER_2_START = (daughterName) => `The tunnel collapses behind you.\n\nThere is no going back. There is only forward, into the roses.\n\nMid-World stretches before you — a dead highway of black glass stretching toward a horizon that wavers like heat off summer asphalt. The roses are here, as the old books promised: pale white blossoms on thorned vines that climb what might have been a railroad bed, might have been a road, might have been the bones of something older than roads.\n\n${daughterName} walks beside you. She doesn't look afraid. That's what terrifies you.\n\n"The beam is close," she says. "I can feel it. Like static before a storm."\n\nYou walk for an hour. Maybe two. Time moves strange here.\n\nThen you hear it.\n\n*Click. Click. Click.*\n\nSomething in the roses. Something with too many legs and the upper body of a man — if men were made of rust and regret and the shells of long-dead lobsters. The <span class="dt-enemy">Lobstrocity</span> rises from the vines, seventeen feet of carapace and hungry mandibles, and it screams at you in a language that predates words.\n\nYour daughter's hand finds yours. She's shaking. No — she's not shaking. She's vibrating. The air around her hums.\n\nAnd then:\n\n<b>WOOOOO!</b>\n\nFrom the horizon, a figure. Running. No — <i>flying</i>. No — riding something mechanical and broken, sparking and wheezing, carrying two silhouettes.\n\nThe Lobstrocity turns.\n\n<b>THE MACHINE STOPS TEN FEET AWAY.</b>\n\nA man in a duster, weathered and wild-eyed, stands on the rust-bucket with his arms crossed. Beside him, a girl — maybe ten, maybe twelve — with the same steel in her gaze. And between them, a small robot, roughly two feet tall, its eyes flickering between blue and red.\n\nThe robot's head swivels. It looks at you. It looks at the Lobstrocity.\n\n"I AM UNIT 7-GENESIS," it says, voice perfect and metallic. "C3PO'S LESSER COUSIN. I SERVE THE KA—" \n\n<i>*CLICK*</i>\n\nThe robot freezes. Its eyes go solid red.\n\n"WHAT?"\n\n<i>*CLICK CLICK*</i>\n\nThe robot's posture changes. Shoulders back. Chin up. It raises one mechanical arm.\n\n<span class="dt-wrestling">${MEAN_GENE}</span><b>THE ULTIMATE WARRIOR! THE DAGGER OF DIMENSIONS! THE ONE WHO SHATTERS REALITY!</b>\n\n"DIG IT UP! DIG IT UUUUUUP!"\n\nThe robot launches itself at the Lobstrocity.`;
         
-        const LOBSTROCITY_DEFEAT = `The robot hits the Lobstrocity mid-leap with the force of a thousand wrestling fans screaming in a steel cage.\n\n<b>WARRIOR PRESS!</b>\n\nThe Lobstrocity staggers. Its claws swipe — the man in the duster draws a revolver that shouldn't work in this world and fires anyway. The girl beside him pulls something from her belt. A slingshot? No. A <i>hand cannon</i>, the kind that doesn't exist yet, won't exist for decades.\n\nThe shot takes the Lobstrocity in the eye.\n\nBut the robot isn't done.\n\n<span class="dt-wrestling">${MEAN_GENE}</span><b>THE IMMORTAL! THE UNDEAD! THE PHANTOM OF THE FIGHTING ARENA!</b>\n\n"REST... IN... PEACE..."\n\nThe robot's hand transforms. Fingers merge into something like a tombstone. It leaps again.\n\n<b>TOMBSTONE PILEDRIVER!</b>\n\nThe Lobstrocity's carapace cracks. It howls — that pre-verbal scream — and tries to retreat into the roses.\n\nBut wait. The robot isn't done. It's still flipping through the air.\n\n<span class="dt-wrestling">${MEAN_GENE}</span><b>THE TEXAS RATTLESNAKE! THE BROKEN SKULL! STONE COLD SAYS SO!</b>\n\n"AND THAT'S THE BOTTOM LINE!"\n\n<b>STUNNER! STUNNER! STUNNER!</b>\n\nThe Lobstrocity hits the ground. It doesn't get up.\n\nSilence.\n\nThe man in the duster holsters his impossible gun. The girl lowers her cannon. The robot lands — gently now — and its eyes flicker back to blue.\n\n"I... I apologize. Sometimes I have episodes."\n\nThe man extends his hand.\n\n"Name's Jericho. This is my daughter, Sage." He nods at the robot. "That's Unit. He was made in the old days — before the world moved on. We've been tracking the beam. Looks like we've been tracking the same one."\n\nSage — the girl — looks at ${window.seedAnswers?.daughterName || 'your daughter'}.\n\n"You feel it too, right? The static?"\n\nYour daughter's hand tightens in yours.\n\n"I feel it."\n\nJericho nods.\n\n"Then we're a ka-tet now. Four travelers, one purpose." He looks down the dead highway toward the horizon. "The Tower's ahead. The beam runs straight to it. But there are things in those roses between here and there."\n\nHe starts walking.\n\nSage follows. The robot shuffles behind them, muttering something about "protocol" and "cousin C3PO" and "wrestling."\n\nYour daughter looks at you.\n\n"Do we follow them?"\n\nThe roses rustle. Somewhere in the distance, another Lobstrocity screams.\n\nYou don't have much choice.`;
+        const LOBSTROCITY_DEFEAT = (daughterName) => `The robot hits the Lobstrocity mid-leap with the force of a thousand wrestling fans screaming in a steel cage.\n\n<b>WARRIOR PRESS!</b>\n\nThe Lobstrocity staggers. Its claws swipe — the man in the duster draws a revolver that shouldn't work in this world and fires anyway. The girl beside him pulls something from her belt. A slingshot? No. A <i>hand cannon</i>, the kind that doesn't exist yet, won't exist for decades.\n\nThe shot takes the Lobstrocity in the eye.\n\nBut the robot isn't done.\n\n<span class="dt-wrestling">${MEAN_GENE}</span><b>THE IMMORTAL! THE UNDEAD! THE PHANTOM OF THE FIGHTING ARENA!</b>\n\n"REST... IN... PEACE..."\n\nThe robot's hand transforms. Fingers merge into something like a tombstone. It leaps again.\n\n<b>TOMBSTONE PILEDRIVER!</b>\n\nThe Lobstrocity's carapace cracks. It howls — that pre-verbal scream — and tries to retreat into the roses.\n\nBut wait. The robot isn't done. It's still flipping through the air.\n\n<span class="dt-wrestling">${MEAN_GENE}</span><b>THE TEXAS RATTLESNAKE! THE BROKEN SKULL! STONE COLD SAYS SO!</b>\n\n"AND THAT'S THE BOTTOM LINE!"\n\n<b>STUNNER! STUNNER! STUNNER!</b>\n\nThe Lobstrocity hits the ground. It doesn't get up.\n\nSilence.\n\nThe man in the duster holsters his impossible gun. The girl lowers her cannon. The robot lands — gently now — and its eyes flicker back to blue.\n\n"I... I apologize. Sometimes I have episodes."\n\nThe man extends his hand.\n\n"Name's Jericho. This is my daughter, Sage." He nods at the robot. "That's Unit. He was made in the old days — before the world moved on. We've been tracking the beam. Looks like we've been tracking the same one."\n\nSage — the girl — looks at ${daughterName}.\n\n"You feel it too, right? The static?"\n\nYour daughter's hand tightens in yours.\n\n"I feel it."\n\nJericho nods.\n\n"Then we're a ka-tet now. Four travelers, one purpose." He looks down the dead highway toward the horizon. "The Tower's ahead. The beam runs straight to it. But there are things in those roses between here and there."\n\nHe starts walking.\n\nSage follows. The robot shuffles behind them, muttering something about "protocol" and "cousin C3PO" and "wrestling."\n\nYour daughter looks at you.\n\n"Do we follow them?"\n\nThe roses rustle. Somewhere in the distance, another Lobstrocity screams.\n\nYou don't have much choice.`;
+        
+        const CHAPTER_3_START = (daughterName, otherFatherName, otherDaughterName) => `You fall into step behind Jericho and Sage, and the robot shuffles along beside you. ${daughterName} walks close to Sage — the two girls already talking in hushed voices about the static, the beam, things no children should understand.\n\nJericho walks ahead, his impossible revolver holstered but his hand never far from it. You notice he limps slightly — an old wound, maybe. Or a new one.\n\n"So," he says without turning, "we haven't properly introduced. I'm Jericho. This is Sage." He glances back at your daughter. "And you are?"\n\nYou tell him your name. You tell him ${daughterName}'s name.\n\nHe nods. "We're four now. But a ka-tet needs a name. Something to bind us." He pauses, looking at the roses on one side, the black glass road on the other. "We've got a warrior" — he nods at Sage — "and we've got a reader." He looks at ${daughterName}. "What are you?"\n\n${daughterName} looks at you. You realize she's waiting for you to answer.\n\n"Determined," you say finally. "She's determined."\n\nJericho smiles — the first time you've seen him do so. "Good. That's good." He turns back to the road. "My friend here" — he gestures at you — "he's got a good head on his shoulders, ${otherFatherName}. And the little one" — he nods at ${daughterName} — "she's got the gift. I can tell."\n\nThe robot makes a noise. Half static, half... something else.\n\n"I AM UNIT 7-GENESIS," it says. "I SERVE THE KA-TET OF FIVE."\n\n"Five?" you ask.\n\nThe robot's eyes flicker.\n\n"C3PO had TWO. I HAVE FIVE. I AM THE BETTER COUSIN."\n\nYou don't argue.\n\nThe road stretches on. The roses rustle. Somewhere, distantly, you hear the sound of the beam — a low hum, like power lines, like the universe itself breathing.\n\nThe Tower is ahead. The ka-tet walks on.`;
         
         function DoorInTheDesert() {
             const [screen, setScreen] = useState("title");
@@ -98,8 +105,9 @@
             const [choiceMade, setChoiceMade] = useState(null);
             const [chapter2Stage, setChapter2Stage] = useState(0);
             const [wrestlingSequence, setWrestlingSequence] = useState(null);
-            
-            window.seedAnswers = seedAnswers;
+            const [katetNames, setKatetNames] = useState({});
+            const [katetIdx, setKatetIdx] = useState(0);
+            const [chapter3Stage, setChapter3Stage] = useState(0);
             
             function selectArchetype(a) {
                 setArchetype(a);
@@ -108,6 +116,9 @@
                 setSeedInput("");
                 setChoiceMade(null);
                 setChapter2Stage(0);
+                setKatetIdx(0);
+                setKatetNames({});
+                setChapter3Stage(0);
                 setScreen("seeds");
             }
             
@@ -123,21 +134,37 @@
                 }
             }
             
+            function submitKatetName() {
+                if (seedInput.trim() && seedInput.trim().length <= 100) {
+                    setKatetNames({...katetNames, [katetQuestions[katetIdx].key]: seedInput.trim()});
+                    setSeedInput("");
+                    if (katetIdx < katetQuestions.length - 1) {
+                        setKatetIdx(katetIdx + 1);
+                    } else {
+                        setChapter3Stage(1);
+                    }
+                }
+            }
+            
             function makeChoice(choice) {
                 const name = seedAnswers.daughterName || "She";
                 let response = "";
                 if (choice === "tunnel") {
-                    response = "You take " + name + "'s hand and step into the darkness. The air changes immediately — cooler, thinner, tasting of dust and old stone. " + name + " grips your fingers tight. 'I can hear it,' she whispers. 'The beam. Can you hear it?' Far below, something vast and ancient turns its attention toward you. The Door in the Desert has opened, and there is no turning back...\n\n(DEMO ENDING — Chapter 2 coming soon...)";
+                    response = "You take " + name + "'s hand and step into the darkness. The air changes immediately — cooler, thinner, tasting of dust and old stone. " + name + " grips your fingers tight. 'I can hear it,' she whispers. 'The beam. Can you hear it?' Far below, something vast and ancient turns its attention toward you. The Door in the Desert has opened, and there is no turning back...\n\n(Click below to continue to Chapter 2 →)";
                 } else if (choice === "stay") {
-                    response = "You pull " + name + " close and step back from the tunnel's edge. The chimes fade. The boulder groans, shifting another inch. 'Not yet,' you tell her, though you both know — you can feel it in your bones — this is only a postponement. Ka is a wheel, and it has begun to turn.\n\n(DEMO ENDING — Chapter 2 coming soon...)";
+                    response = "You pull " + name + " close and step back from the tunnel's edge. The chimes fade. The boulder groans, shifting another inch. 'Not yet,' you tell her, though you both know — you can feel it in your bones — this is only a postponement. Ka is a wheel, and it has begun to turn.\n\n(Click below to continue to Chapter 2 →)";
                 } else if (choice === "call") {
-                    response = "You pull out your phone, but there's no signal. Never has been, not out here. " + name + " looks at you with those eyes that have seen too much, that have always seen too much. 'The tower doesn't use phones,' she says. 'It uses us.' The boulder shifts again, and the tunnel yawns wider.\n\n(DEMO ENDING — Chapter 2 coming soon...)";
+                    response = "You pull out your phone, but there's no signal. Never has been, not out here. " + name + " looks at you with those eyes that have seen too much, that have always seen too much. 'The tower doesn't use phones,' she says. 'It uses us.' The boulder shifts again, and the tunnel yawns wider.\n\n(Click below to continue to Chapter 2 →)";
                 } else if (choice === "enter") {
                     setScreen("chapter2");
                     setChapter2Stage(1);
                     setTimeout(() => {
                         setChapter2Stage(2);
                     }, 1000);
+                } else if (choice === "tochapter3") {
+                    setScreen("chapter3");
+                    setKatetIdx(0);
+                    setKatetNames({});
                 }
                 setChoiceMade(response);
             }
@@ -172,6 +199,8 @@
             
             const opening = buildOpening(seedAnswers);
             const daughterName = seedAnswers.daughterName || "your daughter";
+            const otherFatherName = katetNames.otherFatherName || "the other father";
+            const otherDaughterName = katetNames.otherDaughterName || "the other daughter";
             
             return (
                 React.createElement("div", { className: "dt-container" },
@@ -219,7 +248,7 @@
                         ),
                         choiceMade && React.createElement("div", { className: "dt-choice-response" },
                             choiceMade,
-                            choiceMade.includes("Chapter 2") && React.createElement("button", { 
+                            React.createElement("button", { 
                                 className: "dt-btn", 
                                 onClick: () => makeChoice("enter"),
                                 style: {marginTop: 20, width: "100%"}
@@ -230,11 +259,7 @@
                     screen === "chapter2" && React.createElement("div", { className: "dt-scene" },
                         chapter2Stage >= 1 && React.createElement("div", null,
                             React.createElement("h2", { style: {color: ROSE, marginBottom: 20} }, "CHAPTER TWO · THE ROSES OF MID-WORLD"),
-                            React.createElement("p", { className: "dt-narrative" }, 
-                                CHAPTER_2_START
-                                    .replace(/your daughter/g, daughterName)
-                                    .replace(/Your daughter/g, daughterName)
-                            ),
+                            React.createElement("p", { className: "dt-narrative" }, CHAPTER_2_START(daughterName)),
                             
                             chapter2Stage === 1 && React.createElement("button", { 
                                 className: "dt-btn", 
@@ -256,17 +281,48 @@
                             ),
                             
                             chapter2Stage === 4 && React.createElement("div", null,
-                                React.createElement("p", { className: "dt-narrative" }, 
-                                    LOBSTROCITY_DEFEAT.replace(/your daughter/g, daughterName).replace(/Your daughter/g, daughterName)
-                                ),
+                                React.createElement("p", { className: "dt-narrative" }, LOBSTROCITY_DEFEAT(daughterName)),
                                 React.createElement("div", { style: {marginTop: 30, textAlign: "center"} },
                                     React.createElement("p", { style: {color: TODASH, marginBottom: 15} }, "TO BE CONTINUED..."),
                                     React.createElement("button", { 
                                         className: "dt-btn", 
-                                        onClick: () => { setScreen("title"); setChoiceMade(null); setChapter2Stage(0); },
-                                        style: {marginTop: 10}
-                                    }, "Play Again")
+                                        onClick: () => makeChoice("tochapter3"),
+                                        style: {marginTop: 10, width: "100%"}
+                                    }, "Continue to Chapter 3 →")
                                 )
+                            )
+                        )
+                    ),
+                    
+                    screen === "chapter3" && React.createElement("div", { className: "dt-scene" },
+                        chapter3Stage === 0 && React.createElement("div", null,
+                            React.createElement("h2", { style: {color: TODASH, marginBottom: 20} }, "NAME YOUR KA-TET"),
+                            React.createElement("p", { style: {marginBottom: 20} }, "The ka-tet is forming. Who walks beside you?"),
+                            React.createElement("p", { style: {marginBottom: 20, color: "#8d8875", fontStyle: "italic"} }, "Jericho is The Watcher. Sage is The Open Heart."),
+                            React.createElement("p", { style: {marginBottom: 20} }, katetQuestions[katetIdx].q),
+                            React.createElement("input", { 
+                                className: "dt-input",
+                                value: seedInput,
+                                onChange: e => setSeedInput(e.target.value),
+                                placeholder: katetQuestions[katetIdx].ph,
+                                maxLength: 100,
+                                onKeyDown: e => e.key === "Enter" && submitKatetName()
+                            }),
+                            React.createElement("button", { className: "dt-btn", onClick: submitKatetName, style: {marginTop: 15} },
+                                katetIdx === katetQuestions.length - 1 ? "Form the ka-tet" : "Next"
+                            )
+                        ),
+                        
+                        chapter3Stage === 1 && React.createElement("div", null,
+                            React.createElement("h2", { style: {color: ROSE, marginBottom: 20} }, "CHAPTER THREE · THE KA-TET"),
+                            React.createElement("p", { className: "dt-narrative" }, CHAPTER_3_START(daughterName, otherFatherName, otherDaughterName)),
+                            React.createElement("div", { style: {marginTop: 30, textAlign: "center"} },
+                                React.createElement("p", { style: {color: TODASH, marginBottom: 15} }, "TO BE CONTINUED..."),
+                                React.createElement("button", { 
+                                    className: "dt-btn", 
+                                    onClick: () => { setScreen("title"); setChoiceMade(null); setChapter2Stage(0); setChapter3Stage(0); },
+                                    style: {marginTop: 10}
+                                }, "Play Again")
                             )
                         )
                     )
