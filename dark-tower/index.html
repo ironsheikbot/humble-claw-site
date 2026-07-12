@@ -111,6 +111,8 @@
             const [chapter4Stage, setChapter4Stage] = useState(0);
             const [hallucination, setHallucination] = useState(0);
             const [wizardsWords, setWizardsWords] = useState([]);
+            const [chapter5Stage, setChapter5Stage] = useState(0);
+            const [chapter5Branches, setChapter5Branches] = useState([]);
 
             function selectArchetype(a) {
                 setArchetype(a);
@@ -125,6 +127,8 @@
                 setChapter4Stage(0);
                 setHallucination(0);
                 setWizardsWords([]);
+                setChapter5Stage(0);
+                setChapter5Branches([]);
                 setScreen("seeds");
             }
 
@@ -231,6 +235,66 @@
                     }
                 }, 5000);
             }
+
+            function makeChapter5Choice(choiceType, choice) {
+                setChapter5Branches(prev => [...prev, { type: choiceType, choice }]);
+                setChapter5Stage(prev => prev + 1);
+            }
+
+            const CHAPTER_5_START = (daughterName, otherFatherName, otherDaughterName, chapter5Branches) => {
+                const roadChoice = chapter5Branches.find(b => b.type === 'road');
+                const warningChoice = chapter5Branches.find(b => b.type === 'warning');
+                const encounterChoice = chapter5Branches.find(b => b.type === 'encounter');
+
+                let intro = `The ka-tet emerges from the pollen-induced nightmare, blinking in the harsh Mid-World sun. The Wizard's cruel prophecy echoes in their minds, a broken record of doom and despair. Jericho clenches his jaw, Sage fiddles with her cannon, and the robot, Unit, is humming a particularly off-key rendition of a lullaby. ${daughterName} looks at you, her eyes wide, but unbroken.\n\nAhead, the dead highway of black glass splits. Three paths. Three choices. Ka, it seems, has decided to offer a buffet of fate.`;
+
+                let pathNarrative = "";
+                if (roadChoice) {
+                    if (roadChoice.choice === 'black_glass_road') {
+                        pathNarrative = `\n\nReluctantly, you follow the black glass road. It's safe, predictable, and about as exciting as a tax audit. "Slow and steady wins the race," Jericho mutters, though his eyes keep darting to the shimmering roses. Unit, ever the optimist, adds, "EFFICIENCY MAXIMIZED. ENTERTAINMENT MINIMIZED. A TRUE BRET HART STRATEGY." The journey is uneventful, save for Unit accidentally trying to apply a 'Sharpshooter' to a tumbleweed.`;
+                    } else if (roadChoice.choice === 'cut_through_roses') {
+                        pathNarrative = `\n\nAgainst your better judgment, and likely due to ${daughterName}'s adventurous spirit, you plunge into the roses. Thorns snag at clothes, but the air is strangely sweet, the whispers amplified. "RISK ASSESSMENT: HIGH," Unit chirps, then immediately adds, "BUT THE POTENTIAL FOR UNEXPECTED ENCOUNTERS IS ALSO HIGH. PERHAPS A TAG-TEAM MATCH?" The roses seem to shift and part for you, revealing glimpses of strange, beautiful, and sometimes terrifying things.`;
+                    } else if (roadChoice.choice === 'send_robot_scout') {
+                        pathNarrative = `\n\n"Unit, scout ahead!" you command. The robot salutes. "AFFIRMATIVE, SAI! PREPARING FOR SOLO EXCURSION!" It vanishes into the roses with a surprisingly agile leap, leaving the ka-tet feeling strangely exposed, and a little guilty. "He'll be fine," Sage says, though she bites her lip. Jericho just sighs, "Hope he doesn't find another wrestling persona out there." You proceed cautiously, every rustle making you jump.`;
+                    }
+                }
+
+                let warningNarrative = "";
+                if (warningChoice) {
+                    if (warningChoice.choice === 'heed_prophecy') {
+                        warningNarrative = `\n\nThe Wizard's words gnaw at you. "Perhaps we should question this path," you suggest, looking at your companions. "Are we truly meant for the Tower, if the prophecy says otherwise?" Jericho shrugs, "Prophecies are like a bad referee call, sai. Sometimes you gotta ignore 'em and keep fighting." ${daughterName} simply squeezes your hand, a silent question in her eyes. Unit, meanwhile, is calculating the statistical probability of a self-fulfilling prophecy.`;
+                    } else if (warningChoice.choice === 'reject_prophecy') {
+                        warningNarrative = `\n\n"To hell with the prophecy!" you declare, feeling a sudden surge of defiance. "We make our own ka!" Sage grins, "That's the spirit!" Jericho nods approvingly. "That's the talk of a true champion, sai." Even Unit seems to straighten, emitting a small, encouraging *BEEP-BOOP*. The air around you seems to crackle with renewed determination.`;
+                    } else if (warningChoice.choice === 'search_evidence') {
+                        warningNarrative = `\n\n"What about others?" you ask. "Other travelers who ignored such warnings?" You begin to search the desolate roadside, finding only ancient, sun-baked refuse. Then, Sage points. A faded, graffiti-scrawled message on a crumbling monolith: "THE TOWER IS A LIE. DO NOT FOLLOW THE BEAM." A chill runs down your spine. Jericho looks grim. "Looks like someone else made their choice, sai. And maybe they were wrong."`;
+                    }
+                }
+
+                let encounterNarrative = "";
+                if (encounterChoice) {
+                    encounterNarrative = `\n\nAfter hours of travel, you encounter a lone figure, cloaked and hooded, by a flickering campfire. They're stirring a pot of something that smells vaguely of burnt rubber and despair.`;
+                    if (encounterChoice.choice === 'trust_traveler') {
+                        encounterNarrative += ` You approach with an open heart. "Hail, traveler," you say, offering a friendly nod. The figure looks up, revealing eyes that seem too old for their face. A slow, unsettling smile spreads across their lips. "Long days and pleasant nights, ka-tet. Share my stew? It's... an acquired taste."`;
+                    } else if (encounterChoice.choice === 'distrust_traveler') {
+                        encounterNarrative += ` You eye them suspiciously. Jericho's hand is on his revolver. "Who goes there?" he demands. The figure chuckles, a dry, rustling sound. "Just a weary traveler, gunslinger. Passing through. Like you. Perhaps." They make no move, but the air around them feels thick with unspoken things.`;
+                    } else if (encounterChoice.choice === 'interrogate_traveler') {
+                        encounterNarrative += ` You decide to get answers. "Who are you? What do you know of the Tower?" you press. The figure slowly rises, their cloak billowing around them. "Questions, questions. Always questions. What if I told you... I know nothing? Or everything?" Their voice shifts, deepening, becoming a low growl. "Some roads are best untraveled. Some questions, unasked." The campfire suddenly flares, casting long, dancing shadows that seem to have too many arms.`;
+                    }
+                }
+
+
+                return `${intro}${pathNarrative}${warningNarrative}${encounterNarrative}`;
+            };
+
+            const CHAPTER_5_END_NARRATIVE = (daughterName, otherFatherName, otherDaughterName, chapter5Branches) => {
+                let summary = `\n\nYour choices in this twisted chapter:`;
+                chapter5Branches.forEach(branch => {
+                    summary += `\n- ${branch.type.replace('_', ' ').toUpperCase()}: ${branch.choice.replace('_', ' ').toUpperCase()}`;
+                });
+                summary += `\n\n"TO BE CONTINUED..."`;
+                return summary;
+            }
+            
 
             const opening = buildOpening(seedAnswers);
             const daughterName = seedAnswers.daughterName || "your daughter";
@@ -408,7 +472,55 @@
                                 React.createElement("p", { style: {color: TODASH, marginBottom: 15} }, "TO BE CONTINUED..."),
                                 React.createElement("button", { 
                                     className: "dt-btn", 
-                                    onClick: () => { setScreen("title"); setChoiceMade(null); setChapter2Stage(0); setChapter3Stage(0); setChapter4Stage(0); setHallucination(null); setWizardsWords([]); }, 
+                                    onClick: () => { setScreen("chapter5"); setChapter5Stage(0); }, 
+                                    style: {marginTop: 10, width: "100%"}
+                                }, "Continue to Chapter 5 →")
+                            )
+                        )
+                    ),
+
+                    screen === "chapter5" && React.createElement("div", { className: "dt-scene" },
+                        chapter5Stage === 0 && React.createElement("div", null,
+                            React.createElement("h2", { style: {color: ROSE, marginBottom: 20} }, "CHAPTER FIVE · THE ROAD SPLITS"),
+                            React.createElement("p", { className: "dt-narrative" }, CHAPTER_5_START(daughterName, otherFatherName, otherDaughterName, chapter5Branches)),
+                            React.createElement("div", { style: {marginTop: 30} },
+                                React.createElement("p", { style: {marginBottom: 20, color: TODASH} }, "The first split. Which road will you take?"),
+                                React.createElement("button", { className: "dt-choice", onClick: () => makeChapter5Choice('road', 'black_glass_road') }, "Follow the black glass road (safer, slower)"),
+                                React.createElement("button", { className: "dt-choice", onClick: () => makeChapter5Choice('road', 'cut_through_roses') }, "Cut through the roses (risky, faster)"),
+                                React.createElement("button", { className: "dt-choice", onClick: () => makeChapter5Choice('road', 'send_robot_scout') }, "Send Unit ahead as scout (loses Unit temporarily)")
+                            )
+                        ),
+
+                        chapter5Stage === 1 && React.createElement("div", null,
+                            React.createElement("h2", { style: {color: ROSE, marginBottom: 20} }, "CHAPTER FIVE · THE ROAD SPLITS"),
+                            React.createElement("p", { className: "dt-narrative" }, CHAPTER_5_START(daughterName, otherFatherName, otherDaughterName, chapter5Branches)),
+                            React.createElement("div", { style: {marginTop: 30} },
+                                React.createElement("p", { style: {marginBottom: 20, color: TODASH} }, "The Wizard's warning echoes. How do you respond?"),
+                                React.createElement("button", { className: "dt-choice", onClick: () => makeChapter5Choice('warning', 'heed_prophecy') }, "Heed the prophecy, question the path"),
+                                React.createElement("button", { className: "dt-choice", onClick: () => makeChapter5Choice('warning', 'reject_prophecy') }, "Reject the prophecy, 'we make our own ka'"),
+                                React.createElement("button", { className: "dt-choice", onClick: () => makeChapter5Choice('warning', 'search_evidence') }, "Search for evidence of others who ignored it")
+                            )
+                        ),
+
+                        chapter5Stage === 2 && React.createElement("div", null,
+                            React.createElement("h2", { style: {color: ROSE, marginBottom: 20} }, "CHAPTER FIVE · THE ROAD SPLITS"),
+                            React.createElement("p", { className: "dt-narrative" }, CHAPTER_5_START(daughterName, otherFatherName, otherDaughterName, chapter5Branches)),
+                            React.createElement("div", { style: {marginTop: 30} },
+                                React.createElement("p", { style: {marginBottom: 20, color: TODASH} }, "A mysterious traveler. How do you deal with them?"),
+                                React.createElement("button", { className: "dt-choice", onClick: () => makeChapter5Choice('encounter', 'trust_traveler') }, "Trust them"),
+                                React.createElement("button", { className: "dt-choice", onClick: () => makeChapter5Choice('encounter', 'distrust_traveler') }, "Distrust them"),
+                                React.createElement("button", { className: "dt-choice", onClick: () => makeChapter5Choice('encounter', 'interrogate_traveler') }, "Interrogate them")
+                            )
+                        ),
+
+                        chapter5Stage === 3 && React.createElement("div", null,
+                            React.createElement("h2", { style: {color: ROSE, marginBottom: 20} }, "CHAPTER FIVE · THE ROAD SPLITS"),
+                            React.createElement("p", { className: "dt-narrative" }, CHAPTER_5_START(daughterName, otherFatherName, otherDaughterName, chapter5Branches)),
+                            React.createElement("p", { className: "dt-narrative", style: {marginTop: 30, fontStyle: "italic", color: BRASS} }, CHAPTER_5_END_NARRATIVE(daughterName, otherFatherName, otherDaughterName, chapter5Branches)),
+                            React.createElement("div", { style: {marginTop: 30, textAlign: "center"} },
+                                React.createElement("button", { 
+                                    className: "dt-btn", 
+                                    onClick: () => { setScreen("title"); setChoiceMade(null); setChapter2Stage(0); setChapter3Stage(0); setChapter4Stage(0); setChapter5Stage(0); setHallucination(null); setWizardsWords([]); setChapter5Branches([]); setArchetype(null); setSeedIdx(0); setSeedAnswers({}); setSeedInput(""); setKatetIdx(0); setKatetNames({}); setWrestlingSequence(null); }, 
                                     style: {marginTop: 10}
                                 }, "Play Again")
                             )
